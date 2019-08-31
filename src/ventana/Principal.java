@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
@@ -50,6 +52,17 @@ public class Principal {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//javax.swing.UIManager.setLookAndFeel("Windows");
+		
+		try{
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		}  catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		SwingUtilities.updateComponentTreeUI(frame);
+
+		//updateComponentTreeUI(frame);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);

@@ -44,19 +44,9 @@ public class ListadoSaldosClie extends JDialog {
 			contentPanel.add(lblSeleccioneLaFecha);
 		}
 		{
-			JLabel lblDesde = new JLabel("Desde: ");
-			lblDesde.setBounds(114, 11, 49, 14);
-			contentPanel.add(lblDesde);
-		}
-		{
 			JLabel lblHasta = new JLabel("Hasta: ");
 			lblHasta.setBounds(206, 11, 49, 14);
 			contentPanel.add(lblHasta);
-		}
-		{
-			JButton btnNewButton = new JButton("New button");
-			btnNewButton.setBounds(146, 7, 49, 23);
-			contentPanel.add(btnNewButton);
 		}
 		{
 			JButton btnNewButton_1 = new JButton("New button");
