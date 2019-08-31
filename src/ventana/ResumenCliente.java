@@ -5,23 +5,23 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-public class ResumenCliente extends JDialog {
+public class ResumenCliente extends JFrame {
 
 	private final JPanel contentPanel = new JPanel();
-
+	private JPanel contentPane;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ResumenCliente dialog = new ResumenCliente();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			ResumenCliente frame = new ResumenCliente();
+			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -31,10 +31,15 @@ public class ResumenCliente extends JDialog {
 	 * Create the dialog.
 	 */
 	public ResumenCliente() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		contentPane.setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
 			JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Cliente");
@@ -94,7 +99,7 @@ public class ResumenCliente extends JDialog {
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			contentPane.add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");

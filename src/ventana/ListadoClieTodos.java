@@ -20,15 +20,15 @@ public class ListadoClieTodos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
+	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ListadoClieTodos dialog = new ListadoClieTodos();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			ListadoClieTodos frame = new ListadoClieTodos();
+			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -39,11 +39,14 @@ public class ListadoClieTodos extends JDialog {
 	 */
 	public ListadoClieTodos() {
 		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 53, 376, 165);
 		contentPanel.add(scrollPane);
@@ -61,7 +64,7 @@ public class ListadoClieTodos extends JDialog {
 			btnBuscarPor.setBounds(315, 19, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
-		
+
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(177, 20, 28, 22);
 		contentPanel.add(comboBox);
@@ -70,7 +73,7 @@ public class ListadoClieTodos extends JDialog {
 			lblBuscarPor.setBounds(122, 23, 73, 14);
 			contentPanel.add(lblBuscarPor);
 		}
-		
+
 		textField = new JTextField();
 		textField.setBounds(215, 20, 96, 20);
 		contentPanel.add(textField);
@@ -78,7 +81,7 @@ public class ListadoClieTodos extends JDialog {
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			contentPane.add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");

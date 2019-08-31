@@ -3,13 +3,17 @@ package ventana;
 import java.awt.EventQueue;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class DefinirPeriodoDeTrabajo extends JDialog {
+public class DefinirPeriodoDeTrabajo extends JFrame {
+	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
@@ -18,9 +22,8 @@ public class DefinirPeriodoDeTrabajo extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DefinirPeriodoDeTrabajo dialog = new DefinirPeriodoDeTrabajo();
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
+					DefinirPeriodoDeTrabajo frame = new DefinirPeriodoDeTrabajo();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -32,28 +35,32 @@ public class DefinirPeriodoDeTrabajo extends JDialog {
 	 * Create the dialog.
 	 */
 	public DefinirPeriodoDeTrabajo() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(null);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
 		JLabel lblSeleccioneElMes = new JLabel("Seleccione el Mes del Per\u00EDodo de Trabajo");
 		lblSeleccioneElMes.setBounds(120, 43, 202, 14);
-		getContentPane().add(lblSeleccioneElMes);
-		
+		contentPane.add(lblSeleccioneElMes);
+
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(148, 83, 133, 22);
-		getContentPane().add(comboBox);
-		
+		contentPane.add(comboBox);
+
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		btnNewButton.setBounds(77, 185, 89, 23);
-		getContentPane().add(btnNewButton);
-		
+		contentPane.add(btnNewButton);
+
 		JButton btnNewButton_1 = new JButton("Cancelar");
 		btnNewButton_1.setBounds(253, 185, 89, 23);
-		getContentPane().add(btnNewButton_1);
+		contentPane.add(btnNewButton_1);
 
 	}
 
