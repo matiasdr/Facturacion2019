@@ -179,6 +179,30 @@ public class Principal {
 		
 		JMenuItem mntmIvaCompras = new JMenuItem("IVA Compras");
 		mnListados.add(mntmIvaCompras);
+		
+		JMenu mnArtculos = new JMenu("Art\u00EDculos");
+		menuBar.add(mnArtculos);
+		
+		JMenuItem mntmNuevoArtculo = new JMenuItem("Nuevo Art\u00EDculo");
+		mnArtculos.add(mntmNuevoArtculo);
+		
+		JMenuItem mntmModificarArtculo = new JMenuItem("Modificar Art\u00EDculo");
+		mnArtculos.add(mntmModificarArtculo);
+		
+		JMenuItem mntmListadoArticulos = new JMenuItem("Listado de Articulos");
+		mnArtculos.add(mntmListadoArticulos);
+		
+		JMenuItem mntmCambiarPrecios = new JMenuItem("Cambiar Precios");
+		mnArtculos.add(mntmCambiarPrecios);
+		
+		JMenu mnUsuarios = new JMenu("Usuarios");
+		menuBar.add(mnUsuarios);
+		
+		JMenuItem mntmAgregarOModificar = new JMenuItem("Agregar o Modificar Usuario");
+		mnUsuarios.add(mntmAgregarOModificar);
+		
+		JMenuItem mntmListarActividadesPor = new JMenuItem("Listar Actividades por Usuario");
+		mnUsuarios.add(mntmListarActividadesPor);
 	}
 	
 	
