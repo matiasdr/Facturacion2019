@@ -48,35 +48,35 @@ public class ModificarProveedor extends JFrame {
 		contentPane.setLayout(null);
 
 		JLabel lblNombreORazn = new JLabel("Nombre o Raz\u00F3n Social");
-		lblNombreORazn.setBounds(42, 59, 125, 14);
+		lblNombreORazn.setBounds(42, 59, 170, 14);
 		contentPane.add(lblNombreORazn);
 
 		JLabel lblCuitOCuil = new JLabel("CUIT o CUIL");
-		lblCuitOCuil.setBounds(42, 84, 91, 14);
+		lblCuitOCuil.setBounds(42, 84, 170, 14);
 		contentPane.add(lblCuitOCuil);
 
 		JLabel lblNewLabel = new JLabel("Domicilio");
-		lblNewLabel.setBounds(42, 109, 49, 14);
+		lblNewLabel.setBounds(42, 109, 170, 14);
 		contentPane.add(lblNewLabel);
 
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(42, 134, 49, 14);
+		lblTelefono.setBounds(42, 134, 170, 14);
 		contentPane.add(lblTelefono);
 
 		JLabel lblCondicionAnteEl = new JLabel("Condicion ante el IVA");
-		lblCondicionAnteEl.setBounds(42, 159, 106, 14);
+		lblCondicionAnteEl.setBounds(42, 159, 170, 14);
 		contentPane.add(lblCondicionAnteEl);
 
 		JLabel lblCategora = new JLabel("Categor\u00EDa");
-		lblCategora.setBounds(42, 184, 49, 14);
+		lblCategora.setBounds(42, 184, 170, 14);
 		contentPane.add(lblCategora);
 
 		JLabel lblPersonaResponsable = new JLabel("Persona Responsable");
-		lblPersonaResponsable.setBounds(42, 209, 125, 14);
+		lblPersonaResponsable.setBounds(42, 209, 170, 14);
 		contentPane.add(lblPersonaResponsable);
 
 		JLabel lblContactoresponsable = new JLabel("Contacto (Responsable)");
-		lblContactoresponsable.setBounds(42, 234, 125, 14);
+		lblContactoresponsable.setBounds(42, 234, 170, 14);
 		contentPane.add(lblContactoresponsable);
 
 		textField = new JTextField();
@@ -119,7 +119,7 @@ public class ModificarProveedor extends JFrame {
 		contentPane.add(comboBox);
 
 		JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Proveedor");
-		lblSeleccioneElCliente.setBounds(42, 11, 144, 14);
+		lblSeleccioneElCliente.setBounds(42, 11, 170, 14);
 		contentPane.add(lblSeleccioneElCliente);
 
 		JButton btnBuscar = new JButton("Buscar");

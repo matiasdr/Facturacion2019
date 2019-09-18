@@ -11,15 +11,19 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class NuevoProveedor extends JFrame {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
+	private JTextField textFieldRazonSocial;
+	private JTextField textFieldCuit;
+	private JTextField textFieldDomicilio;
+	private JTextField textFieldTelefono;
+	private JTextField textFieldCategoria;
+	private JTextField textFieldPersResponsable;
+	private JTextField textFieldContacto;
 	private JPanel contentPane;
 	/**
 	 * Launch the application.
@@ -43,82 +47,164 @@ public class NuevoProveedor extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		JLabel labelRazon = new JLabel("Campo Inv\u00E1lido");
+		labelRazon.setBounds(299, 11, 125, 14);
+		contentPane.add(labelRazon);
+		labelRazon.setVisible(false);
+		
+		JLabel labelCuit = new JLabel("Campo Inv\u00E1lido");
+		labelCuit.setBounds(299, 36, 125, 14);
+		contentPane.add(labelCuit);
+		labelCuit.setVisible(false);
+		
+		JLabel labelCondicion = new JLabel("Campo Inv\u00E1lido");
+		labelCondicion.setBounds(299, 111, 125, 14);
+		contentPane.add(labelCondicion);
+		labelCondicion.setVisible(false);
+		
+		JLabel labelCategoria = new JLabel("Campo Inv\u00E1lido");
+		labelCategoria.setBounds(299, 136, 125, 14);
+		contentPane.add(labelCategoria);
+		labelCategoria.setVisible(false);
+		
 		contentPane.setLayout(null);
-
 		JLabel lblNombreORazn = new JLabel("Nombre o Raz\u00F3n Social");
-		lblNombreORazn.setBounds(10, 11, 125, 14);
+		lblNombreORazn.setBounds(10, 11, 173, 14);
 		contentPane.add(lblNombreORazn);
 
 		JLabel lblCuitOCuil = new JLabel("CUIT o CUIL");
-		lblCuitOCuil.setBounds(10, 36, 91, 14);
+		lblCuitOCuil.setBounds(10, 36, 173, 14);
 		contentPane.add(lblCuitOCuil);
 
-		JLabel lblNewLabel = new JLabel("Domicilio");
-		lblNewLabel.setBounds(10, 61, 49, 14);
-		contentPane.add(lblNewLabel);
+		JLabel lblDomicilio = new JLabel("Domicilio");
+		lblDomicilio.setBounds(10, 61, 173, 14);
+		contentPane.add(lblDomicilio);
 
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(10, 86, 49, 14);
+		lblTelefono.setBounds(10, 86, 173, 14);
 		contentPane.add(lblTelefono);
 
 		JLabel lblCondicionAnteEl = new JLabel("Condicion ante el IVA");
-		lblCondicionAnteEl.setBounds(10, 111, 106, 14);
+		lblCondicionAnteEl.setBounds(10, 111, 173, 14);
 		contentPane.add(lblCondicionAnteEl);
 
 		JLabel lblCategora = new JLabel("Categor\u00EDa");
-		lblCategora.setBounds(10, 136, 49, 14);
+		lblCategora.setBounds(10, 136, 173, 14);
 		contentPane.add(lblCategora);
 
 		JLabel lblPersonaResponsable = new JLabel("Persona Responsable");
-		lblPersonaResponsable.setBounds(10, 161, 125, 14);
+		lblPersonaResponsable.setBounds(10, 161, 173, 14);
 		contentPane.add(lblPersonaResponsable);
 
 		JLabel lblContactoresponsable = new JLabel("Contacto (Responsable)");
-		lblContactoresponsable.setBounds(10, 186, 125, 14);
+		lblContactoresponsable.setBounds(10, 186, 173, 14);
 		contentPane.add(lblContactoresponsable);
 
-		textField = new JTextField();
-		textField.setBounds(193, 8, 96, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textFieldRazonSocial = new JTextField();
+		textFieldRazonSocial.setBounds(193, 8, 96, 20);
+		contentPane.add(textFieldRazonSocial);
+		textFieldRazonSocial.setColumns(10);
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(193, 33, 96, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		textFieldCuit = new JTextField();
+		textFieldCuit.setBounds(193, 33, 96, 20);
+		contentPane.add(textFieldCuit);
+		textFieldCuit.setColumns(10);
 
-		textField_2 = new JTextField();
-		textField_2.setBounds(193, 58, 96, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		textFieldDomicilio = new JTextField();
+		textFieldDomicilio.setBounds(193, 58, 96, 20);
+		contentPane.add(textFieldDomicilio);
+		textFieldDomicilio.setColumns(10);
+		
+		textFieldTelefono = new JTextField();
+		textFieldTelefono.setBounds(193, 83, 96, 20);
+		contentPane.add(textFieldTelefono);
+		textFieldTelefono.setColumns(10);
 
-		textField_3 = new JTextField();
-		textField_3.setBounds(193, 83, 96, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
+		textFieldCategoria = new JTextField();
+		textFieldCategoria.setBounds(193, 133, 96, 20);
+		contentPane.add(textFieldCategoria);
+		textFieldCategoria.setColumns(10);
 
-		textField_4 = new JTextField();
-		textField_4.setBounds(193, 133, 96, 20);
-		contentPane.add(textField_4);
-		textField_4.setColumns(10);
+		textFieldPersResponsable = new JTextField();
+		textFieldPersResponsable.setBounds(193, 158, 96, 20);
+		contentPane.add(textFieldPersResponsable);
+		textFieldPersResponsable.setColumns(10);
 
-		textField_5 = new JTextField();
-		textField_5.setBounds(193, 158, 96, 20);
-		contentPane.add(textField_5);
-		textField_5.setColumns(10);
-
-		textField_6 = new JTextField();
-		textField_6.setBounds(193, 183, 96, 20);
-		contentPane.add(textField_6);
-		textField_6.setColumns(10);
-
-		JComboBox comboBox = new JComboBox();
+		textFieldContacto = new JTextField();
+		textFieldContacto.setBounds(193, 183, 96, 20);
+		contentPane.add(textFieldContacto);
+		textFieldContacto.setColumns(10);
+		
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(193, 107, 96, 22);
 		contentPane.add(comboBox);
+		comboBox.addItem("Resp Inscripto");
+		comboBox.addItem("Consumidor final");
+		comboBox.addItem("Monotributista");
+		comboBox.addItem("Exento");
+		comboBox.addItem("");
 
 		JButton btnGuardarProveedor = new JButton("Guardar Proveedor");
-		btnGuardarProveedor.setBounds(140, 214, 138, 23);
+		btnGuardarProveedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nombre=null;
+				String cuitProv=null;
+				String domicilio=null;
+				String telefono=null;
+				String categoria=null;
+				String personaResponsable=null;
+				String contacto=null;
+				String condicion=null;
+				Boolean error=false;
+				
+				if(textFieldRazonSocial.getText().isEmpty()) {
+					error=true;
+					labelRazon.setVisible(true);
+				} else {
+					nombre = textFieldRazonSocial.getText();
+					labelRazon.setVisible(false);
+				}
+				if(textFieldCuit.getText().isEmpty() || textFieldCuit.getText().length()!=11) {
+					error=true;
+					labelCuit.setVisible(true);
+				} else {
+					cuitProv = textFieldCuit.getText();
+					labelCuit.setVisible(false);
+				}
+				if(textFieldCategoria.getText().isEmpty()) {
+					error=true;
+					labelCategoria.setVisible(true);
+				} else {
+					categoria = textFieldCategoria.getText();
+					labelCategoria.setVisible(false);
+				}
+				if(comboBox.getSelectedItem().equals("")) {
+					error=true;
+					labelRazon.setVisible(true);
+				} else {
+					condicion = comboBox.getSelectedItem().toString();
+					labelRazon.setVisible(false);
+				}
+				
+				if(!textFieldDomicilio.getText().isEmpty()) domicilio = textFieldDomicilio.getText();
+				if(!textFieldTelefono.getText().isEmpty()) telefono = textFieldTelefono.getText();
+				if(!textFieldPersResponsable.getText().isEmpty()) personaResponsable = textFieldPersResponsable.getText();
+				if(!textFieldContacto.getText().isEmpty()) contacto = textFieldContacto.getText();
+				
+				if(error) {
+					JOptionPane.showMessageDialog(null, "Error en algun campo");
+				} else {
+					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
+				}
+				
+				
+			}
+		});
+		btnGuardarProveedor.setBounds(140, 214, 167, 23);
 		contentPane.add(btnGuardarProveedor);
-	}
 
+		
+
+
+	}
 }
