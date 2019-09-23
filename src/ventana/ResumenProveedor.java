@@ -37,19 +37,21 @@ public class ResumenProveedor extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		
+		
 		contentPane.setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Cliente");
-			lblSeleccioneElCliente.setBounds(10, 11, 101, 14);
-			contentPanel.add(lblSeleccioneElCliente);
+			JLabel lblSeleccioneElProveedor = new JLabel("Seleccione el Proveedor");
+			lblSeleccioneElProveedor.setBounds(10, 11, 101, 14);
+			contentPanel.add(lblSeleccioneElProveedor);
 		}
 		{
-			JButton btnBuscarCliente = new JButton("Buscar Cliente");
-			btnBuscarCliente.setBounds(121, 7, 113, 23);
-			contentPanel.add(btnBuscarCliente);
+			JButton btnBuscarProveedor = new JButton("Buscar Proveedor");
+			btnBuscarProveedor.setBounds(121, 7, 113, 23);
+			contentPanel.add(btnBuscarProveedor);
 		}
 		{
 			JLabel lblNombreDelCliente = new JLabel("NOMBRE DEL Proveedor");

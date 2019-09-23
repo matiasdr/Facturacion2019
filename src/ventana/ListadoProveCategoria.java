@@ -47,6 +47,7 @@ public class ListadoProveCategoria extends JFrame {
 		JList list = new JList();
 		list.setBounds(324, 11, 110, 207);
 		contentPanel.add(list);
+		
 
 		JLabel lblSeleccioneLaCategora = new JLabel("Seleccione la categor\u00EDa");
 		lblSeleccioneLaCategora.setBounds(56, 11, 155, 25);

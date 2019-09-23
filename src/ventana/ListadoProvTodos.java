@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 public class ListadoProvTodos extends JFrame {
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
+	private JTextField textFieldCondicion;
 	private JPanel contentPane;
 
 	/**
@@ -47,6 +47,25 @@ public class ListadoProvTodos extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
+		
+
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setBounds(177, 20, 28, 22);
+		contentPanel.add(comboBox);
+		{
+			JLabel lblBuscarPor = new JLabel("Buscar por");
+			lblBuscarPor.setBounds(122, 23, 73, 14);
+			contentPanel.add(lblBuscarPor);
+		}
+		comboBox.addItem("Razon Social");
+		comboBox.addItem("CUIT");
+		
+
+		textFieldCondicion = new JTextField();
+		textFieldCondicion.setBounds(215, 20, 96, 20);
+		contentPanel.add(textFieldCondicion);
+		textFieldCondicion.setColumns(10);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 53, 376, 165);
 		contentPanel.add(scrollPane);
@@ -59,25 +78,21 @@ public class ListadoProvTodos extends JFrame {
 			JButton btnBuscarPor = new JButton("Buscar");
 			btnBuscarPor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String seleccion = comboBox.getSelectedItem().toString();
+					String condicion = textFieldCondicion.getText();
+					
+					if(seleccion.equals("Razon Social")) {
+						// llamar a la funcion de buscar por nombre del proveedor
+						
+					} else if(seleccion.equals("CUIT")) {
+						// llamar a la fucnion de buscar por CUIT.
+					}
 				}
+				
 			});
 			btnBuscarPor.setBounds(315, 19, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(177, 20, 28, 22);
-		contentPanel.add(comboBox);
-		{
-			JLabel lblBuscarPor = new JLabel("Buscar por");
-			lblBuscarPor.setBounds(122, 23, 73, 14);
-			contentPanel.add(lblBuscarPor);
-		}
-
-		textField = new JTextField();
-		textField.setBounds(215, 20, 96, 20);
-		contentPanel.add(textField);
-		textField.setColumns(10);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
