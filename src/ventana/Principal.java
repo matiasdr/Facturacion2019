@@ -112,7 +112,15 @@ public class Principal {
 		mnClientes.add(mntmNuevoCliente);
 		
 		JMenuItem mntmModificarCliente = new JMenuItem("Modificar Cliente");
+		mntmModificarCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				 ModificarCliente mc;
+				 mc = new ModificarCliente();
+				 mc.setVisible(true);				
+			}
+		});
 		mnClientes.add(mntmModificarCliente);
+		
 		
 		JMenu mnListadoDeClientes = new JMenu("Listado de Clientes");
 		mnClientes.add(mnListadoDeClientes);

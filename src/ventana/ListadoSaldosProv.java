@@ -35,7 +35,7 @@ public class ListadoSaldosProv extends JFrame {
 	 */
 	public ListadoSaldosProv() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 515, 342);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -46,17 +46,17 @@ public class ListadoSaldosProv extends JFrame {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblSeleccioneLaFecha = new JLabel("Seleccione la fecha");
-			lblSeleccioneLaFecha.setBounds(10, 11, 94, 14);
+			lblSeleccioneLaFecha.setBounds(10, 11, 122, 14);
 			contentPanel.add(lblSeleccioneLaFecha);
 		}
 		{
 			JLabel lblHasta = new JLabel("Hasta: ");
-			lblHasta.setBounds(206, 11, 49, 14);
+			lblHasta.setBounds(144, 11, 49, 14);
 			contentPanel.add(lblHasta);
 		}
 		{
 			JButton btnNewButton_1 = new JButton("New button");
-			btnNewButton_1.setBounds(240, 7, 89, 23);
+			btnNewButton_1.setBounds(262, 7, 89, 23);
 			contentPanel.add(btnNewButton_1);
 		}
 		{
@@ -65,7 +65,7 @@ public class ListadoSaldosProv extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			btnNewButton_2.setBounds(335, 7, 89, 23);
+			btnNewButton_2.setBounds(375, 7, 89, 23);
 			contentPanel.add(btnNewButton_2);
 		}
 		{

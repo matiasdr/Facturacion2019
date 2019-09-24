@@ -38,7 +38,7 @@ public class ListadoClieTodos extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListadoClieTodos() {
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 505, 339);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -48,7 +48,7 @@ public class ListadoClieTodos extends JDialog {
 		contentPanel.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(28, 53, 376, 165);
+		scrollPane.setBounds(28, 69, 414, 165);
 		contentPanel.add(scrollPane);
 		{
 			JButton btnImprimir = new JButton("Imprimir");
@@ -61,12 +61,12 @@ public class ListadoClieTodos extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			btnBuscarPor.setBounds(315, 19, 89, 23);
+			btnBuscarPor.setBounds(376, 17, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(177, 20, 28, 22);
+		comboBox.setBounds(211, 19, 28, 22);
 		contentPanel.add(comboBox);
 		{
 			JLabel lblBuscarPor = new JLabel("Buscar por");
@@ -75,7 +75,7 @@ public class ListadoClieTodos extends JDialog {
 		}
 
 		textField = new JTextField();
-		textField.setBounds(215, 20, 96, 20);
+		textField.setBounds(251, 20, 96, 20);
 		contentPanel.add(textField);
 		textField.setColumns(10);
 		{

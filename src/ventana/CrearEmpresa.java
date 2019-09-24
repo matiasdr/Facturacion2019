@@ -14,14 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 
 public class CrearEmpresa extends JFrame {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
+	private JTextField RazonSocial;
+	private JTextField NomFantacia;
+	private JTextField Cuit;
+	private JTextField Domicilio;
+	private JTextField Telefono;
+	private JTextField NumIngBrutos;
+	private JTextField FecInAct;
+	private JTextField CantPuntVtas;
 	private JPanel contentPane;
 
 	/**
@@ -91,49 +91,49 @@ public class CrearEmpresa extends JFrame {
 		lblMesDeInicio.setBounds(10, 236, 150, 14);
 		contentPane.add(lblMesDeInicio);
 
-		textField = new JTextField();
-		textField.setBounds(180, 11, 96, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		RazonSocial = new JTextField();
+		RazonSocial.setBounds(180, 11, 96, 20);
+		contentPane.add(RazonSocial);
+		RazonSocial.setColumns(10);
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(180, 33, 96, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		NomFantacia = new JTextField();
+		NomFantacia.setBounds(180, 33, 96, 20);
+		contentPane.add(NomFantacia);
+		NomFantacia.setColumns(10);
 
-		textField_2 = new JTextField();
-		textField_2.setBounds(180, 58, 96, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		Cuit = new JTextField();
+		Cuit.setBounds(180, 58, 96, 20);
+		contentPane.add(Cuit);
+		Cuit.setColumns(10);
 
-		textField_3 = new JTextField();
-		textField_3.setBounds(180, 83, 96, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
+		Domicilio = new JTextField();
+		Domicilio.setBounds(180, 83, 96, 20);
+		contentPane.add(Domicilio);
+		Domicilio.setColumns(10);
 
-		textField_4 = new JTextField();
-		textField_4.setBounds(180, 108, 96, 20);
-		contentPane.add(textField_4);
-		textField_4.setColumns(10);
+		Telefono = new JTextField();
+		Telefono.setBounds(180, 108, 96, 20);
+		contentPane.add(Telefono);
+		Telefono.setColumns(10);
 
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(180, 132, 96, 22);
 		contentPane.add(comboBox);
 
-		textField_5 = new JTextField();
-		textField_5.setBounds(180, 158, 96, 20);
-		contentPane.add(textField_5);
-		textField_5.setColumns(10);
+		NumIngBrutos = new JTextField();
+		NumIngBrutos.setBounds(180, 158, 96, 20);
+		contentPane.add(NumIngBrutos);
+		NumIngBrutos.setColumns(10);
 
-		textField_6 = new JTextField();
-		textField_6.setBounds(180, 183, 96, 20);
-		contentPane.add(textField_6);
-		textField_6.setColumns(10);
+		FecInAct = new JTextField();
+		FecInAct.setBounds(180, 183, 96, 20);
+		contentPane.add(FecInAct);
+		FecInAct.setColumns(10);
 
-		textField_7 = new JTextField();
-		textField_7.setBounds(180, 208, 96, 20);
-		contentPane.add(textField_7);
-		textField_7.setColumns(10);
+		CantPuntVtas = new JTextField();
+		CantPuntVtas.setBounds(180, 208, 96, 20);
+		contentPane.add(CantPuntVtas);
+		CantPuntVtas.setColumns(10);
 
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(180, 232, 96, 22);
