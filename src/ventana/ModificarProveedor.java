@@ -26,6 +26,7 @@ public class ModificarProveedor extends JFrame {
 	private JTextField textFieldPersResp;
 	private JTextField textFieldContacto;
 	private JPanel contentPane;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -42,7 +43,7 @@ public class ModificarProveedor extends JFrame {
 	 * Create the dialog.
 	 */
 	public ModificarProveedor() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -51,6 +52,7 @@ public class ModificarProveedor extends JFrame {
 		contentPane.setLayout(null);
 
 
+		
 		JLabel lblErrorRazon = new JLabel("Campo Invalido");
 		lblErrorRazon.setBounds(331, 59, 103, 14);
 		contentPane.add(lblErrorRazon);
@@ -152,6 +154,14 @@ public class ModificarProveedor extends JFrame {
 		contentPane.add(lblSeleccioneElCliente);
 
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ElegirProveedor ep= new ElegirProveedor(new java.awt.Frame(), true);
+				ep.setVisible(true);
+				
+				textFieldRazon.setText(ep.getProvElegido());
+			}
+		});
 		btnBuscar.setBounds(225, 11, 89, 23);
 		contentPane.add(btnBuscar);
 
@@ -217,4 +227,5 @@ public class ModificarProveedor extends JFrame {
 		contentPane.add(btnGuardar);
 		
 	}
+	
 }

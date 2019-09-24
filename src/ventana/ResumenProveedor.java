@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import com.toedter.calendar.JDateChooser;
 
 public class ResumenProveedor extends JFrame {
 
@@ -31,7 +32,7 @@ public class ResumenProveedor extends JFrame {
 	 * Create the dialog.
 	 */
 	public ResumenProveedor() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -45,12 +46,12 @@ public class ResumenProveedor extends JFrame {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblSeleccioneElProveedor = new JLabel("Seleccione el Proveedor");
-			lblSeleccioneElProveedor.setBounds(10, 11, 101, 14);
+			lblSeleccioneElProveedor.setBounds(10, 11, 142, 14);
 			contentPanel.add(lblSeleccioneElProveedor);
 		}
 		{
 			JButton btnBuscarProveedor = new JButton("Buscar Proveedor");
-			btnBuscarProveedor.setBounds(121, 7, 113, 23);
+			btnBuscarProveedor.setBounds(153, 7, 81, 23);
 			contentPanel.add(btnBuscarProveedor);
 		}
 		{
@@ -69,19 +70,9 @@ public class ResumenProveedor extends JFrame {
 			contentPanel.add(lblDesde);
 		}
 		{
-			JButton button = new JButton("New button");
-			button.setBounds(163, 32, 59, 23);
-			contentPanel.add(button);
-		}
-		{
 			JLabel lblHasta = new JLabel("Hasta: ");
-			lblHasta.setBounds(235, 36, 49, 14);
+			lblHasta.setBounds(269, 36, 49, 14);
 			contentPanel.add(lblHasta);
-		}
-		{
-			JButton btnNewButton = new JButton("New button");
-			btnNewButton.setBounds(275, 32, 59, 23);
-			contentPanel.add(btnNewButton);
 		}
 		{
 			JButton btnListar = new JButton("Listar");
@@ -98,6 +89,15 @@ public class ResumenProveedor extends JFrame {
 			btnImprimir.setBounds(198, 61, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(164, 30, 89, 20);
+		contentPanel.add(dateChooser);
+		dateChooser.setDateFormatString("dd-MM-yy");
+		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(316, 30, 89, 20);
+		contentPanel.add(dateChooser_1);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -115,5 +115,4 @@ public class ResumenProveedor extends JFrame {
 			}
 		}
 	}
-
 }
