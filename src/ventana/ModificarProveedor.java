@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ModificarProveedor extends JFrame {
 
@@ -111,6 +113,20 @@ public class ModificarProveedor extends JFrame {
 		textFieldRazon.setColumns(10);
 
 		textFieldCuit = new JTextField();
+		textFieldCuit.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char validar = e.getKeyChar();
+				if(Character.isLetter(validar)) {
+					getToolkit().beep();
+					e.consume();
+				}
+				String contenido = textFieldCuit.getText();
+				if(contenido.length()>=11) {
+					e.consume();
+				}
+			}
+		});
 		textFieldCuit.setBounds(225, 81, 96, 20);
 		contentPane.add(textFieldCuit);
 		textFieldCuit.setColumns(10);

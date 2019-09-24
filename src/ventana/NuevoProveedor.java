@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class NuevoProveedor extends JFrame {
 	private JTextField textFieldRazonSocial;
@@ -106,6 +108,20 @@ public class NuevoProveedor extends JFrame {
 		textFieldRazonSocial.setColumns(10);
 
 		textFieldCuit = new JTextField();
+		textFieldCuit.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char validar=e.getKeyChar();
+				if(Character.isLetter(validar)) {
+					getToolkit().beep();
+					e.consume();
+				}
+				String contenido = textFieldCuit.getText();
+				if(contenido.length()>=11) {
+					e.consume();
+				}
+			}
+		});
 		textFieldCuit.setBounds(193, 33, 96, 20);
 		contentPane.add(textFieldCuit);
 		textFieldCuit.setColumns(10);

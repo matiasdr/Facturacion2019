@@ -62,6 +62,7 @@ public class ElegirProveedor extends JDialog {
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				provElegido=textField.getText().toString();
+				setVisible(false);
 			}
 		});
 		btnSeleccionar.setBounds(295, 228, 89, 23);
