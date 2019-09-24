@@ -14,11 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JTable;
 
 public class ListadoProvTodos extends JFrame {
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
+	private JTextField textFieldCondicion;
 	private JPanel contentPane;
+	private JTable table;
+	private String provSeleccionado;
 
 	/**
 	 * Launch the application.
@@ -36,7 +39,7 @@ public class ListadoProvTodos extends JFrame {
 	 * Create the dialog.
 	 */
 	public ListadoProvTodos() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -47,9 +50,24 @@ public class ListadoProvTodos extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(28, 53, 376, 165);
-		contentPanel.add(scrollPane);
+		
+
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setBounds(177, 20, 28, 22);
+		contentPanel.add(comboBox);
+		{
+			JLabel lblBuscarPor = new JLabel("Buscar por");
+			lblBuscarPor.setBounds(122, 23, 73, 14);
+			contentPanel.add(lblBuscarPor);
+		}
+		comboBox.addItem("Razon Social");
+		comboBox.addItem("CUIT");
+		
+
+		textFieldCondicion = new JTextField();
+		textFieldCondicion.setBounds(215, 20, 96, 20);
+		contentPanel.add(textFieldCondicion);
+		textFieldCondicion.setColumns(10);
 		{
 			JButton btnImprimir = new JButton("Imprimir");
 			btnImprimir.setBounds(28, 19, 89, 23);
@@ -59,29 +77,40 @@ public class ListadoProvTodos extends JFrame {
 			JButton btnBuscarPor = new JButton("Buscar");
 			btnBuscarPor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String seleccion = comboBox.getSelectedItem().toString();
+					String condicion = textFieldCondicion.getText();
+					
+					if(seleccion.equals("Razon Social")) {
+						// llamar a la funcion de buscar por nombre del proveedor
+						
+					} else if(seleccion.equals("CUIT")) {
+						// llamar a la fucnion de buscar por CUIT.
+					}
+					
+					// resultado... debe ser acomodado en el JTable 
 				}
+				
 			});
 			btnBuscarPor.setBounds(315, 19, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(177, 20, 28, 22);
-		contentPanel.add(comboBox);
 		{
-			JLabel lblBuscarPor = new JLabel("Buscar por");
-			lblBuscarPor.setBounds(122, 23, 73, 14);
-			contentPanel.add(lblBuscarPor);
+			table = new JTable();
+			table.setBounds(28, 53, 386, 155);
+			contentPanel.add(table);
 		}
-
-		textField = new JTextField();
-		textField.setBounds(215, 20, 96, 20);
-		contentPanel.add(textField);
-		textField.setColumns(10);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
+			
+			JButton btnSeleccionar = new JButton("seleccionar");
+			btnSeleccionar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					provSeleccionado = textFieldCondicion.getText().toString();
+				}
+			});
+			buttonPane.add(btnSeleccionar);
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
@@ -95,5 +124,8 @@ public class ListadoProvTodos extends JFrame {
 			}
 		}
 	}
-
+	public String getProv() {
+		
+		return provSeleccionado;
+	}
 }
