@@ -3,6 +3,7 @@ package ventana;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import com.toedter.calendar.*;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 
@@ -63,10 +65,16 @@ public class ResumenProveedor extends JFrame {
 			JButton btnBuscarProveedor = new JButton("Buscar Proveedor");
 			btnBuscarProveedor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ElegirProveedor ep = new ElegirProveedor(new java.awt.Frame(), true);
-					ep.setVisible(true);
-					
-					lblNombreDelCliente.setText(ep.getProvElegido());
+					ElegirProveedor ep;
+					try {
+						ep = new ElegirProveedor(new java.awt.Frame(), true);
+						ep.setVisible(true);
+						lblNombreDelCliente.setText(String.valueOf(ep.getProvElegido()));
+
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}					
 				}
 			});
 			btnBuscarProveedor.setBounds(153, 7, 81, 23);

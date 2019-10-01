@@ -1,6 +1,7 @@
 package ventana;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -16,6 +17,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class GenerarRecibo extends JFrame {
@@ -154,10 +156,16 @@ public class GenerarRecibo extends JFrame {
 		JButton button = new JButton("Buscar");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ElegirProveedor ep = new ElegirProveedor(new java.awt.Frame(), true);
-				ep.setVisible(true);
+				ElegirProveedor ep;
+				try {
+					ep = new ElegirProveedor(new java.awt.Frame(), true);
+					ep.setVisible(true);
+					lblNombreProveedor.setText(String.valueOf(ep.getProvElegido()));
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
-				lblNombreProveedor.setText(ep.getProvElegido());
 				
 				// aca deberiasmo llamar a un store procedure para cargar el listado de las facturas de ese proveedor
 			}
