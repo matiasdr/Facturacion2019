@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import conexion.Conexion;
+
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
@@ -53,7 +56,8 @@ public class Principal {
 		frame.setBounds(100, 100, 1000, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//javax.swing.UIManager.setLookAndFeel("Windows");
-		
+		Conexion nc = new Conexion();
+		nc.conectar();
 		try{
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		}  catch (Exception e) {
@@ -210,6 +214,12 @@ public class Principal {
 		mnGenerar.add(mntmFactura);
 		
 		JMenuItem mntmRecibo = new JMenuItem("Recibo");
+		mntmRecibo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GenerarRecibo recibo = new GenerarRecibo();
+				recibo.setVisible(true);
+			}
+		});
 		mnGenerar.add(mntmRecibo);
 		
 		JMenu mnCargar = new JMenu("Cargar");

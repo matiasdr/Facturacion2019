@@ -2,6 +2,8 @@ package ventana;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -10,12 +12,18 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.*;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Date;
+import java.awt.event.ActionEvent;
+
 
 public class ResumenProveedor extends JFrame {
 
 	private final JPanel contentPanel = new JPanel();
 	private JPanel contentPane;
+	JLabel lblNombreDelCliente = new JLabel("NOMBRE DEL Proveedor");
 	/**
 	 * Launch the application.
 	 */
@@ -50,15 +58,29 @@ public class ResumenProveedor extends JFrame {
 			contentPanel.add(lblSeleccioneElProveedor);
 		}
 		{
-			JButton btnBuscarProveedor = new JButton("Buscar Proveedor");
-			btnBuscarProveedor.setBounds(153, 7, 81, 23);
-			contentPanel.add(btnBuscarProveedor);
-		}
-		{
-			JLabel lblNombreDelCliente = new JLabel("NOMBRE DEL Proveedor");
 			lblNombreDelCliente.setBounds(244, 11, 142, 14);
 			contentPanel.add(lblNombreDelCliente);
 		}
+		{
+			JButton btnBuscarProveedor = new JButton("Buscar Proveedor");
+			btnBuscarProveedor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ElegirProveedor ep;
+					try {
+						ep = new ElegirProveedor(new java.awt.Frame(), true);
+						ep.setVisible(true);
+						lblNombreDelCliente.setText(String.valueOf(ep.getProvElegido()));
+
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}					
+				}
+			});
+			btnBuscarProveedor.setBounds(153, 7, 81, 23);
+			contentPanel.add(btnBuscarProveedor);
+		}
+		
 		{
 			JLabel lblSeleccioneElPeriodo = new JLabel("Seleccione el periodo");
 			lblSeleccioneElPeriodo.setBounds(10, 36, 113, 14);
@@ -74,8 +96,25 @@ public class ResumenProveedor extends JFrame {
 			lblHasta.setBounds(269, 36, 49, 14);
 			contentPanel.add(lblHasta);
 		}
+		JDateChooser fechaDesde = new JDateChooser();
+		fechaDesde.setBounds(164, 30, 89, 20);
+		contentPanel.add(fechaDesde);
+		fechaDesde.setDateFormatString("dd-MM-yy");
+		
+		JDateChooser fechaHasta = new JDateChooser();
+		fechaHasta.setBounds(316, 30, 89, 20);
+		contentPanel.add(fechaHasta);
+		fechaHasta.setDateFormatString("dd-MM-yy");
 		{
 			JButton btnListar = new JButton("Listar");
+			btnListar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String prov = lblNombreDelCliente.getText();
+					Date desde = fechaDesde.getDate();
+					Date hasta = fechaHasta.getDate();
+					// aca llamariamos al store procedure y le pasariamos como parametros el nomrbe del proveedor y las fechas
+				}
+			});
 			btnListar.setBounds(10, 61, 89, 23);
 			contentPanel.add(btnListar);
 		}
@@ -90,14 +129,7 @@ public class ResumenProveedor extends JFrame {
 			contentPanel.add(btnImprimir);
 		}
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(164, 30, 89, 20);
-		contentPanel.add(dateChooser);
-		dateChooser.setDateFormatString("dd-MM-yy");
-		
-		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(316, 30, 89, 20);
-		contentPanel.add(dateChooser_1);
+	
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

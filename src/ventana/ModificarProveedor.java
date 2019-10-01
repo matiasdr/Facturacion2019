@@ -2,6 +2,7 @@ package ventana;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,10 +13,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import conexion.Conexion;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ModificarProveedor extends JFrame {
 
@@ -43,8 +51,9 @@ public class ModificarProveedor extends JFrame {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ModificarProveedor() {
+	public ModificarProveedor() throws SQLException {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -111,7 +120,7 @@ public class ModificarProveedor extends JFrame {
 		textFieldRazon.setBounds(225, 56, 96, 20);
 		contentPane.add(textFieldRazon);
 		textFieldRazon.setColumns(10);
-
+		
 		textFieldCuit = new JTextField();
 		textFieldCuit.addKeyListener(new KeyAdapter() {
 			@Override
@@ -155,27 +164,68 @@ public class ModificarProveedor extends JFrame {
 		textFieldContacto.setBounds(225, 231, 96, 20);
 		contentPane.add(textFieldContacto);
 		textFieldContacto.setColumns(10);
-
+		
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(225, 155, 96, 22);
 		contentPane.add(comboBox);
-		comboBox.addItem("Resp Inscripto");
-		comboBox.addItem("Consumidor final");
-		comboBox.addItem("Monotributista");
-		comboBox.addItem("Exento");
-		comboBox.addItem("");
 
-		JLabel lblSeleccioneElProov = new JLabel("Seleccione el Proveedor");
-		lblSeleccioneElProov.setBounds(42, 11, 170, 14);
-		contentPane.add(lblSeleccioneElProov);
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from condicion_fiscal");
+		while(resultado.next()) {
+			comboBox.addItem(resultado.getString("descripcion"));
+		}
+		JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Proveedor");
+		lblSeleccioneElCliente.setBounds(42, 11, 170, 14);
+		contentPane.add(lblSeleccioneElCliente);
 
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ElegirProveedor ep= new ElegirProveedor(new java.awt.Frame(), true);
-				ep.setVisible(true);
+				Integer id_prov=null;
+				try {
+					ElegirProveedor ep;
+					ep = new ElegirProveedor(new java.awt.Frame(), true);
+					ep.setVisible(true);
+					id_prov=ep.getProvElegido();
+					//textFieldRazon.setText(ep.getProvElegido());
+				} catch (HeadlessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Conexion nc = new Conexion();
+				Connection conec = nc.conectar();
+				try {
+					Statement instruccion = conec.createStatement();
+					ResultSet resultado = instruccion.executeQuery("Select * from proveedor where id_proveedor = "+id_prov);
+					// ahora rellenamos todos los campos con los datos de la consulta
+					while(resultado.next()) {
+					textFieldRazon.setText(resultado.getString("nombre"));
+					textFieldCategoria.setText(resultado.getString("categoria"));
+					textFieldDomicilio.setText(resultado.getString("domicilio"));
+					textFieldPersResp.setText(resultado.getString("nombrecontacto"));
+					textFieldContacto.setText(resultado.getString("telefonocontacto"));
+					textFieldTelefono.setText(resultado.getString("telefono"));
+					int seleccion = resultado.getInt("id_condicion_fiscal");
+					comboBox.setSelectedIndex(seleccion-1);
+					String cadena = resultado.getString("cuilcuit");
+					cadena = cadena.replace("-", "");
+					textFieldCuit.setText(cadena);
+					
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
-				textFieldRazon.setText(ep.getProvElegido());
+				nc.desconectar();
+				
+				
 			}
 		});
 		btnBuscar.setBounds(225, 11, 89, 23);
