@@ -165,9 +165,9 @@ public class ModificarProveedor extends JFrame {
 		comboBox.addItem("Exento");
 		comboBox.addItem("");
 
-		JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Proveedor");
-		lblSeleccioneElCliente.setBounds(42, 11, 170, 14);
-		contentPane.add(lblSeleccioneElCliente);
+		JLabel lblSeleccioneElProov = new JLabel("Seleccione el Proveedor");
+		lblSeleccioneElProov.setBounds(42, 11, 170, 14);
+		contentPane.add(lblSeleccioneElProov);
 
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {

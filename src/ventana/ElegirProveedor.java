@@ -38,7 +38,8 @@ public class ElegirProveedor extends JDialog {
 	 */
 	public ElegirProveedor(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
-		setBounds(100, 100, 450, 300);
+		setTitle("Busqueda de Proveedores");
+		setBounds(100, 100, 527, 337);
 		getContentPane().setLayout(null);
 		
 		textField = new JTextField();
