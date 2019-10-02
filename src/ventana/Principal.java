@@ -7,6 +7,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -43,27 +47,27 @@ public class Principal {
 
 	/**
 	 * Create the application.
+	 * @throws SQLException 
 	 */
-	public Principal() {
+	public Principal() throws SQLException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws SQLException 
 	 */
-	private void initialize() {
+	private void initialize() throws SQLException {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//javax.swing.UIManager.setLookAndFeel("Windows");
-		Conexion nc = new Conexion();
-		nc.conectar();
+		
 		try{
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		}  catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		SwingUtilities.updateComponentTreeUI(frame);
 
 		//updateComponentTreeUI(frame);
@@ -156,8 +160,15 @@ public class Principal {
 		JMenuItem mntmModificarProveedor = new JMenuItem("Modificar Proveedor");
 		mntmModificarProveedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ModificarProveedor mp = new ModificarProveedor();
-				mp.setVisible(true);
+				ModificarProveedor mp;
+				try {
+					mp = new ModificarProveedor();
+					mp.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnProveedores.add(mntmModificarProveedor);
@@ -226,24 +237,54 @@ public class Principal {
 		menuBar.add(mnCargar);
 		
 		JMenuItem mntmFacturasDeCompra = new JMenuItem("Facturas de Compra");
+		mntmFacturasDeCompra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CargarFacturaCompra cfc= new CargarFacturaCompra();
+				cfc.setVisible(true);
+			}
+		});
 		mnCargar.add(mntmFacturasDeCompra);
 		
 		JMenuItem mntmFacturasDeVenta = new JMenuItem("Facturas de Venta");
+		mntmFacturasDeVenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CargarFacturaVenta cfv= new CargarFacturaVenta();
+				cfv.setVisible(true);
+			}
+		});
 		mnCargar.add(mntmFacturasDeVenta);
 		
 		JMenu mnListados = new JMenu("Listados");
 		menuBar.add(mnListados);
 		
 		JMenuItem mntmIvaVentas = new JMenuItem("IVA Ventas");
+		mntmIvaVentas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListadoIVAVentas liv= new ListadoIVAVentas();
+				liv.setVisible(true);
+			}
+		});
 		mnListados.add(mntmIvaVentas);
 		
 		JMenuItem mntmIvaCompras = new JMenuItem("IVA Compras");
+		mntmIvaCompras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListadoIVACompras lic = new ListadoIVACompras();
+				lic.setVisible(true);
+			}
+		});
 		mnListados.add(mntmIvaCompras);
 		
 		JMenu mnArtculos = new JMenu("Art\u00EDculos");
 		menuBar.add(mnArtculos);
 		
 		JMenuItem mntmNuevoArtculo = new JMenuItem("Nuevo Art\u00EDculo");
+		mntmNuevoArtculo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NuevoArticulo na = new NuevoArticulo();
+				na.setVisible(true);
+			}
+		});
 		mnArtculos.add(mntmNuevoArtculo);
 		
 		JMenuItem mntmModificarArtculo = new JMenuItem("Modificar Art\u00EDculo");
