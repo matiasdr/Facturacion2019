@@ -169,6 +169,7 @@ public class ModificarProveedor extends JFrame {
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(225, 155, 96, 22);
 		contentPane.add(comboBox);
+
 		
 		Conexion nc = new Conexion();
 		Connection conec = nc.conectar();

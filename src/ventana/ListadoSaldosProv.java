@@ -44,7 +44,7 @@ public class ListadoSaldosProv extends JFrame {
 	public ListadoSaldosProv() {
 
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 526, 290);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -61,15 +61,15 @@ public class ListadoSaldosProv extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblSeleccioneLaFecha = new JLabel("Seleccione la fecha");
+			JLabel lblSeleccioneLaFecha = new JLabel("Seleccione la fecha ");
 
-			lblSeleccioneLaFecha.setBounds(30, 11, 94, 14);
+			lblSeleccioneLaFecha.setBounds(30, 11, 114, 14);
 			contentPanel.add(lblSeleccioneLaFecha);
 		}
 		{
 			JLabel lblHasta = new JLabel("Hasta: ");
 
-			lblHasta.setBounds(134, 11, 49, 14);
+			lblHasta.setBounds(154, 11, 49, 14);
 			contentPanel.add(lblHasta);
 		}
 		{
@@ -107,24 +107,6 @@ public class ListadoSaldosProv extends JFrame {
 			JButton btnImprimir = new JButton("Imprimir");
 			btnImprimir.setBounds(166, 194, 89, 23);
 			contentPanel.add(btnImprimir);
-		}
-		
-		
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			contentPane.add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
 		}
 	}
 }
