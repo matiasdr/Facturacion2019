@@ -9,10 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.JTable;
 
 public class ListadoIVAVentas extends JFrame {
 
 	private JPanel contentPane;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -34,40 +37,43 @@ public class ListadoIVAVentas extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoIVAVentas() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 590, 508);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblSeleccioneElPerodo = new JLabel("Seleccione el Per\u00EDodo");
-		lblSeleccioneElPerodo.setBounds(10, 11, 119, 14);
+		JLabel lblSeleccioneElPerodo = new JLabel("Periodo");
+		lblSeleccioneElPerodo.setBounds(10, 11, 61, 14);
 		contentPane.add(lblSeleccioneElPerodo);
 		
 		JLabel lblDesde = new JLabel("Desde");
-		lblDesde.setBounds(119, 11, 49, 14);
+		lblDesde.setBounds(81, 11, 49, 14);
 		contentPane.add(lblDesde);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(154, 7, 42, 23);
-		contentPane.add(btnNewButton);
-		
 		JLabel lblHasta = new JLabel("Hasta");
-		lblHasta.setBounds(206, 11, 49, 14);
+		lblHasta.setBounds(234, 11, 49, 14);
 		contentPane.add(lblHasta);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setBounds(238, 7, 49, 23);
-		contentPane.add(btnNewButton_1);
-		
-		JList list = new JList();
-		list.setBounds(27, 47, 397, 204);
-		contentPane.add(list);
-		
 		JButton btnImprimir = new JButton("Imprimir");
-		btnImprimir.setBounds(308, 7, 89, 23);
+		btnImprimir.setBounds(475, 7, 89, 23);
 		contentPane.add(btnImprimir);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(126, 5, 98, 20);
+		contentPane.add(dateChooser);
+		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(268, 7, 98, 20);
+		contentPane.add(dateChooser_1);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(376, 7, 89, 23);
+		contentPane.add(btnBuscar);
+		
+		table = new JTable();
+		table.setBounds(38, 56, 507, 377);
+		contentPane.add(table);
 	}
-
 }

@@ -69,6 +69,11 @@ public class GenerarRecibo extends JFrame {
 		JRadioButton rdbtnPorPagoEfectuado = new JRadioButton("Por Pago a Proveedores");
 		rdbtnPorPagoEfectuado.setBounds(408, 26, 209, 23);
 		contentPane.add(rdbtnPorPagoEfectuado);
+		
+		ButtonGroup elec = new ButtonGroup();
+		elec.add(rdbtnPorPagoEfectuado);
+		elec.add(rdbtnPagoRecibido);
+
 
 		JLabel lblSeleccionarCliente = new JLabel("Seleccionar Cliente");
 		lblSeleccionarCliente.setBounds(10, 55, 99, 14);
@@ -160,7 +165,7 @@ public class GenerarRecibo extends JFrame {
 				try {
 					ep = new ElegirProveedor(new java.awt.Frame(), true);
 					ep.setVisible(true);
-					lblNombreProveedor.setText(String.valueOf(ep.getProvElegido()));
+					lblNombreProveedor.setText(ep.getNombreProovedor());
 				} catch (HeadlessException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

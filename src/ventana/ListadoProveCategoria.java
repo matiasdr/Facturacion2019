@@ -54,7 +54,7 @@ public class ListadoProveCategoria extends JFrame {
 
 		DefaultListModel listModel = new DefaultListModel<String>(); // En las siguientes líneas cargamos la lista de las categorias
 		JList list = new JList();
-		list.setBounds(324, 11, 110, 207);
+		list.setBounds(325, 0, 89, 222);
 		list.setModel(listModel);
 		contentPanel.add(list);
 		listModel.addElement("Categoria 1");
@@ -70,15 +70,18 @@ public class ListadoProveCategoria extends JFrame {
 		btnImprimir.setBounds(196, 204, 89, 23);
 		contentPanel.add(btnImprimir);
 		
-		DefaultTableModel tablaProv = new DefaultTableModel(0, 2); // Definimos el encabezado de la lsita de proveedores
-		Object[] encabezado = new Object[2];
-		encabezado[0]="C U I T";
-		encabezado[1]="Razon Social";
-		tablaProv.addRow(encabezado);
+		
+		DefaultTableModel tablaModelo = new DefaultTableModel(0, 3);
+		Object[] fila = new Object[3];
+		fila[0]= "ID Prov";
+		fila[1]= "Nombre";
+		fila[2]= "CUIT";
+		tablaModelo.addRow(fila);
+		
 		
 		table = new JTable();
 		table.setBounds(28, 50, 286, 143);
-		table.setModel(tablaProv);
+		table.setModel(tablaModelo);
 		contentPanel.add(table);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -105,23 +108,5 @@ public class ListadoProveCategoria extends JFrame {
 		});
 		btnFiltrar.setBounds(221, 12, 89, 23);
 		contentPanel.add(btnFiltrar);
-
-		
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			contentPane.add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
 	}
 }

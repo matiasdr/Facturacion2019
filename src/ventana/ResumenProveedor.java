@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
 import java.awt.event.ActionEvent;
+import javax.swing.JTable;
 
 
 public class ResumenProveedor extends JFrame {
@@ -24,6 +25,7 @@ public class ResumenProveedor extends JFrame {
 	private final JPanel contentPanel = new JPanel();
 	private JPanel contentPane;
 	JLabel lblNombreDelCliente = new JLabel("NOMBRE DEL Proveedor");
+	private JTable table;
 	/**
 	 * Launch the application.
 	 */
@@ -69,7 +71,7 @@ public class ResumenProveedor extends JFrame {
 					try {
 						ep = new ElegirProveedor(new java.awt.Frame(), true);
 						ep.setVisible(true);
-						lblNombreDelCliente.setText(String.valueOf(ep.getProvElegido()));
+						lblNombreDelCliente.setText(ep.getNombreProovedor());
 
 					} catch (HeadlessException | SQLException e1) {
 						// TODO Auto-generated catch block
@@ -119,15 +121,14 @@ public class ResumenProveedor extends JFrame {
 			contentPanel.add(btnListar);
 		}
 		{
-			JList list = new JList();
-			list.setBounds(10, 96, 402, 122);
-			contentPanel.add(list);
-		}
-		{
 			JButton btnImprimir = new JButton("Imprimir");
 			btnImprimir.setBounds(198, 61, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
+		
+		table = new JTable();
+		table.setBounds(10, 99, 404, 109);
+		contentPanel.add(table);
 		
 	
 		{

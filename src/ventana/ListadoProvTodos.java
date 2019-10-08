@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,6 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
+import conexion.Conexion;
+
 import javax.swing.JTable;
 
 public class ListadoProvTodos extends JFrame {
@@ -37,10 +49,13 @@ public class ListadoProvTodos extends JFrame {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ListadoProvTodos() {
+	public ListadoProvTodos() throws SQLException {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 519, 305);
+		
+		setBounds(100, 100, 591, 358);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -51,9 +66,20 @@ public class ListadoProvTodos extends JFrame {
 		contentPanel.setLayout(null);
 
 		
+		DefaultTableModel tablaModelo = new DefaultTableModel(0, 3);
+		Object[] fila = new Object[3];
+		fila[0]= "ID Prov";
+		fila[1]= "Nombre";
+		fila[2]= "CUIT";
+		tablaModelo.addRow(fila);
+		
 
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(177, 20, 93, 22);
+
+		
+
+		comboBox.setBounds(185, 19, 106, 22);
+
 		contentPanel.add(comboBox);
 		{
 			JLabel lblBuscarPor = new JLabel("Buscar por");
@@ -65,7 +91,8 @@ public class ListadoProvTodos extends JFrame {
 		
 
 		textFieldCondicion = new JTextField();
-		textFieldCondicion.setBounds(282, 20, 96, 21);
+
+		textFieldCondicion.setBounds(325, 21, 106, 20);
 		contentPanel.add(textFieldCondicion);
 		textFieldCondicion.setColumns(10);
 		{
@@ -82,35 +109,109 @@ public class ListadoProvTodos extends JFrame {
 					
 					if(seleccion.equals("Razon Social")) {
 						// llamar a la funcion de buscar por nombre del proveedor
+						Conexion nc = new Conexion();
+						Connection conec = nc.conectar();
+						Statement instruccion;
+						try {
+							instruccion = conec.createStatement();
+							ResultSet resultado = instruccion.executeQuery("Select * from proveedor where nombre like '%"+condicion+"%'");
+							
+							// antes de cargar los resultado borramos todos los datos de la tabla menos la primer fial que tiene el encabezado
+							
+							while(tablaModelo.getRowCount()>1) {
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							
+							while(resultado.next()) {
+								Object[] linea = new Object[3];
+								linea[0]= resultado.getInt("id_proveedor");
+								linea[1]= resultado.getString("nombre");
+								linea[2]= resultado.getString("cuilcuit");
+								tablaModelo.addRow(linea);
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+							
+						
+						nc.desconectar();
+						
+						
 						
 					} else if(seleccion.equals("CUIT")) {
 						// llamar a la fucnion de buscar por CUIT.
+						
+						Conexion nc = new Conexion();
+						Connection conec = nc.conectar();
+						Statement instruccion;
+						try {
+							instruccion = conec.createStatement();
+							ResultSet resultado = instruccion.executeQuery("Select * from proveedor where cuilcuit = '"+condicion+"'");
+							
+							// antes de cargar los resultado borramos todos los datos de la tabla menos la primer fial que tiene el encabezado
+							
+							while(tablaModelo.getRowCount()>1) {
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							
+							while(resultado.next()) {
+								Object[] linea = new Object[3];
+								linea[0]= resultado.getInt("id_proveedor");
+								linea[1]= resultado.getString("nombre");
+								linea[2]= resultado.getString("cuilcuit");
+								tablaModelo.addRow(linea);
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+							
+						
+						nc.desconectar();
+						
+						
 					}
 					
 					// resultado... debe ser acomodado en el JTable 
 				}
 				
 			});
-			btnBuscarPor.setBounds(390, 20, 89, 23);
+
+			btnBuscarPor.setBounds(441, 20, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
 		{
 			table = new JTable();
-			table.setBounds(0, 53, 479, 155);
+
+			table.setModel(tablaModelo);
+			table.setBounds(28, 53, 502, 199);
+
 			contentPanel.add(table);
+			
 		}
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from proveedor");
+		
+		while(resultado.next()) {
+			Object[] linea = new Object[3];
+			linea[0]= resultado.getInt("id_proveedor");
+			linea[1]= resultado.getString("nombre");
+			linea[2]= resultado.getString("cuilcuit");
+			tablaModelo.addRow(linea);
+			
+		}
+		nc.desconectar();
+		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
-			
-			JButton btnSeleccionar = new JButton("seleccionar");
-			btnSeleccionar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					provSeleccionado = textFieldCondicion.getText().toString();
-				}
-			});
-			buttonPane.add(btnSeleccionar);
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
@@ -129,3 +230,5 @@ public class ListadoProvTodos extends JFrame {
 		return provSeleccionado;
 	}
 }
+
+
