@@ -2,6 +2,7 @@ package ventana;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,7 +13,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import conexion.Conexion;
+
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -43,8 +53,8 @@ public class ModificarCliente extends JFrame {
 	/**
 	 * Create the dialog.
 	 */
-	public ModificarCliente() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public ModificarCliente() throws SQLException {
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 582, 348);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -117,6 +127,21 @@ public class ModificarCliente extends JFrame {
 		mod_cliRazSoc.setColumns(10);
 
 		mod_cliCuit = new JTextField();
+		mod_cliCuit.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char validar = e.getKeyChar();
+				if(Character.isLetter(validar)) {
+					getToolkit().beep();
+					e.consume();
+				}
+				String contenido = mod_cliCuit.getText();
+				if(contenido.length()>=11) {
+					e.consume();
+				}
+			}
+		});
+		
 		mod_cliCuit.setBounds(195, 81, 136, 20);
 		contentPane.add(mod_cliCuit);
 		mod_cliCuit.setColumns(10);
@@ -147,13 +172,16 @@ public class ModificarCliente extends JFrame {
 		mod_cliContacto.setColumns(10);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(198, 155, 96, 22);
+		comboBox.setBounds(198, 155, 164, 22);
 		contentPane.add(comboBox);
-		comboBox.addItem("Resp Inscripto");
-		comboBox.addItem("Consumidor final");
-		comboBox.addItem("Monotributista");
-		comboBox.addItem("Exento");
-		comboBox.addItem("");
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from condicion_fiscal");
+		while(resultado.next()) {
+			comboBox.addItem(resultado.getString("descripcion"));
+		}
 
 		JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Cliente");
 		lblSeleccioneElCliente.setBounds(42, 11, 144, 14);
@@ -161,12 +189,46 @@ public class ModificarCliente extends JFrame {
 
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ElegirCliente ep= new ElegirCliente(new java.awt.Frame(), true);
-				ep.setVisible(true);
+			public void actionPerformed(ActionEvent e) {
+				Integer id_cli=null;
+				try {
+					ElegirCliente ec;
+					ec = new ElegirCliente(new java.awt.Frame(), true);
+					ec.setVisible(true);
+					id_cli=ec.getClienElegido();
+				} catch (HeadlessException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Conexion nc = new Conexion();
+				Connection conec = nc.conectar();
+				try {
+					Statement instruccion = conec.createStatement();
+					ResultSet resultado = instruccion.executeQuery("Select * from cliente where id_cliente = "+id_cli);
+					// ahora rellenamos todos los campos con los datos de la consulta
+					while(resultado.next()) {
+					mod_cliRazSoc.setText(resultado.getString("nombre"));
+					mod_cliCateg.setText(resultado.getString("categoria"));
+					mod_cliDom.setText(resultado.getString("domicilio"));
+					mod_cliResp.setText(resultado.getString("nombrecontacto"));
+					mod_cliContacto.setText(resultado.getString("telefonocontacto"));
+					mod_cliTelef.setText(resultado.getString("telefono"));
+					int seleccion = resultado.getInt("id_condicion_fiscal");
+					comboBox.setSelectedIndex(seleccion-1);
+					String cadena = resultado.getString("cuilcuit");
+					cadena = cadena.replace("-", "");
+					mod_cliCuit.setText(cadena);
+					
+					}
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
 				
-				mod_cliRazSoc.setText(ep.getClienElegido());
-				
+				nc.desconectar();
+						
 			}
 		});
 		btnBuscar.setBounds(225, 11, 89, 23);

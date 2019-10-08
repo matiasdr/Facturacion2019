@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -65,7 +66,7 @@ public class Principal {
 		}
 
 		SwingUtilities.updateComponentTreeUI(frame);
-
+        
 		//updateComponentTreeUI(frame);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -118,9 +119,16 @@ public class Principal {
 		JMenuItem mntmModificarCliente = new JMenuItem("Modificar Cliente");
 		mntmModificarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				 ModificarCliente mc;
-				 mc = new ModificarCliente();
-				 mc.setVisible(true);				
+				 
+				 try {
+					 ModificarCliente mc;
+					mc = new ModificarCliente();
+					mc.setVisible(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 				
 			}
 		});
 		mnClientes.add(mntmModificarCliente);
@@ -130,6 +138,13 @@ public class Principal {
 		mnClientes.add(mnListadoDeClientes);
 		
 		JMenuItem mntmTodos = new JMenuItem("Todos");
+		mntmTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ListadoClieTodos ltc = new ListadoClieTodos(); 
+			    ltc.setVisible(true);
+				
+			}
+		});
 		mnListadoDeClientes.add(mntmTodos);
 		
 		JMenuItem mntmPorCategoria = new JMenuItem("Por Categoria");
@@ -156,8 +171,15 @@ public class Principal {
 		JMenuItem mntmModificarProveedor = new JMenuItem("Modificar Proveedor");
 		mntmModificarProveedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ModificarProveedor mp = new ModificarProveedor();
-				mp.setVisible(true);
+				ModificarProveedor mp;
+				try {
+					mp = new ModificarProveedor();
+					mp.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnProveedores.add(mntmModificarProveedor);
