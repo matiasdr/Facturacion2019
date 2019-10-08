@@ -20,6 +20,8 @@ import conexion.Conexion;
 
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
+
 import javax.swing.JTextField;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -151,8 +153,16 @@ public class Principal {
 		JMenuItem mntmNuevoProveedor = new JMenuItem("Nuevo Proveedor");
 		mntmNuevoProveedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NuevoProveedor np = new NuevoProveedor();
-				np.setVisible(true);
+				
+				try {
+					NuevoProveedor np;
+					np = new NuevoProveedor();
+					np.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnProveedores.add(mntmNuevoProveedor);
@@ -179,8 +189,14 @@ public class Principal {
 		JMenuItem mntmTodos_1 = new JMenuItem("Todos");
 		mntmTodos_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListadoProvTodos lp= new ListadoProvTodos();
-				lp.setVisible(true);
+				try {
+					ListadoProvTodos lp = new ListadoProvTodos();
+					lp.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnListadoDeProveedores.add(mntmTodos_1);
@@ -218,8 +234,16 @@ public class Principal {
 		JMenuItem mntmFactura = new JMenuItem("Factura");
 		mntmFactura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GenerarFactura facturar= new GenerarFactura();
-				facturar.setVisible(true);
+				
+				try {
+					GenerarFactura facturar;
+					facturar = new GenerarFactura();
+					facturar.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnGenerar.add(mntmFactura);
@@ -281,19 +305,54 @@ public class Principal {
 		JMenuItem mntmNuevoArtculo = new JMenuItem("Nuevo Art\u00EDculo");
 		mntmNuevoArtculo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NuevoArticulo na = new NuevoArticulo();
-				na.setVisible(true);
+				
+				try {
+					NuevoArticulo na;
+					na = new NuevoArticulo();
+					na.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnArtculos.add(mntmNuevoArtculo);
 		
 		JMenuItem mntmModificarArtculo = new JMenuItem("Modificar Art\u00EDculo");
+		mntmModificarArtculo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ModificarArticulo ma = new ModificarArticulo();
+					ma.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnArtculos.add(mntmModificarArtculo);
 		
 		JMenuItem mntmListadoArticulos = new JMenuItem("Listado de Articulos");
+		mntmListadoArticulos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ListadoArticulos la = new ListadoArticulos(new java.awt.Frame(), false);
+					la.setVisible(true);
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		mnArtculos.add(mntmListadoArticulos);
 		
 		JMenuItem mntmCambiarPrecios = new JMenuItem("Cambiar Precios");
+		mntmCambiarPrecios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		mnArtculos.add(mntmCambiarPrecios);
 		
 		JMenu mnUsuarios = new JMenu("Usuarios");

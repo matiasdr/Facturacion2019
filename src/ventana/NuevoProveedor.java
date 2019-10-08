@@ -10,6 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import conexion.Conexion;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -17,6 +20,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class NuevoProveedor extends JFrame {
 	private JTextField textFieldRazonSocial;
@@ -41,8 +48,9 @@ public class NuevoProveedor extends JFrame {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public NuevoProveedor() {
+	public NuevoProveedor() throws SQLException {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -154,12 +162,15 @@ public class NuevoProveedor extends JFrame {
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setBounds(193, 107, 96, 22);
 		contentPane.add(comboBox);
-		comboBox.addItem("Resp Inscripto");
-		comboBox.addItem("Consumidor final");
-		comboBox.addItem("Monotributista");
-		comboBox.addItem("Exento");
-		comboBox.addItem("");
 
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from condicion_fiscal");
+		while(resultado.next()) {
+			comboBox.addItem(resultado.getString("descripcion"));
+		}
 		JButton btnGuardarProveedor = new JButton("Guardar Proveedor");
 		btnGuardarProveedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

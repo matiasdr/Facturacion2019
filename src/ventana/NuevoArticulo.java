@@ -6,12 +6,20 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import conexion.Conexion;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class NuevoArticulo extends JFrame {
 
@@ -39,8 +47,9 @@ public class NuevoArticulo extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
 	 */
-	public NuevoArticulo() {
+	public NuevoArticulo() throws SQLException {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 490, 287);
 		contentPane = new JPanel();
@@ -124,5 +133,21 @@ public class NuevoArticulo extends JFrame {
 		});
 		btnNewButton_1.setBounds(293, 166, 89, 23);
 		contentPane.add(btnNewButton_1);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(301, 114, 96, 20);
+		contentPane.add(comboBox);
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from proveedor");
+		while(resultado.next()) {
+			comboBox.addItem(resultado.getString("nombre"));
+		}
+		
+		JLabel label = new JLabel("Proveedor");
+		label.setBounds(10, 117, 118, 14);
+		contentPane.add(label);
 	}
 }

@@ -12,11 +12,22 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.xml.ws.handler.MessageContext;
+
+import conexion.Conexion;
+import javax.swing.JScrollPane;
 
 public class GenerarFactura extends JFrame {
 	private JTextField textFieldVencimiento;
@@ -24,6 +35,7 @@ public class GenerarFactura extends JFrame {
 	private JTextField textFieldCantidad;
 	private JPanel contentPane;
 	private JTable table;
+	private JTable tablaProductos;
 	
 	/**
 	 * Launch the application.
@@ -43,8 +55,9 @@ public class GenerarFactura extends JFrame {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public GenerarFactura() {
+	public GenerarFactura() throws SQLException {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
@@ -115,19 +128,41 @@ public class GenerarFactura extends JFrame {
 		lblDasDeVencimiento.setBounds(113, 93, 111, 14);
 		contentPane.add(lblDasDeVencimiento);		
 		
-		DefaultTableModel modelTabla = new DefaultTableModel(0, 5);
 		Object[] fila=new Object[5];
 		fila[0]="EAN";
 		fila[1]="Articulo";
 		fila[2]="Cantidad";
 		fila[3]="Precio Unitario";
 		fila[4]="Precio Total";
-		modelTabla.addRow(fila);
 		
-		table = new JTable();
-		table.setModel(modelTabla);
-		table.setBounds(10, 260, 273, 50);
-		contentPane.add(table);
+		DefaultTableModel modelTabla = new DefaultTableModel(fila, 0);
+		
+		
+		
+		Object[] encabe=new Object[4];
+		encabe[0]="EAN";
+		encabe[1]="Descripcion";
+		encabe[2]="Stock";
+		encabe[3]="Precio Unitario";		
+		
+		
+		DefaultTableModel modelTablaProductos = new DefaultTableModel(encabe, 0);
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from articulo");
+		
+		while(resultado.next()) {
+			Object[] linea = new Object[4];
+			linea[0]= resultado.getString("ean");
+			linea[1]= resultado.getString("descripcion");
+			linea[2]= resultado.getInt("cantidad");
+			linea[3]= resultado.getDouble("precio_venta");
+			modelTablaProductos.addRow(linea);
+			
+		}
+		nc.desconectar();
 		
 		JLabel lblBuscarArtculos = new JLabel("Buscar Art\u00EDculos");
 		lblBuscarArtculos.setBounds(10, 116, 93, 14);
@@ -151,20 +186,41 @@ public class GenerarFactura extends JFrame {
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String art = textFieldArticulo.getText();
-				// llamar a la funcion buscar articulo por nombre y colocar los resultados en el Jlist
+				
+				// llamar a la funcion buscar articulo por nombre y colocar los resultados en el JTable
+				
+				Conexion nc1 = new Conexion();
+				Connection conec1 = nc1.conectar();
+				Statement instruccion1;
+				try {
+					instruccion1 = conec1.createStatement();
+					ResultSet resultado1 = instruccion1.executeQuery("Select * from articulo join proveedor ON proveedor.id_proveedor = articulo.id_proveedor where descripcion like '%"+art+"%'");
+					
+					// antes de cargar los resultado borramos todos los datos de la tabla menos la primer fial que tiene el encabezado
+					
+					while(modelTablaProductos.getRowCount()>0) {
+						modelTablaProductos.removeRow(modelTablaProductos.getRowCount()-1);
+					}
+					
+					while(resultado1.next()) {
+						Object[] linea = new Object[4];
+						linea[0]= resultado1.getString("ean");
+						linea[1]= resultado1.getString("descripcion");
+						linea[2]= resultado1.getInt("cantidad");
+						linea[3]= resultado1.getDouble("precio_venta");
+						modelTablaProductos.addRow(linea);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				nc1.desconectar();
+				
 			}
 		});
 		btnFiltrar.setBounds(281, 112, 89, 23);
 		contentPane.add(btnFiltrar);
 
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
-		
-		JList list = new JList();
-		list.setBounds(10, 145, 274, 90);
-		list.setModel(listModel);
-		contentPane.add(list);
-		listModel.addElement("Hola MUndo");
-		
 		JLabel totalFactura = new JLabel("00,00");
 		totalFactura.setBounds(233, 319, 49, 14);
 		contentPane.add(totalFactura);
@@ -173,16 +229,35 @@ public class GenerarFactura extends JFrame {
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Obtenemos loa valores de los controles de la ventana
+				if(tablaProductos.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "No Seleccionó el Producto");
+					return;
+				}
+				if(textFieldCantidad.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No completó la cantidad");
+					return;
+				}
 				Integer cant = Integer.valueOf(textFieldCantidad.getText());
-				double total = 10.50*cant;
+				Double precio = (Double) modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 3);
+				String ean =(String) modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 0);
+				String descripcion = (String) modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 1);
+				Integer stock = (Integer)modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 2);
+				// verificamos que no se intente obtener una cantidad mayor a la que hay en existencia
+				
+				if(cant>stock || cant<=0) {
+					JOptionPane.showMessageDialog(null, "Cantidad elegida No Valida");
+					return;
+				}
+				
+				Double total = precio*cant;
 				
 				// creamos un Arreglo de 5 y le pasamos los valores
 				
 				Object[] nuevaFila = new Object[5];
-				nuevaFila[0]="NUMERO EAN"; //aca debemos traer de la base de datos el correspondiente
-				nuevaFila[1]= list.getSelectedValue().toString(); // este es el nombre del articulo
+				nuevaFila[0]=ean; //aca debemos traer de la base de datos el correspondiente
+				nuevaFila[1]= descripcion; // este es el nombre del articulo
 				nuevaFila[2]= cant; // la cantidad del artiuclo;
-				nuevaFila[3]= 10.50; // este es el precio Unitario de nuestro articulo
+				nuevaFila[3]= precio; // este es el precio Unitario de nuestro articulo
 				nuevaFila[4]= total; // el total de ese articulo
 				// hacemos un addROw para agregar a la vista un item
 			
@@ -190,7 +265,7 @@ public class GenerarFactura extends JFrame {
 				
 				
 				double todos=0;
-				for(int i = 1; i<table.getRowCount();i++ ) {
+				for(int i = 0; i<table.getRowCount();i++ ) {
 					todos=todos + (double) table.getValueAt(i, 4);
 				}
 				String var=String.valueOf(todos);
@@ -203,6 +278,10 @@ public class GenerarFactura extends JFrame {
 		JButton btnQuitar = new JButton("Quitar");
 		btnQuitar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "No Seleccionó el Item a eliminar");
+					return;
+				}
 				modelTabla.removeRow(table.getSelectedRow());
 				
 				double todos=0;
@@ -232,6 +311,22 @@ public class GenerarFactura extends JFrame {
 		JLabel lblTotalDeLa = new JLabel("Total de la Factura");
 		lblTotalDeLa.setBounds(91, 319, 111, 14);
 		contentPane.add(lblTotalDeLa);
+		
+		tablaProductos = new JTable();
+		tablaProductos.setModel(modelTablaProductos);
+		
+		JScrollPane scrollPane = new JScrollPane(tablaProductos);
+		scrollPane.setBounds(20, 141, 263, 100);
+		contentPane.add(scrollPane);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 248, 272, 62);
+		contentPane.add(scrollPane_1);
+		
+		table = new JTable();
+		scrollPane_1.setViewportView(table);
+		table.setModel(modelTabla);
+		//scrollPane.setViewportView(tablaProductos);
 		
 
 		
