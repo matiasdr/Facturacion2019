@@ -40,7 +40,7 @@ public class ListadoProvTodos extends JFrame {
 	 */
 	public ListadoProvTodos() {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 519, 305);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -53,11 +53,11 @@ public class ListadoProvTodos extends JFrame {
 		
 
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(177, 20, 28, 22);
+		comboBox.setBounds(177, 20, 93, 22);
 		contentPanel.add(comboBox);
 		{
 			JLabel lblBuscarPor = new JLabel("Buscar por");
-			lblBuscarPor.setBounds(122, 23, 73, 14);
+			lblBuscarPor.setBounds(101, 24, 73, 14);
 			contentPanel.add(lblBuscarPor);
 		}
 		comboBox.addItem("Razon Social");
@@ -65,12 +65,12 @@ public class ListadoProvTodos extends JFrame {
 		
 
 		textFieldCondicion = new JTextField();
-		textFieldCondicion.setBounds(215, 20, 96, 20);
+		textFieldCondicion.setBounds(282, 20, 96, 21);
 		contentPanel.add(textFieldCondicion);
 		textFieldCondicion.setColumns(10);
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(28, 19, 89, 23);
+			btnImprimir.setBounds(0, 20, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
 		{
@@ -91,12 +91,12 @@ public class ListadoProvTodos extends JFrame {
 				}
 				
 			});
-			btnBuscarPor.setBounds(315, 19, 89, 23);
+			btnBuscarPor.setBounds(390, 20, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
 		{
 			table = new JTable();
-			table.setBounds(28, 53, 386, 155);
+			table.setBounds(0, 53, 479, 155);
 			contentPanel.add(table);
 		}
 		{
