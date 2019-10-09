@@ -71,7 +71,7 @@ public class Principal {
 			e.printStackTrace();
 		}
 		SwingUtilities.updateComponentTreeUI(frame);
-
+        
 		//updateComponentTreeUI(frame);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -124,9 +124,16 @@ public class Principal {
 		JMenuItem mntmModificarCliente = new JMenuItem("Modificar Cliente");
 		mntmModificarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				 ModificarCliente mc;
-				 mc = new ModificarCliente();
-				 mc.setVisible(true);				
+				 
+				 try {
+					 ModificarCliente mc;
+					mc = new ModificarCliente();
+					mc.setVisible(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 				
 			}
 		});
 		mnClientes.add(mntmModificarCliente);
@@ -136,6 +143,13 @@ public class Principal {
 		mnClientes.add(mnListadoDeClientes);
 		
 		JMenuItem mntmTodos = new JMenuItem("Todos");
+		mntmTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ListadoClieTodos ltc = new ListadoClieTodos(); 
+			    ltc.setVisible(true);
+				
+			}
+		});
 		mnListadoDeClientes.add(mntmTodos);
 		
 		JMenuItem mntmPorCategoria = new JMenuItem("Por Categoria");

@@ -53,7 +53,9 @@ public class ListadoProvTodos extends JFrame {
 	 */
 	public ListadoProvTodos() throws SQLException {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setBounds(100, 100, 591, 358);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -73,11 +75,15 @@ public class ListadoProvTodos extends JFrame {
 		
 
 		JComboBox<String> comboBox = new JComboBox<String>();
+
+		
+
 		comboBox.setBounds(185, 19, 106, 22);
+
 		contentPanel.add(comboBox);
 		{
 			JLabel lblBuscarPor = new JLabel("Buscar por");
-			lblBuscarPor.setBounds(122, 23, 73, 14);
+			lblBuscarPor.setBounds(101, 24, 73, 14);
 			contentPanel.add(lblBuscarPor);
 		}
 		comboBox.addItem("Razon Social");
@@ -85,12 +91,13 @@ public class ListadoProvTodos extends JFrame {
 		
 
 		textFieldCondicion = new JTextField();
+
 		textFieldCondicion.setBounds(325, 21, 106, 20);
 		contentPanel.add(textFieldCondicion);
 		textFieldCondicion.setColumns(10);
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(28, 19, 89, 23);
+			btnImprimir.setBounds(0, 20, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
 		{
@@ -172,13 +179,16 @@ public class ListadoProvTodos extends JFrame {
 				}
 				
 			});
+
 			btnBuscarPor.setBounds(441, 20, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
 		{
 			table = new JTable();
+
 			table.setModel(tablaModelo);
 			table.setBounds(28, 53, 502, 199);
+
 			contentPanel.add(table);
 			
 		}
