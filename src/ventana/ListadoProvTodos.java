@@ -65,13 +65,11 @@ public class ListadoProvTodos extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		
-		DefaultTableModel tablaModelo = new DefaultTableModel(0, 3);
 		Object[] fila = new Object[3];
 		fila[0]= "ID Prov";
 		fila[1]= "Nombre";
 		fila[2]= "CUIT";
-		tablaModelo.addRow(fila);
+		DefaultTableModel tablaModelo = new DefaultTableModel(fila, 0);
 		
 
 		JComboBox<String> comboBox = new JComboBox<String>();
@@ -118,7 +116,7 @@ public class ListadoProvTodos extends JFrame {
 							
 							// antes de cargar los resultado borramos todos los datos de la tabla menos la primer fial que tiene el encabezado
 							
-							while(tablaModelo.getRowCount()>1) {
+							while(tablaModelo.getRowCount()>0) {
 								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
 							}
 							
@@ -152,7 +150,7 @@ public class ListadoProvTodos extends JFrame {
 							
 							// antes de cargar los resultado borramos todos los datos de la tabla menos la primer fial que tiene el encabezado
 							
-							while(tablaModelo.getRowCount()>1) {
+							while(tablaModelo.getRowCount()>0) {
 								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
 							}
 							
@@ -183,13 +181,15 @@ public class ListadoProvTodos extends JFrame {
 			btnBuscarPor.setBounds(441, 20, 89, 23);
 			contentPanel.add(btnBuscarPor);
 		}
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(30, 67, 515, 185);
+		contentPanel.add(scrollPane);
 		{
 			table = new JTable();
+			scrollPane.setViewportView(table);
 
 			table.setModel(tablaModelo);
-			table.setBounds(28, 53, 502, 199);
-
-			contentPanel.add(table);
 			
 		}
 		
