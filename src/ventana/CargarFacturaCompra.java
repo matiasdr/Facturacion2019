@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
@@ -173,7 +175,7 @@ public class CargarFacturaCompra extends JFrame {
 		comboBox.setBounds(135, 170, 85, 22);
 		contentPane.add(comboBox);
 		comboBox.addItem("Mercadería");
-		comboBox.addItem("Utiles de Oficina");
+		comboBox.addItem("Gastos");
 		comboBox.addItem("Bienes de Uso");
 
 		JLabel lblAlcuotaDeIva = new JLabel("Al\u00EDcuota de IVA");
@@ -221,14 +223,20 @@ public class CargarFacturaCompra extends JFrame {
 				}
 				Double importe = Double.valueOf(textFieldImporteFacturado.getText());
 				if(comboBoxIva.getSelectedItem().equals("21%")) {
-					Double alicuota = importe*0.21;
-					lblesteEsEl.setText(String.valueOf(alicuota));
+					Double alicuota = importe*210/1210;
+					BigDecimal ali = new BigDecimal(alicuota);
+					ali = ali.setScale(2, RoundingMode.HALF_UP);
+					lblesteEsEl.setText(String.valueOf(ali));
 				} else if(comboBoxIva.getSelectedItem().equals("10,5%")) {
-					Double alicuota = importe*0.105;
-					lblesteEsEl.setText(String.valueOf(alicuota));
+					Double alicuota = importe*105/1105;
+					BigDecimal ali = new BigDecimal(alicuota);
+					ali = ali.setScale(2, RoundingMode.HALF_UP);
+					lblesteEsEl.setText(String.valueOf(ali));
 				} else {
-					Double alicuota = importe*0.27;
-					lblesteEsEl.setText(String.valueOf(alicuota));
+					Double alicuota = importe*270/1270;
+					BigDecimal ali = new BigDecimal(alicuota);
+					ali = ali.setScale(2, RoundingMode.HALF_UP);
+					lblesteEsEl.setText(String.valueOf(ali));
 				}
 			}
 		});
