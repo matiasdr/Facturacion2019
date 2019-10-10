@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -17,6 +18,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import conexion.Conexion;
+//import ui.MenuInicio;
 
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
@@ -26,10 +28,17 @@ import javax.swing.JTextField;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.FlowLayout;
+import javax.swing.JLabel;
+import java.awt.Toolkit;
 
 public class Principal {
 
-	private JFrame frame;
+	private JFrame frmSistemaDeGestion;
 
 	/**
 	 * Launch the application.
@@ -39,7 +48,7 @@ public class Principal {
 			public void run() {
 				try {
 					Principal window = new Principal();
-					window.frame.setVisible(true);
+					window.frmSistemaDeGestion.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,9 +69,13 @@ public class Principal {
 	 * @throws SQLException 
 	 */
 	private void initialize() throws SQLException {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 1000);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSistemaDeGestion = new JFrame();
+		frmSistemaDeGestion.setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/logos/logo4.png")));
+		frmSistemaDeGestion.setForeground(Color.WHITE);
+		frmSistemaDeGestion.setFont(new Font("SansSerif", Font.BOLD | Font.ITALIC, 22));
+		frmSistemaDeGestion.setTitle("Sistema de Gestion");
+		frmSistemaDeGestion.setBounds(100, 100, 823, 526);
+		frmSistemaDeGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//javax.swing.UIManager.setLookAndFeel("Windows");
 		
 		try{
@@ -70,12 +83,12 @@ public class Principal {
 		}  catch (Exception e) {
 			e.printStackTrace();
 		}
-		SwingUtilities.updateComponentTreeUI(frame);
+		SwingUtilities.updateComponentTreeUI(frmSistemaDeGestion);
         
 		//updateComponentTreeUI(frame);
 		
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmSistemaDeGestion.setJMenuBar(menuBar);
 		
 		JMenu mnArchivo = new JMenu("Archivo");
 		menuBar.add(mnArchivo);
@@ -109,6 +122,7 @@ public class Principal {
 		mnArchivo.add(mntmSalir);
 		
 		JMenu mnClientes = new JMenu("Clientes");
+		mnClientes.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(mnClientes);
 		
 		JMenuItem mntmNuevoCliente = new JMenuItem("Nuevo Cliente");
@@ -152,10 +166,16 @@ public class Principal {
 		});
 		mnListadoDeClientes.add(mntmTodos);
 		
-		JMenuItem mntmPorCategoria = new JMenuItem("Por Categoria");
-		mnListadoDeClientes.add(mntmPorCategoria);
-		
 		JMenuItem mntmListadoDeSaldos = new JMenuItem("Listado de Saldos");
+		mntmListadoDeSaldos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				 ListadoSaldosClie lsc;
+				lsc = new ListadoSaldosClie();
+				lsc.setVisible(true);
+				 				
+			}
+		});
 		mnClientes.add(mntmListadoDeSaldos);
 		
 		JMenuItem mntmResumenDeCliente = new JMenuItem("Resumen de Cliente");
@@ -214,15 +234,6 @@ public class Principal {
 			}
 		});
 		mnListadoDeProveedores.add(mntmTodos_1);
-		
-		JMenuItem mntmPorCategorias = new JMenuItem("Por Categorias");
-		mntmPorCategorias.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ListadoProveCategoria lpc = new ListadoProveCategoria();
-				lpc.setVisible(true);
-			}
-		});
-		mnListadoDeProveedores.add(mntmPorCategorias);
 		
 		JMenuItem mntmListadoDeSaldos_1 = new JMenuItem("Listado de Saldos");
 		mntmListadoDeSaldos_1.addActionListener(new ActionListener() {
@@ -377,6 +388,14 @@ public class Principal {
 		
 		JMenuItem mntmListarActividadesPor = new JMenuItem("Listar Actividades por Usuario");
 		mnUsuarios.add(mntmListarActividadesPor);
+		
+		JPanel panel = new JPanel();
+		frmSistemaDeGestion.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setIcon(new ImageIcon(Principal.class.getResource("/logos/logo4.png")));
+		panel.add(lblLogo);
 	}
 	
 	

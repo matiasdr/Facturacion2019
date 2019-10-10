@@ -31,7 +31,7 @@ public class ListadoClieTodos extends JDialog {
 	private JTextField tfBusqueda;
 	private JPanel contentPane;
 	private JTable table;
-	private Integer clieSeleccion;
+	private String clieSeleccion;
 
 	/**
 	 * Launch the application.
@@ -76,17 +76,13 @@ public class ListadoClieTodos extends JDialog {
 		comboBox.addItem("Cuil/Cuit");
 		
 		
-		 DefaultTableModel tablaModelo = new DefaultTableModel(0, 3);
+		 
 			Object[] fila = new Object[3];
 			fila[0]= "ID Cliente";
 			fila[1]= "Nombre";
 			fila[2]= "CUIT";
-			tablaModelo.addRow(fila);
-				
-		    table = new JTable();
-			table.setModel(tablaModelo);
-			table.setBounds(0, 55, 516, 179);
-			contentPanel.add(table);
+			
+			DefaultTableModel tablaModelo = new DefaultTableModel(fila, 0);
 	
 		{
 			JButton btnBuscarPor = new JButton("Buscar");
@@ -105,6 +101,12 @@ public class ListadoClieTodos extends JDialog {
 						try {
 							instruccion = conec.createStatement();
 							ResultSet resultado = instruccion.executeQuery("Select * from cliente where nombre like '%"+busqueda+"%'");
+							
+							while(tablaModelo.getRowCount()>0) // LIMPIA EL JTABLE ANTES DE CARGARLO DE NUEVO
+							{
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							
 							while(resultado.next()) {
 								Object[] linea = new Object[3];
 								linea[0]= resultado.getInt("id_cliente");
@@ -129,6 +131,11 @@ public class ListadoClieTodos extends JDialog {
 						try {
 							instruccion = conec.createStatement();
 							ResultSet resultado = instruccion.executeQuery("Select * from cliente where cuilcuit like '%"+busqueda+"%'");
+							
+							while(tablaModelo.getRowCount()>0) {
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							
 							while(resultado.next()) {
 								Object[] linea = new Object[3];
 								linea[0]= resultado.getInt("id_cliente");
@@ -159,26 +166,22 @@ public class ListadoClieTodos extends JDialog {
 		tfBusqueda.setBounds(319, 20, 96, 20);
 		contentPanel.add(tfBusqueda);
 		tfBusqueda.setColumns(10);
+		{
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(12, 55, 504, 192);
+			contentPanel.add(scrollPane);
+			
+		    table = new JTable();
+		    scrollPane.setViewportView(table);
+		    table.setModel(tablaModelo);
+		}
 		
 		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
-			
-			JButton btnSeleccionar = new JButton("Seleccionar");
-			btnSeleccionar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					
-					Integer seleccion = (Integer) tablaModelo.getValueAt(table.getSelectedRow(), 0);
-					clieSeleccion=seleccion;
-					setVisible(false);
-				}
-			});
-			buttonPane.add(btnSeleccionar);
-			
-			
-			
+				
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
@@ -191,5 +194,10 @@ public class ListadoClieTodos extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+    public String getProv() {
+		
+		return clieSeleccion;
 	}
 }
