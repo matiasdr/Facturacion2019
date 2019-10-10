@@ -1,5 +1,6 @@
 package ventana;
 
+import java.awt.Button;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -18,15 +19,22 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.SwingConstants;
 
 public class CargarFacturaCompra extends JFrame {
 	private JTextField textField;
 	private JTextField textFieldNumFactura;
 	private JTextField textFieldImporteFacturado;
 	private JPanel contentPane;
+	JButton btnCalcular = new JButton("Calcular");
+	JLabel lblesteEsEl = new JLabel("(Monto)");
+	JLabel lblIvaFiscal = new JLabel("IVA FISCAL");
+	JLabel lblMoneda = new JLabel("$");
 
 	/**
 	 * Launch the application.
@@ -49,14 +57,12 @@ public class CargarFacturaCompra extends JFrame {
 	 */
 	public CargarFacturaCompra() {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 450);
+		setTitle("Cargar Facturas de Compras");
+		setBounds(100, 100, 492, 538);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		JLabel lblCargarFacturaDe = new JLabel("Cargar Factura de Compra");
-		lblCargarFacturaDe.setBounds(168, 11, 137, 14);
-		contentPane.add(lblCargarFacturaDe);
 		
 		JRadioButton rdbtna = new JRadioButton("\"A\"");
 		rdbtna.setBounds(113, 68, 77, 23);
@@ -74,6 +80,43 @@ public class CargarFacturaCompra extends JFrame {
 		tipo.add(rdbtna);
 		tipo.add(rdbtnb);
 		tipo.add(rdbtnc);
+		
+		rdbtnc.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					btnCalcular.setVisible(false);
+					lblesteEsEl.setVisible(false);
+					lblIvaFiscal.setVisible(false);
+					lblMoneda.setVisible(false);
+				
+							
+			}
+		});
+		
+		rdbtnb.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				btnCalcular.setVisible(true);
+				lblesteEsEl.setVisible(true);
+				lblIvaFiscal.setVisible(true);
+				lblMoneda.setVisible(true);
+			}
+		});
+		
+		rdbtna.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				btnCalcular.setVisible(true);
+				lblesteEsEl.setVisible(true);
+				lblIvaFiscal.setVisible(true);	
+				lblMoneda.setVisible(true);
+			}
+		});
 		
 		JLabel lblNombreProveedor = new JLabel("Nombre Proveedor");
 		lblNombreProveedor.setBounds(253, 37, 169, 14);
@@ -93,8 +136,16 @@ public class CargarFacturaCompra extends JFrame {
 					
 					if(ep.getCondFiscal()==1) {
 						rdbtna.setSelected(true);
+						btnCalcular.setVisible(true);
+						lblesteEsEl.setVisible(true);
+						lblIvaFiscal.setVisible(true);	
+						lblMoneda.setVisible(true);
 					} else {
 						rdbtnc.setSelected(true);
+						btnCalcular.setVisible(false);
+						lblesteEsEl.setVisible(false);
+						lblIvaFiscal.setVisible(false);
+						lblMoneda.setVisible(false);
 					}
 					
 				} catch (HeadlessException | SQLException e1) {
@@ -139,11 +190,11 @@ public class CargarFacturaCompra extends JFrame {
 		
 
 		JLabel lblNumeroDeFactura = new JLabel("Numero de Factura");
-		lblNumeroDeFactura.setBounds(168, 112, 125, 14);
+		lblNumeroDeFactura.setBounds(180, 112, 125, 14);
 		contentPane.add(lblNumeroDeFactura);
 
 		textFieldNumFactura = new JTextField();
-		textFieldNumFactura.setBounds(276, 109, 96, 20);
+		textFieldNumFactura.setBounds(307, 109, 96, 20);
 		contentPane.add(textFieldNumFactura);
 		textFieldNumFactura.setColumns(10);
 		textFieldNumFactura.addKeyListener(new KeyAdapter() {
@@ -173,35 +224,38 @@ public class CargarFacturaCompra extends JFrame {
 		comboBox.setBounds(135, 170, 85, 22);
 		contentPane.add(comboBox);
 		comboBox.addItem("Mercadería");
-		comboBox.addItem("Utiles de Oficina");
+		comboBox.addItem("Gastos");
 		comboBox.addItem("Bienes de Uso");
 
 		JLabel lblAlcuotaDeIva = new JLabel("Al\u00EDcuota de IVA");
-		lblAlcuotaDeIva.setBounds(10, 240, 103, 14);
+		lblAlcuotaDeIva.setBounds(10, 268, 103, 14);
 		contentPane.add(lblAlcuotaDeIva);
 
 		JComboBox comboBoxIva = new JComboBox();
-		comboBoxIva.setBounds(113, 236, 89, 22);
+		comboBoxIva.setBounds(135, 264, 89, 22);
 		contentPane.add(comboBoxIva);
 		comboBoxIva.addItem("21%");
 		comboBoxIva.addItem("10,5%");
 		comboBoxIva.addItem("27%");
 		
 		JLabel lblImporteNetoTotal = new JLabel("Importe TOTAL FACTURADO");
-		lblImporteNetoTotal.setBounds(10, 275, 180, 14);
+		lblImporteNetoTotal.setBounds(10, 311, 180, 14);
 		contentPane.add(lblImporteNetoTotal);
 
 		textFieldImporteFacturado = new JTextField();
-		textFieldImporteFacturado.setBounds(209, 272, 96, 20);
+		textFieldImporteFacturado.setBounds(219, 308, 77, 20);
 		contentPane.add(textFieldImporteFacturado);
 		textFieldImporteFacturado.setColumns(10);
 
-		JLabel lblIvaFiscal = new JLabel("IVA FISCAL");
-		lblIvaFiscal.setBounds(10, 304, 77, 14);
+		
+		lblIvaFiscal.setBounds(27, 336, 77, 14);
 		contentPane.add(lblIvaFiscal);
+		
+		lblesteEsEl.setHorizontalAlignment(SwingConstants.LEFT);
+		
 
-		JLabel lblesteEsEl = new JLabel("(ESTE ES EL RESULTADO DE IVA)");
-		lblesteEsEl.setBounds(130, 304, 193, 14);
+		
+		lblesteEsEl.setBounds(150, 336, 125, 14);
 		contentPane.add(lblesteEsEl);
 
 		JButton btnCargarFactura = new JButton("Cargar Factura");
@@ -211,8 +265,10 @@ public class CargarFacturaCompra extends JFrame {
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(113, 143, 96, 20);
 		contentPane.add(dateChooser);
+		dateChooser.setDateFormatString("dd-MM-yy");
 		
-		JButton btnCalcular = new JButton("Calcular");
+		
+		
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(textFieldImporteFacturado.getText().isEmpty()) {
@@ -221,27 +277,33 @@ public class CargarFacturaCompra extends JFrame {
 				}
 				Double importe = Double.valueOf(textFieldImporteFacturado.getText());
 				if(comboBoxIva.getSelectedItem().equals("21%")) {
-					Double alicuota = importe*0.21;
-					lblesteEsEl.setText(String.valueOf(alicuota));
+					Double alicuota = importe*210/1210;
+					BigDecimal ali = new BigDecimal(alicuota);
+					ali = ali.setScale(2, RoundingMode.HALF_UP);
+					lblesteEsEl.setText(String.valueOf(ali));
 				} else if(comboBoxIva.getSelectedItem().equals("10,5%")) {
-					Double alicuota = importe*0.105;
-					lblesteEsEl.setText(String.valueOf(alicuota));
+					Double alicuota = importe*105/1105;
+					BigDecimal ali = new BigDecimal(alicuota);
+					ali = ali.setScale(2, RoundingMode.HALF_UP);
+					lblesteEsEl.setText(String.valueOf(ali));
 				} else {
-					Double alicuota = importe*0.27;
-					lblesteEsEl.setText(String.valueOf(alicuota));
+					Double alicuota = importe*270/1270;
+					BigDecimal ali = new BigDecimal(alicuota);
+					ali = ali.setScale(2, RoundingMode.HALF_UP);
+					lblesteEsEl.setText(String.valueOf(ali));
 				}
 			}
 		});
-		btnCalcular.setBounds(333, 271, 89, 23);
+		btnCalcular.setBounds(314, 307, 89, 23);
 		contentPane.add(btnCalcular);
 		
 		JRadioButton rdbtnSi = new JRadioButton("Si");
-		rdbtnSi.setBounds(239, 199, 54, 23);
+		rdbtnSi.setBounds(145, 199, 54, 23);
 		contentPane.add(rdbtnSi);
 		rdbtnSi.setEnabled(false);
 		
 		JRadioButton radioButtonNo = new JRadioButton("No");
-		radioButtonNo.setBounds(306, 199, 54, 23);
+		radioButtonNo.setBounds(209, 199, 54, 23);
 		contentPane.add(radioButtonNo);
 		radioButtonNo.setSelected(true);
 		
@@ -251,8 +313,32 @@ public class CargarFacturaCompra extends JFrame {
 		
 		
 		JLabel lblDeseaGenerarStock = new JLabel("Desea generar Stock?");
-		lblDeseaGenerarStock.setBounds(10, 199, 203, 14);
+		lblDeseaGenerarStock.setBounds(10, 203, 203, 14);
 		contentPane.add(lblDeseaGenerarStock);
+		
+		JLabel lblCondicinoDeVenta = new JLabel("Condicion de Venta");
+		lblCondicinoDeVenta.setBounds(10, 231, 145, 26);
+		contentPane.add(lblCondicinoDeVenta);
+		
+		JRadioButton rdbtnContado = new JRadioButton("Contado");
+		rdbtnContado.setBounds(164, 234, 111, 23);
+		contentPane.add(rdbtnContado);
+		
+		JRadioButton radioButtonCuentaCorriente = new JRadioButton("Cuenta Corriente");
+		radioButtonCuentaCorriente.setBounds(276, 233, 161, 23);
+		contentPane.add(radioButtonCuentaCorriente);
+		
+		ButtonGroup groupCondVenta = new ButtonGroup();
+		groupCondVenta.add(rdbtnContado);
+		groupCondVenta.add(radioButtonCuentaCorriente);
+		
+		
+		lblMoneda.setBounds(131, 336, 24, 14);
+		contentPane.add(lblMoneda);
+		
+		JLabel label = new JLabel("$");
+		label.setBounds(200, 311, 12, 14);
+		contentPane.add(label);
 
 	}
 }

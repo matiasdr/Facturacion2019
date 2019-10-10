@@ -139,14 +139,15 @@ public class Principal {
 		mntmModificarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				 
-				 try {
-					 ModificarCliente mc;
+				 ModificarCliente mc;
+				try {
 					mc = new ModificarCliente();
 					mc.setVisible(true);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				 				
 			}
 		});
@@ -217,10 +218,16 @@ public class Principal {
 		});
 		mnProveedores.add(mntmModificarProveedor);
 		
-		JMenu mnListadoDeProveedores = new JMenu("Listado de Proveedores");
-		mnProveedores.add(mnListadoDeProveedores);
+		JMenuItem mntmListadoDeSaldos_1 = new JMenuItem("Listado de Saldos");
+		mntmListadoDeSaldos_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListadoSaldosProv lsp = new ListadoSaldosProv();
+				lsp.setVisible(true);
+			}
+		});
 		
-		JMenuItem mntmTodos_1 = new JMenuItem("Todos");
+		JMenuItem mntmTodos_1 = new JMenuItem("Listado de Proveedores");
+		mnProveedores.add(mntmTodos_1);
 		mntmTodos_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -233,15 +240,7 @@ public class Principal {
 				
 			}
 		});
-		mnListadoDeProveedores.add(mntmTodos_1);
-		
-		JMenuItem mntmListadoDeSaldos_1 = new JMenuItem("Listado de Saldos");
-		mntmListadoDeSaldos_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ListadoSaldosProv lsp = new ListadoSaldosProv();
-				lsp.setVisible(true);
-			}
-		});
+
 		mnProveedores.add(mntmListadoDeSaldos_1);
 		
 		JMenuItem mntmResumenDeProveedor = new JMenuItem("Resumen de Proveedor");
@@ -273,14 +272,20 @@ public class Principal {
 		});
 		mnGenerar.add(mntmFactura);
 		
-		JMenuItem mntmRecibo = new JMenuItem("Recibo");
-		mntmRecibo.addActionListener(new ActionListener() {
+		JMenu mnRecibo = new JMenu("Recibo");
+		mnGenerar.add(mnRecibo);
+		
+		JMenuItem mntmPagosAProveedores = new JMenuItem("Pagos a Proveedores");
+		mntmPagosAProveedores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				GenerarRecibo recibo = new GenerarRecibo();
-				recibo.setVisible(true);
+				GenerarRecibo gr = new GenerarRecibo();
+				gr.setVisible(true);
 			}
 		});
-		mnGenerar.add(mntmRecibo);
+		mnRecibo.add(mntmPagosAProveedores);
+		
+		JMenuItem mntmCobrosAClientes = new JMenuItem("Cobros a Clientes");
+		mnRecibo.add(mntmCobrosAClientes);
 		
 		JMenu mnCargar = new JMenu("Cargar");
 		menuBar.add(mnCargar);

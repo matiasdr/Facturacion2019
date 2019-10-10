@@ -1,6 +1,7 @@
 package ventana;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -24,7 +25,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.xml.ws.handler.MessageContext;
+
 
 import conexion.Conexion;
 import javax.swing.JScrollPane;
@@ -36,6 +37,9 @@ public class GenerarFactura extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private JTable tablaProductos;
+	private String nombreCliente;
+	private Integer condicionFiscalCliente;
+	
 	
 	/**
 	 * Launch the application.
@@ -66,6 +70,8 @@ public class GenerarFactura extends JFrame {
 		
 		contentPane.setLayout(null);
 
+		JLabel lblNombreDelCliente = new JLabel("Nombre del CLiente");
+		
 		JLabel lblEmitirComprobanteFactura = new JLabel("Emitir Comprobante Factura");
 		lblEmitirComprobanteFactura.setBounds(140, 11, 156, 14);
 		contentPane.add(lblEmitirComprobanteFactura);
@@ -78,6 +84,34 @@ public class GenerarFactura extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// funcion para buscar yseleccionar un Cliente, luego será guardado en el lblNombreDelCLiente
+				Integer idClie=null;
+				try {
+					ElegirCliente ec = new ElegirCliente(new java.awt.Frame(), true);
+					ec.setVisible(true);
+					idClie=ec.getClienElegido();
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				Conexion nc = new Conexion();
+				Connection connec = nc.conectar();
+				try {
+					Statement instruccion = connec.createStatement();
+					ResultSet resultado = instruccion.executeQuery("Select * from cliente where id_cliente = "+idClie);
+					while(resultado.next()) {
+						nombreCliente = resultado.getString("nombre");
+						condicionFiscalCliente = resultado.getInt("id_condicion_fiscal");
+					}
+					lblNombreDelCliente.setText(nombreCliente);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+				
 			}
 		});
 		btnBuscar.setBounds(113, 29, 89, 23);
@@ -88,7 +122,7 @@ public class GenerarFactura extends JFrame {
 		contentPane.add(textFieldVencimiento);
 		textFieldVencimiento.setColumns(10);
 
-		JLabel lblNombreDelCliente = new JLabel("Nombre del CLiente");
+		
 		lblNombreDelCliente.setBounds(212, 33, 132, 14);
 		contentPane.add(lblNombreDelCliente);
 		
@@ -285,7 +319,7 @@ public class GenerarFactura extends JFrame {
 				modelTabla.removeRow(table.getSelectedRow());
 				
 				double todos=0;
-				for(int i = 1; i<table.getRowCount();i++ ) {
+				for(int i = 0; i<table.getRowCount();i++ ) {
 					todos=todos + (double) table.getValueAt(i, 4);
 				}
 				String var=String.valueOf(todos);
