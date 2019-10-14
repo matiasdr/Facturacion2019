@@ -54,13 +54,13 @@ public class GenerarRecibo extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblGeneracinDeRecibos = new JLabel("Generaci\u00F3n de Recibos Por Pagos Hechos a Proveedores");
-		lblGeneracinDeRecibos.setBounds(241, 11, 376, 14);
+		lblGeneracinDeRecibos.setBounds(207, 13, 376, 23);
 		contentPane.add(lblGeneracinDeRecibos);
 		
 		ButtonGroup elec = new ButtonGroup();
 
 		JLabel lblSeleccionarProveedor = new JLabel("Seleccionar Proveedor");
-		lblSeleccionarProveedor.setBounds(126, 62, 147, 14);
+		lblSeleccionarProveedor.setBounds(105, 62, 147, 14);
 		contentPane.add(lblSeleccionarProveedor);
 		
 		JLabel lblNombreProveedor = new JLabel("Nombre del Proveedor");
@@ -93,11 +93,11 @@ public class GenerarRecibo extends JFrame {
 
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(261, 100, 142, 20);
+		textField_2.setBounds(273, 100, 142, 20);
 		contentPane.add(textField_2);
 
 		JLabel label_2 = new JLabel("Medio de Pago");
-		label_2.setBounds(136, 138, 125, 14);
+		label_2.setBounds(136, 138, 125, 18);
 		contentPane.add(label_2);
 
 		JComboBox<String> comboBox_1 = new JComboBox<String>();
@@ -159,7 +159,7 @@ public class GenerarRecibo extends JFrame {
 		
 
 		JLabel lblSeleccionarFacturaA = new JLabel("Seleccionar Factura a Abonar");
-		lblSeleccionarFacturaA.setBounds(471, 106, 209, 14);
+		lblSeleccionarFacturaA.setBounds(487, 106, 180, 14);
 		contentPane.add(lblSeleccionarFacturaA);
 
 		JList list_1 = new JList();
