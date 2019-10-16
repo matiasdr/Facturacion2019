@@ -24,6 +24,7 @@ public class ElegirCliente extends JDialog {
 	private JTextField textField;
 	private JTable table;
 	private Integer clienElegido;
+	private String nombreCliente;
 
 	/**
 	 * Launch the application.
@@ -85,8 +86,9 @@ public class ElegirCliente extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				Integer seleccion = (Integer) tablaModelo.getValueAt(table.getSelectedRow(), 0);
-				//provElegido=textField.getText().toString();
+				String seleccionNombre = (String) tablaModelo.getValueAt(table.getSelectedRow(), 1);
 				clienElegido=seleccion;
+				nombreCliente=seleccionNombre;
 				setVisible(false);
 			}
 		});
@@ -117,4 +119,10 @@ public class ElegirCliente extends JDialog {
 	public void setClien(Integer clienElegido) {
 		this.clienElegido = clienElegido;
 	}
+	
+	public String getNombreCliente() {
+		return nombreCliente;
+	}
+
+
 }

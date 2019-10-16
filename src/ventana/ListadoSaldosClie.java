@@ -98,7 +98,7 @@ public class ListadoSaldosClie extends JFrame {
 			
 			Conexion ltc = new Conexion();
 			Connection conec = ltc.conectar();
-			ltc.listarClientes();
+//			ltc.listarClientes();
 			Statement instruccion;
 			try {
 				instruccion = conec.createStatement();

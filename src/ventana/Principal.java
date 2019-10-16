@@ -285,7 +285,15 @@ public class Principal {
 		mnRecibo.add(mntmPagosAProveedores);
 		
 		JMenuItem mntmCobrosAClientes = new JMenuItem("Cobros a Clientes");
+		mntmCobrosAClientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GenerarRecibo2 grc = new GenerarRecibo2();
+				grc.setVisible(true);				
+			}
+		});
 		mnRecibo.add(mntmCobrosAClientes);
+		
+		
 		
 		JMenu mnCargar = new JMenu("Cargar");
 		menuBar.add(mnCargar);
