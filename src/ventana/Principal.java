@@ -39,6 +39,7 @@ import java.awt.Toolkit;
 public class Principal {
 
 	private JFrame frmSistemaDeGestion;
+	private String permisos;
 
 	/**
 	 * Launch the application.
@@ -87,6 +88,8 @@ public class Principal {
         
 		//updateComponentTreeUI(frame);
 		
+		
+		
 		JMenuBar menuBar = new JMenuBar();
 		frmSistemaDeGestion.setJMenuBar(menuBar);
 		
@@ -101,6 +104,11 @@ public class Principal {
 				ce.setVisible(true);
 			}
 		});
+		mntmCrearEmpresa.setEnabled(false);
+		
+		JMenuItem mntmIngresar = new JMenuItem("Ingresar");
+		
+		mnArchivo.add(mntmIngresar);
 		mnArchivo.add(mntmCrearEmpresa);
 		
 		JMenuItem mntmDefinirPerodoDe = new JMenuItem("Definir Per\u00EDodo de Trabajo");
@@ -112,6 +120,7 @@ public class Principal {
 			}
 		});
 		mnArchivo.add(mntmDefinirPerodoDe);
+		mntmDefinirPerodoDe.setEnabled(false);
 		
 		JMenuItem mntmSalir = new JMenuItem("Salir");
 		mntmSalir.addActionListener(new ActionListener() {
@@ -124,6 +133,7 @@ public class Principal {
 		JMenu mnClientes = new JMenu("Clientes");
 		mnClientes.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(mnClientes);
+		mnClientes.setEnabled(false);
 		
 		JMenuItem mntmNuevoCliente = new JMenuItem("Nuevo Cliente");
 		mntmNuevoCliente.addActionListener(new ActionListener() {
@@ -134,6 +144,7 @@ public class Principal {
 			}
 		});
 		mnClientes.add(mntmNuevoCliente);
+		
 		
 		JMenuItem mntmModificarCliente = new JMenuItem("Modificar Cliente");
 		mntmModificarCliente.addActionListener(new ActionListener() {
@@ -156,6 +167,7 @@ public class Principal {
 		
 		JMenu mnListadoDeClientes = new JMenu("Listado de Clientes");
 		mnClientes.add(mnListadoDeClientes);
+		
 		
 		JMenuItem mntmTodos = new JMenuItem("Todos");
 		mntmTodos.addActionListener(new ActionListener() {
@@ -184,6 +196,7 @@ public class Principal {
 		
 		JMenu mnProveedores = new JMenu("Proveedores");
 		menuBar.add(mnProveedores);
+		mnProveedores.setEnabled(false);
 		
 		JMenuItem mntmNuevoProveedor = new JMenuItem("Nuevo Proveedor");
 		mntmNuevoProveedor.addActionListener(new ActionListener() {
@@ -254,6 +267,7 @@ public class Principal {
 		
 		JMenu mnGenerar = new JMenu("Generar");
 		menuBar.add(mnGenerar);
+		mnGenerar.setEnabled(false);
 		
 		JMenuItem mntmFactura = new JMenuItem("Factura");
 		mntmFactura.addActionListener(new ActionListener() {
@@ -297,6 +311,7 @@ public class Principal {
 		
 		JMenu mnCargar = new JMenu("Cargar");
 		menuBar.add(mnCargar);
+		mnCargar.setEnabled(false);
 		
 		JMenuItem mntmFacturasDeCompra = new JMenuItem("Facturas de Compra");
 		mntmFacturasDeCompra.addActionListener(new ActionListener() {
@@ -318,6 +333,7 @@ public class Principal {
 		
 		JMenu mnListados = new JMenu("Listados");
 		menuBar.add(mnListados);
+		mnListados.setEnabled(false);
 		
 		JMenuItem mntmIvaVentas = new JMenuItem("IVA Ventas");
 		mntmIvaVentas.addActionListener(new ActionListener() {
@@ -339,6 +355,7 @@ public class Principal {
 		
 		JMenu mnArtculos = new JMenu("Art\u00EDculos");
 		menuBar.add(mnArtculos);
+		mnArtculos.setEnabled(false);
 		
 		JMenuItem mntmNuevoArtculo = new JMenuItem("Nuevo Art\u00EDculo");
 		mntmNuevoArtculo.addActionListener(new ActionListener() {
@@ -385,16 +402,9 @@ public class Principal {
 		});
 		mnArtculos.add(mntmListadoArticulos);
 		
-		JMenuItem mntmCambiarPrecios = new JMenuItem("Cambiar Precios");
-		mntmCambiarPrecios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		mnArtculos.add(mntmCambiarPrecios);
-		
 		JMenu mnUsuarios = new JMenu("Usuarios");
 		menuBar.add(mnUsuarios);
+		mnUsuarios.setEnabled(false);
 		
 		JMenuItem mntmAgregarOModificar = new JMenuItem("Agregar o Modificar Usuario");
 		mnUsuarios.add(mntmAgregarOModificar);
@@ -409,6 +419,26 @@ public class Principal {
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(Principal.class.getResource("/logos/logo4.png")));
 		panel.add(lblLogo);
+		
+		
+		mntmIngresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login login = new Login(new java.awt.Frame(), true);
+				login.setVisible(true);
+				permisos=login.getPermisoUsuario();
+				if(permisos == "administrador") {
+					mntmCrearEmpresa.setEnabled(true);
+					mntmDefinirPerodoDe.setEnabled(true);
+					mnUsuarios.setEnabled(true);
+					mnProveedores.setEnabled(true);
+					mnClientes.setEnabled(true);
+					mnListados.setEnabled(true);
+					mnGenerar.setEnabled(true);
+					mnCargar.setEnabled(true);
+					mnArtculos.setEnabled(true);
+				}
+			}
+		});
 	}
 	
 	

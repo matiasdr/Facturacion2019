@@ -223,8 +223,8 @@ public class CargarFacturaCompra extends JFrame {
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(135, 170, 85, 22);
 		contentPane.add(comboBox);
-		comboBox.addItem("Mercadería");
-		comboBox.addItem("Gastos");
+		comboBox.addItem("Compra de Bienes");
+		comboBox.addItem("Servicios");
 		comboBox.addItem("Bienes de Uso");
 
 		JLabel lblAlcuotaDeIva = new JLabel("Al\u00EDcuota de IVA");

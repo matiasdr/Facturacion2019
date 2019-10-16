@@ -28,6 +28,7 @@ public class ModificarArticulo extends JFrame {
 	private JTextField textFieldEAN;
 	private JTextField textFieldStock;
 	private JTextField textFieldPrecio;
+	private Integer idArticuloModificado;
 
 	/**
 	 * Launch the application.
@@ -104,10 +105,26 @@ public class ModificarArticulo extends JFrame {
 		while(resultado.next()) {
 			comboBox.addItem(resultado.getString("nombre"));
 		}
+		nc.desconectar();
 		
-		JButton btnGuardarCambios = new JButton("Guardar Cambios");
-		btnGuardarCambios.setBounds(144, 199, 148, 23);
-		contentPane.add(btnGuardarCambios);
+		
+		JLabel lblProveedor = new JLabel("Proveedor");
+		lblProveedor.setBounds(74, 159, 49, 14);
+		contentPane.add(lblProveedor);
+		
+		JLabel labelIVA = new JLabel("IVA del Articulo");
+		labelIVA.setBounds(74, 190, 134, 14);
+		contentPane.add(labelIVA);
+		
+		double iva21=21;
+		double iva10=10.5;
+		double iva27=27;		
+		JComboBox comboBoxIVA = new JComboBox();
+		comboBoxIVA.setBounds(249, 193, 96, 20);
+		contentPane.add(comboBoxIVA);
+		comboBoxIVA.addItem(iva21);
+		comboBoxIVA.addItem(iva10);
+		comboBoxIVA.addItem(iva27);
 		
 		JButton btnBuscarArtculo = new JButton("Buscar art\u00EDculo");
 		btnBuscarArtculo.addActionListener(new ActionListener() {
@@ -132,10 +149,12 @@ public class ModificarArticulo extends JFrame {
 					textFieldDescripcion.setText(resultado.getString("descripcion"));
 					textFieldEAN.setText(resultado.getString("ean"));
 					textFieldStock.setText(resultado.getString("cantidad"));
-					textFieldPrecio.setText(resultado.getString("precio_venta"));
+					textFieldPrecio.setText(resultado.getString("pvp"));
 					int seleccion = resultado.getInt("id_proveedor");
 					comboBox.setSelectedIndex(seleccion-1);
-					
+					double ivas = resultado.getDouble("ivaporcent");
+					comboBoxIVA.setSelectedItem(ivas);
+					idArticuloModificado=id_art;
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -149,9 +168,29 @@ public class ModificarArticulo extends JFrame {
 		btnBuscarArtculo.setBounds(144, 11, 134, 23);
 		contentPane.add(btnBuscarArtculo);
 		
-		JLabel lblProveedor = new JLabel("Proveedor");
-		lblProveedor.setBounds(74, 159, 49, 14);
-		contentPane.add(lblProveedor);
+		JButton btnGuardarCambios = new JButton("Guardar Cambios");
+		btnGuardarCambios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String ean=textFieldEAN.getText();
+				String nombre= textFieldDescripcion.getText();
+				String precio=textFieldPrecio.getText();
+				String stock=textFieldStock.getText();
+				Integer proveedor = comboBox.getSelectedIndex()+1;
+				double iva = (double) comboBoxIVA.getSelectedItem();
+				try {
+					Conexion nc = new Conexion();
+					Connection conn = nc.conectar();
+					Statement instruccion = conn.createStatement();
+					instruccion.executeUpdate("UPDATE articulo SET ean = '"+ean+"',descripcion = '"+nombre+"',pvp = "+precio+",ivaporcent = "+iva+",cantidad = "+stock+",id_proveedor = "+proveedor+" WHERE id_articulo="+idArticuloModificado);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnGuardarCambios.setBounds(144, 228, 148, 23);
+		contentPane.add(btnGuardarCambios);
 		
 	
 	}

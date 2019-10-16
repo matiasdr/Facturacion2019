@@ -93,6 +93,45 @@ public class NuevoArticulo extends JFrame {
 		contentPane.add(txtPrecio);
 		txtPrecio.setColumns(10);
 		
+		JButton btnNewButton_1 = new JButton("Cancelar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+		btnNewButton_1.setBounds(294, 190, 89, 23);
+		contentPane.add(btnNewButton_1);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(301, 114, 96, 20);
+		contentPane.add(comboBox);
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from proveedor");
+		while(resultado.next()) {
+			comboBox.addItem(resultado.getString("nombre"));
+		}
+		nc.desconectar();
+		
+		JLabel label = new JLabel("Proveedor");
+		label.setBounds(10, 117, 118, 14);
+		contentPane.add(label);
+		
+		JLabel labelIVA = new JLabel("IVA del Articulo");
+		labelIVA.setBounds(10, 142, 118, 14);
+		contentPane.add(labelIVA);
+		double iva21=21;
+		double iva10=10.5;
+		double iva27=27;
+		JComboBox comboBoIVA = new JComboBox();
+		comboBoIVA.setBounds(301, 145, 96, 20);
+		contentPane.add(comboBoIVA);
+		comboBoIVA.addItem(iva21);
+		comboBoIVA.addItem(iva10);
+		comboBoIVA.addItem(iva27);
+		
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -100,6 +139,8 @@ public class NuevoArticulo extends JFrame {
 				String ean=null;
 				String stock=null;
 				String precio=null;
+				double iva= (double) comboBoIVA.getSelectedItem();
+				Integer proveedor = comboBox.getSelectedIndex()+1;
 				Boolean error=false;
 				if(txtNombre.getText().isEmpty()) {
 					error=true;
@@ -118,36 +159,22 @@ public class NuevoArticulo extends JFrame {
 				if(error) {
 					JOptionPane.showMessageDialog(null, "Error en algun campo");
 				} else {
-					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
+					
+					
+					try {
+						Conexion nc = new Conexion();
+						Connection conec = nc.conectar();
+						Statement instruccion = conec.createStatement();
+						instruccion.execute("spnuevoarticulo '"+ean+"', '"+nombre+"', "+precio+", "+iva+", "+stock+", "+proveedor+", 0");
+						JOptionPane.showMessageDialog(null, "Articulo creado correctamente");
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
-		btnNewButton.setBounds(96, 166, 89, 23);
+		btnNewButton.setBounds(101, 190, 89, 23);
 		contentPane.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Cancelar");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
-		btnNewButton_1.setBounds(293, 166, 89, 23);
-		contentPane.add(btnNewButton_1);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(301, 114, 96, 20);
-		contentPane.add(comboBox);
-		
-		Conexion nc = new Conexion();
-		Connection conec = nc.conectar();
-		Statement instruccion = conec.createStatement();
-		ResultSet resultado = instruccion.executeQuery("Select * from proveedor");
-		while(resultado.next()) {
-			comboBox.addItem(resultado.getString("nombre"));
-		}
-		
-		JLabel label = new JLabel("Proveedor");
-		label.setBounds(10, 117, 118, 14);
-		contentPane.add(label);
 	}
 }

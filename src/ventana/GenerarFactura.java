@@ -192,7 +192,7 @@ public class GenerarFactura extends JFrame {
 			linea[0]= resultado.getString("ean");
 			linea[1]= resultado.getString("descripcion");
 			linea[2]= resultado.getInt("cantidad");
-			linea[3]= resultado.getDouble("precio_venta");
+			linea[3]= resultado.getDouble("pvp");
 			modelTablaProductos.addRow(linea);
 			
 		}
@@ -241,7 +241,7 @@ public class GenerarFactura extends JFrame {
 						linea[0]= resultado1.getString("ean");
 						linea[1]= resultado1.getString("descripcion");
 						linea[2]= resultado1.getInt("cantidad");
-						linea[3]= resultado1.getDouble("precio_venta");
+						linea[3]= resultado1.getDouble("pvp");
 						modelTablaProductos.addRow(linea);
 					}
 				} catch (SQLException e1) {

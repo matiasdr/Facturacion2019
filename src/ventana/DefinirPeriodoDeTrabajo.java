@@ -49,6 +49,20 @@ public class DefinirPeriodoDeTrabajo extends JFrame {
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(148, 83, 133, 22);
 		contentPane.add(comboBox);
+		comboBox.addItem("[Seleccione el Periodo]");
+		comboBox.addItem("Enero");
+		comboBox.addItem("Febrero");
+		comboBox.addItem("Marzo");
+		comboBox.addItem("Abril");
+		comboBox.addItem("Mayo");
+		comboBox.addItem("Junio");
+		comboBox.addItem("Julio");
+		comboBox.addItem("Agosto");
+		comboBox.addItem("Septiembre");
+		comboBox.addItem("Octubre");
+		comboBox.addItem("Noviembre");
+		comboBox.addItem("Diciembre");
+		comboBox.setSelectedIndex(0);
 
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.addActionListener(new ActionListener() {

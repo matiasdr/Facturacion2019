@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,7 +22,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
+
+import conexion.Conexion;
+
 import javax.swing.JTable;
+import javax.swing.JScrollPane;
 
 public class ListadoSaldosProv extends JFrame {
 
@@ -73,20 +81,6 @@ public class ListadoSaldosProv extends JFrame {
 			contentPanel.add(lblHasta);
 		}
 		{
-			DefaultTableModel tablaSaldos= new DefaultTableModel(0, 4);
-			Object[] encabezado = new Object[4];
-			encabezado[0]="CUIT";
-			encabezado[1]="Razon Social";
-			encabezado[2]="Fecha Ultimo Movimiento";
-			encabezado[3]="Saldo";
-			tablaSaldos.addRow(encabezado);
-			table = new JTable();
-			table.setBounds(10, 41, 404, 142);
-			table.setModel(tablaSaldos);
-			contentPanel.add(table);
-
-		}
-		{
 			JButton btnNewButton_2 = new JButton("Buscar");
 			btnNewButton_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -105,8 +99,42 @@ public class ListadoSaldosProv extends JFrame {
 		}
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(166, 194, 89, 23);
+			btnImprimir.setBounds(198, 208, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
+		Object[] encabezado = new Object[3];
+		encabezado[0]="CUIT";
+		encabezado[1]="Razon Social";
+		encabezado[2]="Saldo";			
+		DefaultTableModel tablaSaldos= new DefaultTableModel(encabezado, 0);
+		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(37, 54, 427, 143);
+		contentPanel.add(scrollPane);
+		table = new JTable(tablaSaldos);
+		scrollPane.setViewportView(table);
+		
+		Conexion ltc = new Conexion();
+		Connection conec = ltc.conectar();
+		Statement instruccion;
+		try {
+			instruccion = conec.createStatement();
+			ResultSet resultado = instruccion.executeQuery("select c.cuilcuit, c.nombre, cc.saldo from proveedor c "
+					+ "inner join cuenta_proveedor cc on c.id_proveedor = cc.id_proveedor");
+						
+			while(resultado.next()) {
+				Object[] linea = new Object[3];
+				linea[0]= resultado.getString("cuilcuit");
+				linea[1]= resultado.getString("nombre");
+				linea[2]= resultado.getInt("saldo");
+		    	tablaSaldos.addRow(linea);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		ltc.desconectar();	
+		
 	}
 }

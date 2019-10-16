@@ -242,7 +242,7 @@ public class ModificarProveedor extends JFrame {
 				String categoria=null;
 				String personaResponsable=null;
 				String contacto=null;
-				String condicion=null;
+				Integer condicion=null;
 				Boolean error=false;
 				
 				if(textFieldRazon.getText().isEmpty()) {
@@ -273,7 +273,7 @@ public class ModificarProveedor extends JFrame {
 					error = true;
 					labelErrorCondicion.setVisible(true);
 				} else {
-					condicion = comboBox.getSelectedItem().toString();
+					condicion = comboBox.getSelectedIndex()+1;
 					labelErrorCondicion.setVisible(false);
 				}
 				
@@ -281,11 +281,25 @@ public class ModificarProveedor extends JFrame {
 				if(!textFieldTelefono.getText().isEmpty()) telefono = textFieldTelefono.getText();
 				if(!textFieldPersResp.getText().isEmpty()) personaResponsable = textFieldPersResp.getText();
 				if(!textFieldContacto.getText().isEmpty()) contacto = textFieldContacto.getText();
+				StringBuilder objetivo = new StringBuilder(cuitProv);
+				objetivo = objetivo.insert(2,"-");
+				objetivo = objetivo.insert(objetivo.length()-1, "-");
+				cuitProv=objetivo.toString();
+				
 				
 				if(error) {
 					JOptionPane.showMessageDialog(null, "Error en algun campo");
 				} else {
-					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
+					try {
+						Conexion nc = new Conexion();
+						Connection conn= nc.conectar();
+						Statement instruccion = conn.createStatement();
+						instruccion.executeUpdate("UPDATE proveedor SET nombre = '"+nombre+"',cuilcuit = '"+cuitProv+"',domicilio = '"+domicilio+"',telefono = 'telefono',id_condicion_fiscal = 1,categoria = 1,nombrecontacto = 'nombrecontac',telefonocontacto = 'telefonocont',email = 'mail' WHERE id_proveedor = id");
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(null, "Modificacion realizada con exito");
 				}
 				
 			}
