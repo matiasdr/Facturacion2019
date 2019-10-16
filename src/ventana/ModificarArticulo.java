@@ -132,7 +132,7 @@ public class ModificarArticulo extends JFrame {
 					textFieldDescripcion.setText(resultado.getString("descripcion"));
 					textFieldEAN.setText(resultado.getString("ean"));
 					textFieldStock.setText(resultado.getString("cantidad"));
-					textFieldPrecio.setText(resultado.getString("precio_venta"));
+					textFieldPrecio.setText(resultado.getString("pvp"));
 					int seleccion = resultado.getInt("id_proveedor");
 					comboBox.setSelectedIndex(seleccion-1);
 					

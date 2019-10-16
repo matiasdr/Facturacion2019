@@ -127,7 +127,7 @@ public class ListadoArticulos extends JDialog {
 								linea[1]= resultado.getString("ean");
 								linea[2]= resultado.getString("descripcion");
 								linea[3]= resultado.getDouble("cantidad");
-								linea[4]= resultado.getDouble("precio_venta");
+								linea[4]= resultado.getDouble("pvp");
 								linea[5]= resultado.getString("nombre");
 								tablaModelo.addRow(linea);
 							}
@@ -161,7 +161,7 @@ public class ListadoArticulos extends JDialog {
 								linea[1]= resultado1.getString("ean");
 								linea[2]= resultado1.getString("descripcion");
 								linea[3]= resultado1.getDouble("cantidad");
-								linea[4]= resultado1.getDouble("precio_venta");
+								linea[4]= resultado1.getDouble("pvp");
 								linea[5]= resultado1.getString("nombre");
 								tablaModelo.addRow(linea);
 							}
@@ -192,7 +192,7 @@ public class ListadoArticulos extends JDialog {
 								linea[1]= resultado2.getString("ean");
 								linea[2]= resultado2.getString("descripcion");
 								linea[3]= resultado2.getDouble("cantidad");
-								linea[4]= resultado2.getDouble("precio_venta");
+								linea[4]= resultado2.getDouble("pvp");
 								linea[5]= resultado2.getString("nombre");
 								tablaModelo.addRow(linea);
 							}
@@ -242,7 +242,7 @@ public class ListadoArticulos extends JDialog {
 			linea[1]= resultado.getString("ean");
 			linea[2]= resultado.getString("descripcion");
 			linea[3]= resultado.getDouble("cantidad");
-			linea[4]= resultado.getDouble("precio_venta");
+			linea[4]= resultado.getDouble("pvp");
 			linea[5]= resultado.getString("nombre");
 			tablaModelo.addRow(linea);
 			
