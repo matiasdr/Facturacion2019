@@ -171,6 +171,8 @@ public class NuevoProveedor extends JFrame {
 		while(resultado.next()) {
 			comboBox.addItem(resultado.getString("descripcion"));
 		}
+		nc.desconectar();
+		
 		JButton btnGuardarProveedor = new JButton("Guardar Proveedor");
 		btnGuardarProveedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -181,7 +183,7 @@ public class NuevoProveedor extends JFrame {
 				String categoria=null;
 				String personaResponsable=null;
 				String contacto=null;
-				String condicion=null;
+				Integer condicion=null;
 				Boolean error=false;
 				
 				if(textFieldRazonSocial.getText().isEmpty()) {
@@ -209,7 +211,7 @@ public class NuevoProveedor extends JFrame {
 					error=true;
 					labelRazon.setVisible(true);
 				} else {
-					condicion = comboBox.getSelectedItem().toString();
+					condicion = comboBox.getSelectedIndex()+1;
 					labelRazon.setVisible(false);
 				}
 				
@@ -217,11 +219,28 @@ public class NuevoProveedor extends JFrame {
 				if(!textFieldTelefono.getText().isEmpty()) telefono = textFieldTelefono.getText();
 				if(!textFieldPersResponsable.getText().isEmpty()) personaResponsable = textFieldPersResponsable.getText();
 				if(!textFieldContacto.getText().isEmpty()) contacto = textFieldContacto.getText();
+				StringBuilder objetivo = new StringBuilder(cuitProv);
+				objetivo = objetivo.insert(2,"-");
+				objetivo = objetivo.insert(objetivo.length()-1, "-");
+				cuitProv=objetivo.toString();
+				
 				
 				if(error) {
 					JOptionPane.showMessageDialog(null, "Error en algun campo");
 				} else {
-					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
+					try {
+						Conexion nc = new Conexion();
+						Connection conn = nc.conectar();
+						Statement instruccion;
+						instruccion = conn.createStatement();
+						instruccion.execute("spnuevoproveedor '"+nombre+"', '"+cuitProv+"', '"+domicilio+"', '"+telefono+"', "+condicion+", "+categoria+", '"+personaResponsable+"', '"+contacto+"', NULL, 0");
+						JOptionPane.showMessageDialog(null, "Proveedor Agregado Correctamente");
+					
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 				
 				
