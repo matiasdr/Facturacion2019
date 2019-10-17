@@ -37,6 +37,7 @@ public class ModificarProveedor extends JFrame {
 	private JTextField textFieldPersResp;
 	private JTextField textFieldContacto;
 	private JPanel contentPane;
+	private Integer idProvElegido;
 	
 	/**
 	 * Launch the application.
@@ -191,6 +192,7 @@ public class ModificarProveedor extends JFrame {
 					ep = new ElegirProveedor(new java.awt.Frame(), true);
 					ep.setVisible(true);
 					id_prov=ep.getProvElegido();
+					idProvElegido=id_prov;
 					//textFieldRazon.setText(ep.getProvElegido());
 				} catch (HeadlessException e1) {
 					// TODO Auto-generated catch block
@@ -294,12 +296,14 @@ public class ModificarProveedor extends JFrame {
 						Conexion nc = new Conexion();
 						Connection conn= nc.conectar();
 						Statement instruccion = conn.createStatement();
-						instruccion.executeUpdate("UPDATE proveedor SET nombre = '"+nombre+"',cuilcuit = '"+cuitProv+"',domicilio = '"+domicilio+"',telefono = 'telefono',id_condicion_fiscal = 1,categoria = 1,nombrecontacto = 'nombrecontac',telefonocontacto = 'telefonocont',email = 'mail' WHERE id_proveedor = id");
+						instruccion.executeUpdate("UPDATE proveedor SET nombre = '"+nombre+"',cuilcuit = '"+cuitProv+"',domicilio = '"+domicilio+"',telefono = '"+telefono+"',id_condicion_fiscal = "+condicion+",categoria = "+categoria+",nombrecontacto = '"+personaResponsable+"',telefonocontacto = '"+contacto+"',email = 'NULL' WHERE id_proveedor ="+idProvElegido);
+						JOptionPane.showMessageDialog(null, "Modificacion realizada con exito");
+						nc.desconectar();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(null, "Modificacion realizada con exito");
+					
 				}
 				
 			}

@@ -29,6 +29,7 @@ public class ModificarArticulo extends JFrame {
 	private JTextField textFieldStock;
 	private JTextField textFieldPrecio;
 	private Integer idArticuloModificado;
+	private Integer idProv;
 
 	/**
 	 * Launch the application.
@@ -143,15 +144,15 @@ public class ModificarArticulo extends JFrame {
 				Connection conec = nc.conectar();
 				try {
 					Statement instruccion = conec.createStatement();
-					ResultSet resultado = instruccion.executeQuery("Select * from articulo where id_articulo = "+id_art);
+					ResultSet resultado = instruccion.executeQuery("Select * from articulo A join proveedor P on P.id_proveedor = A.id_proveedor where A.id_articulo ="+id_art);
 					// ahora rellenamos todos los campos con los datos de la consulta
 					while(resultado.next()) {
 					textFieldDescripcion.setText(resultado.getString("descripcion"));
 					textFieldEAN.setText(resultado.getString("ean"));
 					textFieldStock.setText(resultado.getString("cantidad"));
 					textFieldPrecio.setText(resultado.getString("pvp"));
-					int seleccion = resultado.getInt("id_proveedor");
-					comboBox.setSelectedIndex(seleccion-1);
+					String seleccion = resultado.getString("nombre");
+					comboBox.setSelectedItem(seleccion);
 					double ivas = resultado.getDouble("ivaporcent");
 					comboBoxIVA.setSelectedItem(ivas);
 					idArticuloModificado=id_art;
@@ -175,13 +176,27 @@ public class ModificarArticulo extends JFrame {
 				String nombre= textFieldDescripcion.getText();
 				String precio=textFieldPrecio.getText();
 				String stock=textFieldStock.getText();
-				Integer proveedor = comboBox.getSelectedIndex()+1;
+				String proveedor = (String) comboBox.getSelectedItem();
 				double iva = (double) comboBoxIVA.getSelectedItem();
+				try {
+					Conexion cn = new Conexion();
+					Connection con = cn.conectar();
+					Statement instrucion = con.createStatement();
+					ResultSet resulta = instrucion.executeQuery("Select * from proveedor where nombre = '"+proveedor+"'");
+					while(resulta.next()) {
+						idProv = resulta.getInt("id_proveedor");
+					}
+					cn.desconectar();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				
 				try {
 					Conexion nc = new Conexion();
 					Connection conn = nc.conectar();
 					Statement instruccion = conn.createStatement();
-					instruccion.executeUpdate("UPDATE articulo SET ean = '"+ean+"',descripcion = '"+nombre+"',pvp = "+precio+",ivaporcent = "+iva+",cantidad = "+stock+",id_proveedor = "+proveedor+" WHERE id_articulo="+idArticuloModificado);
+					instruccion.executeUpdate("UPDATE articulo SET ean = '"+ean+"',descripcion = '"+nombre+"',pvp = "+precio+",ivaporcent = "+iva+",cantidad = "+stock+",id_proveedor = "+idProv+" WHERE id_articulo="+idArticuloModificado);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
