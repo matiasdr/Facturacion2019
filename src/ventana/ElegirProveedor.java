@@ -205,9 +205,10 @@ public class ElegirProveedor extends JDialog {
 		nc.desconectar();
 
 	}
+	
+	
 	public Integer getProvElegido() {
-		
-		return provElegido;
+			return provElegido;
 	}
 	public void setProv(Integer provElegido) {
 		this.provElegido = provElegido;
