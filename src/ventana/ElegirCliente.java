@@ -25,6 +25,7 @@ public class ElegirCliente extends JDialog {
 	private JTable table;
 	private Integer clienElegido;
 	private String nombreCliente;
+	private Integer condicionFiscal;
 
 	/**
 	 * Launch the application.
@@ -68,11 +69,12 @@ public class ElegirCliente extends JDialog {
 		comboBox.setBounds(12, 13, 135, 22);
 		getContentPane().add(comboBox);
 		
-		DefaultTableModel tablaModelo = new DefaultTableModel(0, 3);
-		Object[] fila = new Object[3];
+		DefaultTableModel tablaModelo = new DefaultTableModel(0, 4);
+		Object[] fila = new Object[4];
 		fila[0]= "ID Cliente";
 		fila[1]= "Nombre";
 		fila[2]= "CUIT";
+		fila[3]= "Condicion Fiscal";
 		tablaModelo.addRow(fila);
 		
 		
@@ -89,6 +91,7 @@ public class ElegirCliente extends JDialog {
 				String seleccionNombre = (String) tablaModelo.getValueAt(table.getSelectedRow(), 1);
 				clienElegido=seleccion;
 				nombreCliente=seleccionNombre;
+				condicionFiscal= (Integer) tablaModelo.getValueAt(table.getSelectedRow(), 3);
 				setVisible(false);
 			}
 		});
@@ -103,10 +106,11 @@ public class ElegirCliente extends JDialog {
 		ResultSet resultado = instruccion.executeQuery("Select * from cliente");
 		
 		while(resultado.next()) {
-			Object[] linea = new Object[3];
+			Object[] linea = new Object[4];
 			linea[0]= resultado.getInt("id_cliente");
 			linea[1]= resultado.getString("nombre");
 			linea[2]= resultado.getString("cuilcuit");
+			linea[3]= resultado.getInt("id_condicion_fiscal");
 			tablaModelo.addRow(linea);
 			
 		}
@@ -123,6 +127,9 @@ public class ElegirCliente extends JDialog {
 	public String getNombreCliente() {
 		return nombreCliente;
 	}
-
+	
+	public Integer getCondicionFiscal() {
+		return condicionFiscal;
+	}
 
 }

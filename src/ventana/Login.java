@@ -32,7 +32,7 @@ public class Login extends JDialog {
 	private JTextField textFieldUsuario;
 	private JPasswordField passwordField;
 	private String permisoUsuario;
-
+	private String nombreUsuario;
 	/**
 	 * Launch the application.
 	 */
@@ -101,10 +101,11 @@ public class Login extends JDialog {
 						String aux = resultado.getString("clave").trim();
 						correct = aux.toCharArray();
 						cargo = resultado.getInt("id_cargo");
+						nombreUsuario= resultado.getString("nombre").trim();
 					}
 					nc.desconectar();
 					if(Arrays.equals(pass, correct)) {
-						JOptionPane.showMessageDialog(null, "Credenciales Correctas! Bienvenid@ "+user);
+						JOptionPane.showMessageDialog(null, "Credenciales Correctas! Bienvenid@ "+nombreUsuario);
 					} else {
 						JOptionPane.showMessageDialog(null, "Credenciales Incorrectas");
 						cargo=0;
@@ -142,5 +143,9 @@ public class Login extends JDialog {
 	
 	public String getPermisoUsuario() {
 		return permisoUsuario;
+	}
+	
+	public String getNombreUsuario() {
+		return nombreUsuario;
 	}
 }

@@ -21,20 +21,35 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
+
+import conexion.Conexion;
+
 import javax.swing.SwingConstants;
+import javax.swing.JTable;
 
 public class CargarFacturaCompra extends JFrame {
 	private JTextField textField;
 	private JTextField textFieldNumFactura;
 	private JTextField textFieldImporteFacturado;
 	private JPanel contentPane;
-	JButton btnCalcular = new JButton("Calcular");
+	JButton btnCalcularIVA = new JButton("Calcular Importe de IVA");
 	JLabel lblesteEsEl = new JLabel("(Monto)");
 	JLabel lblIvaFiscal = new JLabel("IVA FISCAL");
 	JLabel lblMoneda = new JLabel("$");
+	private JTextField textFieldNeto21;
+	private JTextField textFieldIVA21;
+	private JTextField textFieldNeto10;
+	private JTextField textFieldIVA10;
+	private JTextField textFieldNeto27;
+	private JTextField textFieldIVA27;
+	private Integer idProveedor;
 
 	/**
 	 * Launch the application.
@@ -58,7 +73,7 @@ public class CargarFacturaCompra extends JFrame {
 	public CargarFacturaCompra() {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Cargar Facturas de Compras");
-		setBounds(100, 100, 492, 538);
+		setBounds(100, 100, 530, 592);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -85,7 +100,7 @@ public class CargarFacturaCompra extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					btnCalcular.setVisible(false);
+					btnCalcularIVA.setVisible(false);
 					lblesteEsEl.setVisible(false);
 					lblIvaFiscal.setVisible(false);
 					lblMoneda.setVisible(false);
@@ -99,7 +114,7 @@ public class CargarFacturaCompra extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				btnCalcular.setVisible(true);
+				btnCalcularIVA.setVisible(true);
 				lblesteEsEl.setVisible(true);
 				lblIvaFiscal.setVisible(true);
 				lblMoneda.setVisible(true);
@@ -111,7 +126,7 @@ public class CargarFacturaCompra extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				btnCalcular.setVisible(true);
+				btnCalcularIVA.setVisible(true);
 				lblesteEsEl.setVisible(true);
 				lblIvaFiscal.setVisible(true);	
 				lblMoneda.setVisible(true);
@@ -133,16 +148,17 @@ public class CargarFacturaCompra extends JFrame {
 					ElegirProveedor ep = new ElegirProveedor(new java.awt.Frame(), true);
 					ep.setVisible(true);
 					lblNombreProveedor.setText(ep.getNombreProovedor());
+					idProveedor = ep.getProvElegido();
 					
 					if(ep.getCondFiscal()==1) {
 						rdbtna.setSelected(true);
-						btnCalcular.setVisible(true);
+						btnCalcularIVA.setVisible(true);
 						lblesteEsEl.setVisible(true);
 						lblIvaFiscal.setVisible(true);	
 						lblMoneda.setVisible(true);
 					} else {
 						rdbtnc.setSelected(true);
-						btnCalcular.setVisible(false);
+						btnCalcularIVA.setVisible(false);
 						lblesteEsEl.setVisible(false);
 						lblIvaFiscal.setVisible(false);
 						lblMoneda.setVisible(false);
@@ -221,55 +237,56 @@ public class CargarFacturaCompra extends JFrame {
 		contentPane.add(lblConceptoDeCompra);
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(135, 170, 85, 22);
+		comboBox.setBounds(135, 170, 137, 22);
 		contentPane.add(comboBox);
 		comboBox.addItem("Compra de Bienes");
 		comboBox.addItem("Servicios");
 		comboBox.addItem("Bienes de Uso");
 
 		JLabel lblAlcuotaDeIva = new JLabel("Al\u00EDcuota de IVA");
-		lblAlcuotaDeIva.setBounds(10, 268, 103, 14);
+		lblAlcuotaDeIva.setBounds(10, 371, 103, 14);
 		contentPane.add(lblAlcuotaDeIva);
 
 		JComboBox comboBoxIva = new JComboBox();
-		comboBoxIva.setBounds(135, 264, 89, 22);
+		comboBoxIva.setBounds(135, 367, 89, 22);
 		contentPane.add(comboBoxIva);
 		comboBoxIva.addItem("21%");
 		comboBoxIva.addItem("10,5%");
 		comboBoxIva.addItem("27%");
 		
 		JLabel lblImporteNetoTotal = new JLabel("Importe TOTAL FACTURADO");
-		lblImporteNetoTotal.setBounds(10, 311, 180, 14);
+		lblImporteNetoTotal.setBounds(10, 405, 180, 14);
 		contentPane.add(lblImporteNetoTotal);
 
 		textFieldImporteFacturado = new JTextField();
-		textFieldImporteFacturado.setBounds(219, 308, 77, 20);
+		textFieldImporteFacturado.setBounds(219, 402, 77, 20);
 		contentPane.add(textFieldImporteFacturado);
 		textFieldImporteFacturado.setColumns(10);
 
 		
-		lblIvaFiscal.setBounds(27, 336, 77, 14);
+		lblIvaFiscal.setBounds(38, 430, 77, 14);
 		contentPane.add(lblIvaFiscal);
 		
 		lblesteEsEl.setHorizontalAlignment(SwingConstants.LEFT);
 		
 
 		
-		lblesteEsEl.setBounds(150, 336, 125, 14);
+		lblesteEsEl.setBounds(164, 430, 125, 14);
 		contentPane.add(lblesteEsEl);
 
 		JButton btnCargarFactura = new JButton("Cargar Factura");
-		btnCargarFactura.setBounds(113, 378, 137, 23);
+		btnCargarFactura.setBounds(132, 486, 137, 23);
 		contentPane.add(btnCargarFactura);
+		btnCargarFactura.setEnabled(false);
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(113, 143, 96, 20);
 		contentPane.add(dateChooser);
-		dateChooser.setDateFormatString("dd-MM-yy");
+		dateChooser.setDateFormatString("yyyy-MM-dd");
 		
 		
 		
-		btnCalcular.addActionListener(new ActionListener() {
+		btnCalcularIVA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(textFieldImporteFacturado.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "COmplete el importe");
@@ -294,8 +311,8 @@ public class CargarFacturaCompra extends JFrame {
 				}
 			}
 		});
-		btnCalcular.setBounds(314, 307, 89, 23);
-		contentPane.add(btnCalcular);
+		btnCalcularIVA.setBounds(320, 401, 169, 23);
+		contentPane.add(btnCalcularIVA);
 		
 		JRadioButton rdbtnSi = new JRadioButton("Si");
 		rdbtnSi.setBounds(145, 199, 54, 23);
@@ -333,12 +350,266 @@ public class CargarFacturaCompra extends JFrame {
 		groupCondVenta.add(radioButtonCuentaCorriente);
 		
 		
-		lblMoneda.setBounds(131, 336, 24, 14);
+		lblMoneda.setBounds(135, 430, 24, 14);
 		contentPane.add(lblMoneda);
 		
 		JLabel label = new JLabel("$");
-		label.setBounds(200, 311, 12, 14);
+		label.setBounds(197, 405, 12, 14);
 		contentPane.add(label);
+		
+		JLabel labelIVAPregunta = new JLabel("Desea ingresar el IVA de forma manual?");
+		labelIVAPregunta.setBounds(10, 256, 250, 26);
+		contentPane.add(labelIVAPregunta);
+		
+		JRadioButton radioButtonManual = new JRadioButton("Si");
+		radioButtonManual.setBounds(253, 260, 61, 23);
+		contentPane.add(radioButtonManual);
+		radioButtonManual.setSelected(true);
+		
+		JRadioButton radioButtonAutomatico = new JRadioButton("No");
+		radioButtonAutomatico.setBounds(320, 258, 68, 23);
+		contentPane.add(radioButtonAutomatico);
+		
+		ButtonGroup grupoCalculoIVA = new ButtonGroup();
+		grupoCalculoIVA.add(radioButtonManual);
+		grupoCalculoIVA.add(radioButtonAutomatico);
+		
+		JLabel lblIva = new JLabel("IVA 21% ");
+		lblIva.setBounds(10, 332, 77, 14);
+		contentPane.add(lblIva);
+		
+		JLabel lblIva_1 = new JLabel("IVA 10.5% ");
+		lblIva_1.setBounds(170, 332, 77, 14);
+		contentPane.add(lblIva_1);
+		
+		JLabel lblIva_2 = new JLabel("IVA 27% ");
+		lblIva_2.setBounds(341, 335, 77, 14);
+		contentPane.add(lblIva_2);
+		
+		JLabel lblImporteNeto = new JLabel("Importe Neto 21%");
+		lblImporteNeto.setBounds(10, 293, 103, 14);
+		contentPane.add(lblImporteNeto);
+		
+		textFieldNeto21 = new JTextField();
+		textFieldNeto21.setBounds(113, 287, 54, 20);
+		contentPane.add(textFieldNeto21);
+		textFieldNeto21.setColumns(10);
+		
+		textFieldIVA21 = new JTextField();
+		textFieldIVA21.setColumns(10);
+		textFieldIVA21.setBounds(113, 329, 54, 20);
+		contentPane.add(textFieldIVA21);
+		
+		JLabel lblImporteNeto_1 = new JLabel("Importe Neto 10.5%");
+		lblImporteNeto_1.setBounds(169, 293, 103, 14);
+		contentPane.add(lblImporteNeto_1);
+		
+		JLabel lblImporteNeto_2 = new JLabel("Importe Neto 27%");
+		lblImporteNeto_2.setBounds(341, 296, 103, 14);
+		contentPane.add(lblImporteNeto_2);
+		
+		textFieldNeto10 = new JTextField();
+		textFieldNeto10.setColumns(10);
+		textFieldNeto10.setBounds(276, 287, 54, 20);
+		contentPane.add(textFieldNeto10);
+		
+		textFieldIVA10 = new JTextField();
+		textFieldIVA10.setColumns(10);
+		textFieldIVA10.setBounds(276, 329, 54, 20);
+		contentPane.add(textFieldIVA10);
+		
+		textFieldNeto27 = new JTextField();
+		textFieldNeto27.setColumns(10);
+		textFieldNeto27.setBounds(435, 287, 54, 20);
+		contentPane.add(textFieldNeto27);
+		
+		textFieldIVA27 = new JTextField();
+		textFieldIVA27.setColumns(10);
+		textFieldIVA27.setBounds(435, 329, 54, 20);
+		contentPane.add(textFieldIVA27);
+		
+		JLabel lblMontoTotal = new JLabel("Monto Total $");
+		lblMontoTotal.setBounds(297, 441, 89, 14);
+		contentPane.add(lblMontoTotal);
+		
+		JLabel lblMonto = new JLabel("Monto");
+		lblMonto.setBounds(396, 441, 49, 14);
+		contentPane.add(lblMonto);
+		
+		JButton btnCalcularImporteTotal = new JButton("Calcular Monto Total");
+		btnCalcularImporteTotal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Double total=0.0;
+				if(!textFieldNeto10.getText().isEmpty()) {
+					total=total+Double.valueOf(textFieldNeto10.getText());
+				}
+				if(!textFieldNeto21.getText().isEmpty()) {
+					total=total+Double.valueOf(textFieldNeto21.getText());
+				}
+				if(!textFieldNeto27.getText().isEmpty()) {
+					total=total+Double.valueOf(textFieldNeto27.getText());
+				}
+				if(!textFieldIVA10.getText().isEmpty()) {
+					total=total+Double.valueOf(textFieldIVA10.getText());
+				}
+				if(!textFieldIVA21.getText().isEmpty()) {
+					total=total+Double.valueOf(textFieldIVA21.getText());
+				}
+				if(!textFieldIVA27.getText().isEmpty()) {
+					total=total+Double.valueOf(textFieldIVA27.getText());
+				}
+				lblMonto.setText(String.valueOf(total));
+				
+				btnCargarFactura.setEnabled(true);
+				
+			}
+		});
+		btnCalcularImporteTotal.setBounds(265, 367, 182, 23);
+		contentPane.add(btnCalcularImporteTotal);
 
+		
+		radioButtonAutomatico.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblIva.setVisible(false);
+				lblIva_1.setVisible(false);
+				lblIva_2.setVisible(false);
+				lblImporteNeto.setVisible(false);
+				lblImporteNeto_1.setVisible(false);
+				lblImporteNeto_2.setVisible(false);
+				textFieldIVA10.setVisible(false);
+				textFieldIVA21.setVisible(false);
+				textFieldIVA27.setVisible(false);
+				textFieldNeto10.setVisible(false);
+				textFieldNeto21.setVisible(false);
+				textFieldNeto27.setVisible(false);
+				lblMonto.setVisible(false);
+				lblMontoTotal.setVisible(false);
+				btnCalcularImporteTotal.setVisible(false);
+				
+				lblIvaFiscal.setVisible(true);
+				lblMoneda.setVisible(true);
+				lblImporteNetoTotal.setVisible(true);
+				label.setVisible(true);
+				textFieldImporteFacturado.setVisible(true);
+				lblAlcuotaDeIva.setVisible(true);
+				comboBoxIva.setVisible(true);
+				lblesteEsEl.setVisible(true);
+				btnCalcularIVA.setVisible(true);
+			}
+		});
+		
+		radioButtonManual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblIva.setVisible(true);
+				lblIva_1.setVisible(true);
+				lblIva_2.setVisible(true);
+				lblImporteNeto.setVisible(true);
+				lblImporteNeto_1.setVisible(true);
+				lblImporteNeto_2.setVisible(true);
+				textFieldIVA10.setVisible(true);
+				textFieldIVA21.setVisible(true);
+				textFieldIVA27.setVisible(true);
+				textFieldNeto10.setVisible(true);
+				textFieldNeto21.setVisible(true);
+				textFieldNeto27.setVisible(true);
+				lblMonto.setVisible(true);
+				lblMontoTotal.setVisible(true);
+				btnCalcularImporteTotal.setVisible(true);
+				
+				lblIvaFiscal.setVisible(false);
+				lblMoneda.setVisible(false);
+				lblImporteNetoTotal.setVisible(false);
+				label.setVisible(false);
+				textFieldImporteFacturado.setVisible(false);
+				lblAlcuotaDeIva.setVisible(false);
+				comboBoxIva.setVisible(false);
+				lblesteEsEl.setVisible(false);
+				btnCalcularIVA.setVisible(false);
+				
+			}
+		});
+		
+		btnCargarFactura.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String numerofac=textField.getText()+textFieldNumFactura.getText();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String fecha = sdf.format(dateChooser.getDate());
+				String puntoDeVenta=textField.getText();
+				
+				if(radioButtonManual.isSelected()) {
+					Double neto21 = 0.0;
+					Double neto10 = 0.0;
+					Double neto27 = 0.0;
+					Double iva10 = 0.0;
+					Double iva21 = 0.0;
+					Double iva27 = 0.0;
+					Double total = Double.valueOf(lblMonto.getText());
+					if(!textFieldNeto10.getText().isEmpty()) {
+						neto10 = Double.valueOf(textFieldNeto10.getText());
+					}
+					if(!textFieldNeto21.getText().isEmpty()) {
+						neto21 = Double.valueOf(textFieldNeto21.getText());
+					}
+					if(!textFieldNeto27.getText().isEmpty()) {
+						neto27 = Double.valueOf(textFieldNeto27.getText());
+					}
+					if(!textFieldIVA10.getText().isEmpty()) {
+						iva10 = Double.valueOf(textFieldIVA10.getText());
+					}
+					if(!textFieldIVA21.getText().isEmpty()) {
+						iva21 = Double.valueOf(textFieldIVA21.getText());
+					}
+					if(!textFieldIVA27.getText().isEmpty()) {
+						iva27 = Double.valueOf(textFieldIVA27.getText());
+					}
+					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+")";
+					System.out.println(sql);
+					try {
+						Conexion nc = new Conexion();
+						Connection conn = nc.conectar();
+						Statement instruccion;
+						instruccion = conn.createStatement();
+						instruccion.executeUpdate(sql);
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+				} else {
+					String query="";
+					if(comboBoxIva.getSelectedItem().equals("21%")) {
+						Double iva21 = Double.valueOf(lblesteEsEl.getText());
+						Double total = Double.valueOf(textFieldImporteFacturado.getText());
+						Double neto21 = total-iva21;
+						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+")";
+					}
+					if(comboBoxIva.getSelectedItem().equals("10.5")) {
+						Double iva10 = Double.valueOf(lblesteEsEl.getText());
+						Double total = Double.valueOf(textFieldImporteFacturado.getText());
+						Double neto10 = total-iva10;
+						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+")";
+					}
+					if(comboBoxIva.getSelectedItem().equals("27%")) {
+						Double iva27 = Double.valueOf(lblesteEsEl.getText());
+						Double total = Double.valueOf(textFieldImporteFacturado.getText());
+						Double neto27 = total-iva27;
+						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+")";
+					}
+					try {
+						Conexion nc = new Conexion();
+						Connection conn = nc.conectar();
+						Statement instruccion;
+						instruccion = conn.createStatement();
+						instruccion.executeUpdate(query);
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		
 	}
 }

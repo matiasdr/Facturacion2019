@@ -7,6 +7,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
@@ -17,9 +18,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +33,7 @@ import javax.swing.table.TableColumnModel;
 
 import conexion.Conexion;
 import javax.swing.JScrollPane;
+import java.awt.Font;
 
 public class GenerarFactura extends JFrame {
 	private JTextField textFieldVencimiento;
@@ -39,6 +44,8 @@ public class GenerarFactura extends JFrame {
 	private JTable tablaProductos;
 	private String nombreCliente;
 	private Integer condicionFiscalCliente;
+	private Integer idCliente;
+	
 	
 	
 	/**
@@ -63,7 +70,7 @@ public class GenerarFactura extends JFrame {
 	 */
 	public GenerarFactura() throws SQLException {
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 450);
+		setBounds(100, 100, 898, 670);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -71,24 +78,19 @@ public class GenerarFactura extends JFrame {
 		contentPane.setLayout(null);
 
 		JLabel lblNombreDelCliente = new JLabel("Nombre del CLiente");
-		
-		JLabel lblEmitirComprobanteFactura = new JLabel("Emitir Comprobante Factura");
-		lblEmitirComprobanteFactura.setBounds(140, 11, 156, 14);
-		contentPane.add(lblEmitirComprobanteFactura);
 
 		JLabel lblSeleccionarCliente = new JLabel("Seleccionar Cliente");
-		lblSeleccionarCliente.setBounds(10, 33, 93, 14);
+		lblSeleccionarCliente.setBounds(78, 22, 93, 14);
 		contentPane.add(lblSeleccionarCliente);
 
-		JButton btnBuscar = new JButton("Buscar");
+		JButton btnBuscar = new JButton("Buscar Cliente");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// funcion para buscar yseleccionar un Cliente, luego será guardado en el lblNombreDelCLiente
-				Integer idClie=null;
 				try {
 					ElegirCliente ec = new ElegirCliente(new java.awt.Frame(), true);
 					ec.setVisible(true);
-					idClie=ec.getClienElegido();
+					idCliente=ec.getClienElegido();
 				} catch (HeadlessException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -98,40 +100,42 @@ public class GenerarFactura extends JFrame {
 				Connection connec = nc.conectar();
 				try {
 					Statement instruccion = connec.createStatement();
-					ResultSet resultado = instruccion.executeQuery("Select * from cliente where id_cliente = "+idClie);
+					ResultSet resultado = instruccion.executeQuery("Select * from cliente where id_cliente = "+idCliente);
 					while(resultado.next()) {
 						nombreCliente = resultado.getString("nombre");
 						condicionFiscalCliente = resultado.getInt("id_condicion_fiscal");
 					}
 					lblNombreDelCliente.setText(nombreCliente);
+
+					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
-				
+			
 				
 				
 			}
 		});
-		btnBuscar.setBounds(113, 29, 89, 23);
+		btnBuscar.setBounds(220, 18, 183, 23);
 		contentPane.add(btnBuscar);
 		
 		textFieldVencimiento = new JTextField();
-		textFieldVencimiento.setBounds(233, 90, 96, 20);
+		textFieldVencimiento.setBounds(220, 85, 96, 20);
 		contentPane.add(textFieldVencimiento);
 		textFieldVencimiento.setColumns(10);
 
 		
-		lblNombreDelCliente.setBounds(212, 33, 132, 14);
+		lblNombreDelCliente.setBounds(447, 22, 132, 14);
 		contentPane.add(lblNombreDelCliente);
 		
 		JRadioButton rdbtnContado = new JRadioButton("Contado");
-		rdbtnContado.setBounds(113, 66, 111, 23);
+		rdbtnContado.setBounds(220, 55, 111, 23);
 		contentPane.add(rdbtnContado);
 
 		JRadioButton rdbtnCuentaCorriente = new JRadioButton("Cuenta Corriente");
-		rdbtnCuentaCorriente.setBounds(233, 66, 111, 23);
+		rdbtnCuentaCorriente.setBounds(343, 55, 111, 23);
 		contentPane.add(rdbtnCuentaCorriente);
 		rdbtnCuentaCorriente.setSelected(true);
 		
@@ -155,29 +159,31 @@ public class GenerarFactura extends JFrame {
 		});
 
 		JLabel lblCondicionDeVenta = new JLabel("Condicion de venta:");
-		lblCondicionDeVenta.setBounds(10, 70, 97, 14);
+		lblCondicionDeVenta.setBounds(78, 59, 97, 14);
 		contentPane.add(lblCondicionDeVenta);
 
 		JLabel lblDasDeVencimiento = new JLabel("D\u00EDas de Vencimiento:");
-		lblDasDeVencimiento.setBounds(113, 93, 111, 14);
+		lblDasDeVencimiento.setBounds(78, 84, 111, 14);
 		contentPane.add(lblDasDeVencimiento);		
 		
-		Object[] fila=new Object[5];
+		Object[] fila=new Object[6];
 		fila[0]="EAN";
 		fila[1]="Articulo";
 		fila[2]="Cantidad";
 		fila[3]="Precio Unitario";
 		fila[4]="Precio Total";
+		fila[5]="ID";
 		
 		DefaultTableModel modelTabla = new DefaultTableModel(fila, 0);
 		
 		
 		
-		Object[] encabe=new Object[4];
+		Object[] encabe=new Object[5];
 		encabe[0]="EAN";
 		encabe[1]="Descripcion";
 		encabe[2]="Stock";
-		encabe[3]="Precio Unitario";		
+		encabe[3]="Precio Unitario";
+		encabe[4]="ID";
 		
 		
 		DefaultTableModel modelTablaProductos = new DefaultTableModel(encabe, 0);
@@ -188,31 +194,32 @@ public class GenerarFactura extends JFrame {
 		ResultSet resultado = instruccion.executeQuery("Select * from articulo");
 		
 		while(resultado.next()) {
-			Object[] linea = new Object[4];
+			Object[] linea = new Object[5];
 			linea[0]= resultado.getString("ean");
 			linea[1]= resultado.getString("descripcion");
 			linea[2]= resultado.getInt("cantidad");
 			linea[3]= resultado.getDouble("pvp");
+			linea[4]= resultado.getInt("id_articulo");
 			modelTablaProductos.addRow(linea);
 			
 		}
 		nc.desconectar();
 		
 		JLabel lblBuscarArtculos = new JLabel("Buscar Art\u00EDculos");
-		lblBuscarArtculos.setBounds(10, 116, 93, 14);
+		lblBuscarArtculos.setBounds(375, 89, 93, 14);
 		contentPane.add(lblBuscarArtculos);
 
 		JLabel lblPorNombre = new JLabel("Por Nombre:");
-		lblPorNombre.setBounds(108, 118, 82, 14);
+		lblPorNombre.setBounds(487, 89, 82, 14);
 		contentPane.add(lblPorNombre);
 		
 		textFieldCantidad = new JTextField();
-		textFieldCantidad.setBounds(304, 181, 60, 20);
+		textFieldCantidad.setBounds(783, 224, 60, 20);
 		contentPane.add(textFieldCantidad);
 		textFieldCantidad.setColumns(10);
 
 		textFieldArticulo = new JTextField();
-		textFieldArticulo.setBounds(174, 113, 96, 20);
+		textFieldArticulo.setBounds(574, 86, 96, 20);
 		contentPane.add(textFieldArticulo);
 		textFieldArticulo.setColumns(10);
 
@@ -237,11 +244,12 @@ public class GenerarFactura extends JFrame {
 					}
 					
 					while(resultado1.next()) {
-						Object[] linea = new Object[4];
+						Object[] linea = new Object[5];
 						linea[0]= resultado1.getString("ean");
 						linea[1]= resultado1.getString("descripcion");
 						linea[2]= resultado1.getInt("cantidad");
 						linea[3]= resultado1.getDouble("pvp");
+						linea[4]= resultado1.getInt("id_articulo");
 						modelTablaProductos.addRow(linea);
 					}
 				} catch (SQLException e1) {
@@ -252,11 +260,12 @@ public class GenerarFactura extends JFrame {
 				
 			}
 		});
-		btnFiltrar.setBounds(281, 112, 89, 23);
+		btnFiltrar.setBounds(708, 85, 89, 23);
 		contentPane.add(btnFiltrar);
 
 		JLabel totalFactura = new JLabel("00,00");
-		totalFactura.setBounds(233, 319, 49, 14);
+		totalFactura.setFont(new Font("Tahoma", Font.BOLD, 18));
+		totalFactura.setBounds(530, 576, 140, 14);
 		contentPane.add(totalFactura);
 
 		JButton btnAgregar = new JButton("Agregar");
@@ -276,6 +285,7 @@ public class GenerarFactura extends JFrame {
 				String ean =(String) modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 0);
 				String descripcion = (String) modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 1);
 				Integer stock = (Integer)modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 2);
+				Integer idArtic= (Integer)modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 4);
 				// verificamos que no se intente obtener una cantidad mayor a la que hay en existencia
 				
 				if(cant>stock || cant<=0) {
@@ -287,12 +297,13 @@ public class GenerarFactura extends JFrame {
 				
 				// creamos un Arreglo de 5 y le pasamos los valores
 				
-				Object[] nuevaFila = new Object[5];
+				Object[] nuevaFila = new Object[6];
 				nuevaFila[0]=ean; //aca debemos traer de la base de datos el correspondiente
 				nuevaFila[1]= descripcion; // este es el nombre del articulo
 				nuevaFila[2]= cant; // la cantidad del artiuclo;
 				nuevaFila[3]= precio; // este es el precio Unitario de nuestro articulo
 				nuevaFila[4]= total; // el total de ese articulo
+				nuevaFila[5]= idArtic;
 				// hacemos un addROw para agregar a la vista un item
 			
 				modelTabla.addRow(nuevaFila);
@@ -306,10 +317,10 @@ public class GenerarFactura extends JFrame {
 				totalFactura.setText(var);
 			}
 		});
-		btnAgregar.setBounds(291, 212, 89, 23);
+		btnAgregar.setBounds(712, 261, 160, 42);
 		contentPane.add(btnAgregar);
 
-		JButton btnQuitar = new JButton("Quitar");
+		JButton btnQuitar = new JButton("Quitar Articulo");
 		btnQuitar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(table.getSelectedRow()<0) {
@@ -326,35 +337,111 @@ public class GenerarFactura extends JFrame {
 				totalFactura.setText(var);
 			}
 		});
-		btnQuitar.setBounds(291, 287, 89, 23);
+		btnQuitar.setBounds(712, 499, 160, 42);
 		contentPane.add(btnQuitar);
 
-		JButton btnGenerarComprobante = new JButton("Generar Comprobante");
-		btnGenerarComprobante.setBounds(55, 367, 147, 23);
+		JButton btnGenerarComprobante = new JButton("Emitir Factura");
+		btnGenerarComprobante.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tipoComprobante=null;
+				Integer numFactura=null;
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+				LocalDateTime now = LocalDateTime.now(); 
+				String fecha = dtf.format(now);
+				String condicion=null;
+				Integer idFacturaGenerada=null;
+				if(rdbtnContado.isSelected()) {
+					condicion="Contado";
+				} else {
+					condicion="Cuenta";
+				}
+				Double importeTotal = Double.valueOf(totalFactura.getText());
+				if(condicionFiscalCliente==1) {
+					tipoComprobante="A";
+				} else {
+					tipoComprobante="B";
+				}
+				try {
+					Conexion nc = new Conexion();
+					Connection conn = nc.conectar();
+					Statement instruccion;
+					instruccion = conn.createStatement();
+					ResultSet resultado = instruccion.executeQuery("select top 1 numero from factura order by numero desc");
+					while(resultado.next()) {
+						numFactura=Integer.valueOf(resultado.getString("numero"))+1;
+					}
+					String numeroFinal="000"+numFactura;
+					instruccion = conn.createStatement();
+					instruccion.execute("spnuevafactura '"+numeroFinal+"', "+tipoComprobante+", '"+fecha+"', "+idCliente+", 1, "+condicion+", "+importeTotal+", NULL");
+					ResultSet resul = instruccion.executeQuery("select top 1 id_factura from factura order by id_factura desc");
+					while(resul.next()) {
+						idFacturaGenerada = resul.getInt("id_factura");
+					}
+					nc.desconectar();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				System.out.println(tipoComprobante+ " " +numFactura+ " " +fecha+ " " +condicion+ " " +importeTotal);
+				
+				// ahora hacemos toda la secuencia de actualizar el stock, de agregar la factura a la cuenta del cliente y agregar los registros de cada articulo_factura correspondiente
+				try {
+					Conexion nc = new Conexion();
+					Connection conn = nc.conectar();
+					Statement instruccion = conn.createStatement();
+					for(int i = 0; i<table.getRowCount();i++ ) {
+						int idarticulo=(int) table.getValueAt(i, 5);
+						int cantidadarticulo=(int) table.getValueAt(i, 2);
+						instruccion.execute("spnuevoarticulofactura null, "+cantidadarticulo+", "+idFacturaGenerada+", "+idarticulo+", null");
+						instruccion.executeUpdate("update articulo set cantidad=cantidad-"+cantidadarticulo+" where id_articulo = "+idarticulo);
+					}
+					
+					ResultSet res = instruccion.executeQuery("select id_cuenta_cliente from cuenta_cliente where id_cliente="+idCliente);
+					if(res.next()) {
+						System.out.println("tiene cuenta");
+						
+					} else {
+						System.out.println("No tiene cuenta");
+					}
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+				
+			}
+		});
+		btnGenerarComprobante.setFont(new Font("Tahoma", Font.BOLD, 17));
+		btnGenerarComprobante.setBounds(30, 558, 219, 44);
 		contentPane.add(btnGenerarComprobante);
 
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(255, 367, 89, 23);
+		btnCancelar.setBounds(712, 575, 89, 23);
 		contentPane.add(btnCancelar);
 
-		JLabel lblElegirCantidad = new JLabel("Elegir Cantidad");
-		lblElegirCantidad.setBounds(294, 160, 76, 14);
+		JLabel lblElegirCantidad = new JLabel("Ingresar Cantidad");
+		lblElegirCantidad.setBounds(753, 188, 119, 14);
 		contentPane.add(lblElegirCantidad);
 
 		
 		JLabel lblTotalDeLa = new JLabel("Total de la Factura");
-		lblTotalDeLa.setBounds(91, 319, 111, 14);
+		lblTotalDeLa.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTotalDeLa.setBounds(259, 576, 224, 14);
 		contentPane.add(lblTotalDeLa);
 		
 		tablaProductos = new JTable();
 		tablaProductos.setModel(modelTablaProductos);
 		
 		JScrollPane scrollPane = new JScrollPane(tablaProductos);
-		scrollPane.setBounds(20, 141, 263, 100);
+		scrollPane.setBounds(30, 116, 672, 236);
 		contentPane.add(scrollPane);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 248, 272, 62);
+		scrollPane_1.setBounds(30, 363, 672, 184);
 		contentPane.add(scrollPane_1);
 		
 		table = new JTable();
