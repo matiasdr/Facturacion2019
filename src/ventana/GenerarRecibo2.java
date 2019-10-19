@@ -43,7 +43,6 @@ public class GenerarRecibo2 extends JFrame {
 	private Integer id_seleccion;
 	private JTable tablaFactPend;
 	private JTable table;
-	private JTable tablaResumen;
 	private int saldoC;
 	private String tipoComp;
 
@@ -71,7 +70,7 @@ public class GenerarRecibo2 extends JFrame {
 		setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
 		setTitle("Generar Recibo de Cobro a Cliente");
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 881, 542);
+		setBounds(100, 100, 881, 428);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -92,22 +91,22 @@ public class GenerarRecibo2 extends JFrame {
 		lblNombreClie.setBounds(378, 59, 276, 25);
 		contentPane.add(lblNombreClie);
 		
-		JLabel lblSaldo = new JLabel("Saldo :");
-		lblSaldo.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblSaldo.setBounds(658, 311, 56, 16);
-		contentPane.add(lblSaldo);
-		
 		JLabel lblimporteSaldo = new JLabel("");
-		lblimporteSaldo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
-		lblimporteSaldo.setBounds(726, 302, 85, 25);
+		lblimporteSaldo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 19));
+		lblimporteSaldo.setBounds(734, 302, 85, 25);
 		contentPane.add(lblimporteSaldo);
 		
-		DefaultTableModel tablaModelo = new DefaultTableModel(0,4);
-		Object[] fila = new Object[4];
+		JLabel lblTipsaldo = new JLabel("");
+		lblTipsaldo.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblTipsaldo.setBounds(590, 302, 137, 25);
+		contentPane.add(lblTipsaldo);
+		
+		DefaultTableModel tablaModelo = new DefaultTableModel(0,3);
+		Object[] fila = new Object[3];
 		fila[0]= "Tipo Comprobante";
 		fila[1]= "Numero";
 		fila[2]= "Saldo";
-		fila[3]= "Importe";
+		
 		tablaModelo.addRow(fila);
 		
 		tablaFactPend = new JTable(tablaModelo);
@@ -141,35 +140,37 @@ public class GenerarRecibo2 extends JFrame {
 								"inner join cliente c on c.id_cliente= cc.id_cliente where c.id_cliente =" + id_seleccion);
 						
 						while(resultado.next()) {
-							Object[] linea = new Object[4];
+							Object[] linea = new Object[3];
 							linea[0]= resultado.getString("comprobante");
 							linea[1]= resultado.getInt("numerocomprobante");
 							linea[2]= resultado.getInt("saldo");
-							linea[3] = resultado.getString("debe_haber").trim();
+							tipoComp = resultado.getString("debe_haber").trim();
 							tablaModelo.addRow(linea);
 						
 							
-							if(linea[3].toString().equals("H")) {
+							if(tipoComp.toString().equals("H")) {
 							
 								saldoC -= resultado.getInt("saldo");
 							}
 							else
-								if(linea[3].toString().equals("D"))
+								if(tipoComp.toString().equals("D"))
 							{
 								saldoC += resultado.getInt("saldo");
 							}
 							
 							
 						}								
-							if(saldoC >= 0) {
+							if(saldoC >= 1) {
 								lblimporteSaldo.setText(String.valueOf(saldoC));
-								lblimporteSaldo.setForeground(Color.BLACK);
+								lblTipsaldo.setText("Saldo Pendiente :");
+								lblimporteSaldo.setForeground(Color.RED);
 							}
 							else
 							{
 								if(saldoC < 0) {
-									lblimporteSaldo.setText(String.valueOf(saldoC));
-									lblimporteSaldo.setForeground(Color.RED);
+									lblimporteSaldo.setText(String.valueOf(saldoC*-1));
+									lblTipsaldo.setText("Saldo a Favor :");
+									lblimporteSaldo.setForeground(Color.BLACK);
 							    }
 							}
         				
@@ -227,74 +228,34 @@ public class GenerarRecibo2 extends JFrame {
 		lblFacPend.setBounds(537, 110, 171, 16);
 		contentPane.add(lblFacPend);
 		
-		JLabel lblResumen = new JLabel("Resumen de Operacion");
-		lblResumen.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblResumen.setBounds(378, 328, 164, 16);
-		contentPane.add(lblResumen);
-		
-		JLabel lblImpoParc = new JLabel("Importe de Pago Parcial :");
+		JLabel lblImpoParc = new JLabel("Importe de Pago :");
 		lblImpoParc.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblImpoParc.setBounds(26, 273, 171, 16);
+		lblImpoParc.setBounds(26, 239, 123, 16);
 		contentPane.add(lblImpoParc);
 		
 		tFImporte = new JTextField();
 		tFImporte.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		tFImporte.setColumns(10);
-		tFImporte.setBounds(196, 270, 116, 22);
+		tFImporte.setBounds(161, 236, 116, 22);
 		contentPane.add(tFImporte);
 		
-		JButton btnCalcular = new JButton("Calcular");
-		btnCalcular.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		btnCalcular.setBounds(174, 453, 97, 25);
-		contentPane.add(btnCalcular);
-		
 		JButton btnConfirmar = new JButton("Confirmar");
+		btnConfirmar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 		btnConfirmar.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		btnConfirmar.setBounds(427, 453, 97, 25);
+		btnConfirmar.setBounds(225, 341, 97, 25);
 		contentPane.add(btnConfirmar);
 		
-		JButton btnEmitirRec = new JButton("Emitir Recibo");
+		JButton btnEmitirRec = new JButton("Cancelar");
 		btnEmitirRec.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		btnEmitirRec.setBounds(645, 453, 123, 25);
+		btnEmitirRec.setBounds(422, 341, 123, 25);
 		contentPane.add(btnEmitirRec);
 		
-		JLabel lblPagoParc = new JLabel("\u00BFRealiza Pago Parcial :");
-		lblPagoParc.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblPagoParc.setBounds(26, 230, 153, 16);
-		contentPane.add(lblPagoParc);
-		
-		JRadioButton rdbtnSi = new JRadioButton("Si");
-		rdbtnSi.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		rdbtnSi.setBounds(191, 227, 41, 25);
-		contentPane.add(rdbtnSi);
-		
-		JRadioButton rdbtnNo = new JRadioButton("No");
-		rdbtnNo.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		rdbtnNo.setBounds(236, 227, 50, 25);
-		contentPane.add(rdbtnNo);
-		
 		ButtonGroup importe = new ButtonGroup();
-		importe.add(rdbtnSi);
-		importe.add(rdbtnNo);
-		rdbtnSi.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(rdbtnSi.isSelected()) {
-					tFImporte.setEnabled(true);
-				}
-			}
-		});
-		
-		rdbtnNo.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(rdbtnNo.isSelected()) {
-					tFImporte.setEnabled(false);
-				}
-			}
-		});
 		
 		JLabel lblMedioPago = new JLabel("Medio de Pago :");
 		lblMedioPago.setFont(new Font("Times New Roman", Font.BOLD, 15));
@@ -316,11 +277,6 @@ public class GenerarRecibo2 extends JFrame {
 		table.setBounds(756, 440, -581, -95);
 		contentPane.add(table);
 		
-		tablaResumen = new JTable();
-		tablaResumen.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		tablaResumen.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		tablaResumen.setBounds(178, 346, 590, 94);
-		contentPane.add(tablaResumen);
 		
 		
 		
