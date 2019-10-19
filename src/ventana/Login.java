@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class Login extends JDialog {
 
@@ -55,6 +56,8 @@ public class Login extends JDialog {
 	public Login(java.awt.Frame parent, boolean modal) {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		super(parent, modal);
+		setTitle("Login");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/logos/logo4.png")));
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -62,30 +65,35 @@ public class Login extends JDialog {
 		contentPane.setLayout(null);
 		
 		JLabel lblNombreDeUsuario = new JLabel("Nombre de Usuario");
-		lblNombreDeUsuario.setBounds(41, 33, 131, 14);
+		lblNombreDeUsuario.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblNombreDeUsuario.setBounds(41, 74, 164, 14);
 		contentPane.add(lblNombreDeUsuario);
 		
 		JLabel lblClave = new JLabel("Clave");
-		lblClave.setBounds(41, 74, 131, 14);
+		lblClave.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblClave.setBounds(41, 117, 55, 14);
 		contentPane.add(lblClave);
 		
 		textFieldUsuario = new JTextField();
-		textFieldUsuario.setBounds(192, 30, 96, 20);
+		textFieldUsuario.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		textFieldUsuario.setBounds(198, 72, 96, 20);
 		contentPane.add(textFieldUsuario);
 		textFieldUsuario.setColumns(10);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(192, 71, 96, 20);
+		passwordField.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		passwordField.setBounds(198, 115, 96, 20);
 		contentPane.add(passwordField);
 		
 		JLabel lblCredencialesInvalidas = new JLabel("Credenciales Invalidas");
-		lblCredencialesInvalidas.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		lblCredencialesInvalidas.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		lblCredencialesInvalidas.setForeground(Color.RED);
-		lblCredencialesInvalidas.setBounds(112, 108, 139, 14);
+		lblCredencialesInvalidas.setBounds(121, 155, 155, 14);
 		lblCredencialesInvalidas.setVisible(false);
 		contentPane.add(lblCredencialesInvalidas);
 		
 		JButton btnIngresar = new JButton("Ingresar");
+		btnIngresar.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String user = textFieldUsuario.getText();
@@ -135,8 +143,13 @@ public class Login extends JDialog {
 				
 			}
 		});
-		btnIngresar.setBounds(134, 147, 89, 23);
+		btnIngresar.setBounds(162, 200, 89, 23);
 		contentPane.add(btnIngresar);
+		
+		JLabel lblNewLabel = new JLabel("Ingrese sus Credenciales");
+		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
+		lblNewLabel.setBounds(112, 13, 188, 30);
+		contentPane.add(lblNewLabel);
 		
 	}
 	
