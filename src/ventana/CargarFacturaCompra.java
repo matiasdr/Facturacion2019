@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
@@ -535,7 +536,7 @@ public class CargarFacturaCompra extends JFrame {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String fecha = sdf.format(dateChooser.getDate());
 				String puntoDeVenta=textField.getText();
-				
+				Double total=0.0;
 				if(radioButtonManual.isSelected()) {
 					Double neto21 = 0.0;
 					Double neto10 = 0.0;
@@ -543,7 +544,7 @@ public class CargarFacturaCompra extends JFrame {
 					Double iva10 = 0.0;
 					Double iva21 = 0.0;
 					Double iva27 = 0.0;
-					Double total = Double.valueOf(lblMonto.getText());
+					total = Double.valueOf(lblMonto.getText());
 					if(!textFieldNeto10.getText().isEmpty()) {
 						neto10 = Double.valueOf(textFieldNeto10.getText());
 					}
@@ -562,7 +563,7 @@ public class CargarFacturaCompra extends JFrame {
 					if(!textFieldIVA27.getText().isEmpty()) {
 						iva27 = Double.valueOf(textFieldIVA27.getText());
 					}
-					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+")";
+					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+")";
 					System.out.println(sql);
 					try {
 						Conexion nc = new Conexion();
@@ -580,21 +581,21 @@ public class CargarFacturaCompra extends JFrame {
 					String query="";
 					if(comboBoxIva.getSelectedItem().equals("21%")) {
 						Double iva21 = Double.valueOf(lblesteEsEl.getText());
-						Double total = Double.valueOf(textFieldImporteFacturado.getText());
+						total = Double.valueOf(textFieldImporteFacturado.getText());
 						Double neto21 = total-iva21;
-						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+")";
+						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+")";
 					}
 					if(comboBoxIva.getSelectedItem().equals("10.5")) {
 						Double iva10 = Double.valueOf(lblesteEsEl.getText());
-						Double total = Double.valueOf(textFieldImporteFacturado.getText());
+						total = Double.valueOf(textFieldImporteFacturado.getText());
 						Double neto10 = total-iva10;
-						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+")";
+						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+")";
 					}
 					if(comboBoxIva.getSelectedItem().equals("27%")) {
 						Double iva27 = Double.valueOf(lblesteEsEl.getText());
-						Double total = Double.valueOf(textFieldImporteFacturado.getText());
+						total = Double.valueOf(textFieldImporteFacturado.getText());
 						Double neto27 = total-iva27;
-						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, '"+numerofac+"', '"+fecha+"', "+idProveedor+", '"+puntoDeVenta+"', 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+")";
+						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+")";
 					}
 					try {
 						Conexion nc = new Conexion();
@@ -602,6 +603,41 @@ public class CargarFacturaCompra extends JFrame {
 						Statement instruccion;
 						instruccion = conn.createStatement();
 						instruccion.executeUpdate(query);
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}				
+					
+				}
+				if(radioButtonCuentaCorriente.isSelected()) {
+					try {
+						Conexion nc = new Conexion();
+						Connection conn = nc.conectar();
+						Statement instruccion;
+						instruccion = conn.createStatement();
+						ResultSet resultado = instruccion.executeQuery("Select * from cuenta_proveedor where id_proveedor="+idProveedor);
+						if(resultado.next()) {
+							System.out.println("Ya tiene cuenta, hay que insertar el item directamente y luego actualizamos el saldo de la cuenta proveedor mediante la suma del valor de este comporbante");
+							String sql="Insert into itemcuentaproveedor (id_cuenta, saldo, fecha, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_proveedor where id_proveedor="+idProveedor+"), "+total+", '"+fecha+"', 'factura', "+numerofac+")";
+							// aca insertamos
+							instruccion.executeUpdate("Insert into itemcuentaproveedor (id_cuenta, saldo, fecha, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_proveedor where id_proveedor="+idProveedor+"), "+total+", '"+fecha+"', 'factura', "+numerofac+")");
+							// aca actualizamos el salod de cuenta proveedor
+							
+							instruccion.executeUpdate("Update cuenta_proveedor set saldo = saldo + "+total+" where id_proveedor = "+idProveedor);
+						
+						} else {
+							// creamos la cuenta
+							instruccion.executeUpdate("Insert into cuenta_proveedor (id_empresa, id_proveedor, saldo, limite_saldo, fecha_alta) values (1, "+idProveedor+", "+total+", 0,'"+fecha+"')");
+							
+							String sql="Insert into itemcuentaproveedor (id_cuenta, saldo, fecha, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_proveedor where id_proveedor="+idProveedor+"), "+total+", '"+fecha+"', 'factura', "+numerofac+")";
+							// insertamos el registro ( no es necesario actualizar el saldo de la cuenta porque recien lo creamos)
+							instruccion.executeUpdate("Insert into itemcuentaproveedor (id_cuenta, saldo, fecha, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_proveedor where id_proveedor="+idProveedor+"), "+total+", '"+fecha+"', 'factura', "+numerofac+")");
+							
+							System.out.println("No teien cuenta hay que crearla");
+						}
+						
+						
 						
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
