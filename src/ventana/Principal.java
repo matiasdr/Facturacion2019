@@ -40,7 +40,7 @@ public class Principal {
 
 	private JFrame frmSistemaDeGestion;
 	private String permisos;
-
+	private String nombreUsuario;
 	/**
 	 * Launch the application.
 	 */
@@ -426,6 +426,7 @@ public class Principal {
 				Login login = new Login(new java.awt.Frame(), true);
 				login.setVisible(true);
 				permisos=login.getPermisoUsuario();
+				nombreUsuario=login.getNombreUsuario();
 				if(permisos == "administrador") {
 					mntmCrearEmpresa.setEnabled(true);
 					mntmDefinirPerodoDe.setEnabled(true);
@@ -437,6 +438,7 @@ public class Principal {
 					mnCargar.setEnabled(true);
 					mnArtculos.setEnabled(true);
 				}
+				frmSistemaDeGestion.setTitle("Sistema de Gestion Usuario: @"+nombreUsuario);
 			}
 		});
 	}

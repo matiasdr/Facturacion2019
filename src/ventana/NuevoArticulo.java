@@ -28,6 +28,7 @@ public class NuevoArticulo extends JFrame {
 	private JTextField txtEAN;
 	private JTextField txtStock;
 	private JTextField txtPrecio;
+	private Integer idProv;
 
 	/**
 	 * Launch the application.
@@ -140,7 +141,21 @@ public class NuevoArticulo extends JFrame {
 				String stock=null;
 				String precio=null;
 				double iva= (double) comboBoIVA.getSelectedItem();
-				Integer proveedor = comboBox.getSelectedIndex()+1;
+				String proveedor = (String) comboBox.getSelectedItem();
+				
+				try {
+					Conexion cn = new Conexion();
+					Connection con = cn.conectar();
+					Statement instrucion = con.createStatement();
+					ResultSet resulta = instrucion.executeQuery("Select * from proveedor where nombre = '"+proveedor+"'");
+					while(resulta.next()) {
+						idProv = resulta.getInt("id_proveedor");
+					}
+					cn.desconectar();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				Boolean error=false;
 				if(txtNombre.getText().isEmpty()) {
 					error=true;
@@ -165,7 +180,7 @@ public class NuevoArticulo extends JFrame {
 						Conexion nc = new Conexion();
 						Connection conec = nc.conectar();
 						Statement instruccion = conec.createStatement();
-						instruccion.execute("spnuevoarticulo '"+ean+"', '"+nombre+"', "+precio+", "+iva+", "+stock+", "+proveedor+", 0");
+						instruccion.execute("spnuevoarticulo '"+ean+"', '"+nombre+"', "+precio+", "+iva+", "+stock+", "+idProv+", 0");
 						JOptionPane.showMessageDialog(null, "Articulo creado correctamente");
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
