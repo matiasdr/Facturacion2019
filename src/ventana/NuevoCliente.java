@@ -282,7 +282,7 @@ public class NuevoCliente extends JFrame {
 							System.out.println (Responsable);
 							System.out.println (Contacto);						
 							Statement instruccion = conec.createStatement();
-							instruccion.execute("spnuevocliente '"+Raz_Social+"', '"+Cuil+"', "+Domicilio+", "+Telefono+","+condicion+","+Categoria+", "+Responsable+", "+Contacto+", NULL, 0");
+							instruccion.execute("spnuevocliente '"+Raz_Social+"', '"+Cuil+"', '"+Domicilio+"', '"+Telefono+"',"+condicion+","+Categoria+", '"+Responsable+"', '"+Contacto+"', NULL, 0");
 							JOptionPane.showMessageDialog(null, "Los Datos fueron Guardados Satisfactoriamente");
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
