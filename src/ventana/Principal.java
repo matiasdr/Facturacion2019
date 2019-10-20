@@ -139,8 +139,14 @@ public class Principal {
 		mntmNuevoCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				NuevoCliente nc;
-				nc = new NuevoCliente();
-				nc.setVisible(true);
+				try {
+					nc = new NuevoCliente();
+					nc.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		mnClientes.add(mntmNuevoCliente);
