@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -350,6 +351,7 @@ public class GenerarFactura extends JFrame {
 				String fecha = dtf.format(now);
 				String condicion=null;
 				Integer idFacturaGenerada=null;
+				String numeroFinal="";
 				if(rdbtnContado.isSelected()) {
 					condicion="Contado";
 				} else {
@@ -370,7 +372,7 @@ public class GenerarFactura extends JFrame {
 					while(resultado.next()) {
 						numFactura=Integer.valueOf(resultado.getString("numero"))+1;
 					}
-					String numeroFinal="000"+numFactura;
+					numeroFinal="000"+numFactura;
 					instruccion = conn.createStatement();
 					instruccion.execute("spnuevafactura '"+numeroFinal+"', "+tipoComprobante+", '"+fecha+"', "+idCliente+", 1, "+condicion+", "+importeTotal+", NULL");
 					ResultSet resul = instruccion.executeQuery("select top 1 id_factura from factura order by id_factura desc");
@@ -397,12 +399,24 @@ public class GenerarFactura extends JFrame {
 						instruccion.executeUpdate("update articulo set cantidad=cantidad-"+cantidadarticulo+" where id_articulo = "+idarticulo);
 					}
 					
-					ResultSet res = instruccion.executeQuery("select id_cuenta_cliente from cuenta_cliente where id_cliente="+idCliente);
-					if(res.next()) {
-						System.out.println("tiene cuenta");
+					// preguntamos si la venta es en cuenta corriente... en ese caso debemos insertar la venta en la cuenta del cliente
+					if(rdbtnCuentaCorriente.isSelected()) {
 						
-					} else {
-						System.out.println("No tiene cuenta");
+						ResultSet res = instruccion.executeQuery("select id_cuenta from cuenta_cliente where id_cliente="+idCliente);
+						if(res.next()) {
+							System.out.println("tiene cuenta");
+							
+						} else {
+							System.out.println("No tiene cuenta");
+							// creamos la cuenta
+							instruccion.executeUpdate("Insert into cuenta_cliente (id_empresa, id_cliente, saldo, limite_saldo, fecha_alta) values (1, "+idCliente+", "+importeTotal+", 0,'"+fecha+"')");
+							
+							// ahora insertamos la venta como un itemcluentalciente.
+							String sql="Insert into itemcuentacliente (id_cuenta, saldo, fecha, debe_haber, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_cliente where id_cliente="+idCliente+"), "+importeTotal+", '"+fecha+"', 'D','factura', "+numeroFinal+")";
+							System.out.println(sql);
+							//instruccion.executeUpdate(sql);
+							
+						}
 					}
 					
 				} catch (SQLException e1) {
