@@ -31,7 +31,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-
 import conexion.Conexion;
 import javax.swing.JScrollPane;
 import java.awt.Font;
@@ -405,6 +404,15 @@ public class GenerarFactura extends JFrame {
 						ResultSet res = instruccion.executeQuery("select id_cuenta from cuenta_cliente where id_cliente="+idCliente);
 						if(res.next()) {
 							System.out.println("tiene cuenta");
+							// isnertamos el item en la cuenta del cliente
+							String sql="Insert into itemcuentacliente (id_cuenta, saldo, fecha, debe_haber, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_cliente where id_cliente="+idCliente+"), "+importeTotal+", '"+fecha+"', 'D','factura', "+numeroFinal+")";
+							System.out.println(sql);
+							instruccion.executeUpdate(sql);
+							
+							// ahora actualizamos el salo en la tabla cuenta_cliente
+							
+							instruccion.executeUpdate("Update cuenta_cliente set saldo = saldo + "+importeTotal+" where id_cliente = "+idCliente);
+							
 							
 						} else {
 							System.out.println("No tiene cuenta");
@@ -414,7 +422,7 @@ public class GenerarFactura extends JFrame {
 							// ahora insertamos la venta como un itemcluentalciente.
 							String sql="Insert into itemcuentacliente (id_cuenta, saldo, fecha, debe_haber, comprobante, numerocomprobante) values ((select id_cuenta from cuenta_cliente where id_cliente="+idCliente+"), "+importeTotal+", '"+fecha+"', 'D','factura', "+numeroFinal+")";
 							System.out.println(sql);
-							//instruccion.executeUpdate(sql);
+							instruccion.executeUpdate(sql);
 							
 						}
 					}
@@ -424,7 +432,18 @@ public class GenerarFactura extends JFrame {
 					e1.printStackTrace();
 				}
 				
+				// Ahora recargamos la página para que se actualice el stock
 				
+				dispose();
+				try {
+					GenerarFactura frame;
+					frame = new GenerarFactura();
+					frame.setVisible(true);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 				
 			}
