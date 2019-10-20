@@ -44,6 +44,7 @@ public class NuevoCliente extends JFrame {
 	private boolean flag;
 	
 	private JComboBox<String> comboBox;
+	private JTextField tFEmail;
 
 	/**
 	 * Launch the application.
@@ -70,7 +71,7 @@ public class NuevoCliente extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NuevoCliente.class.getResource("/logos/logo4.png")));
 		setTitle("Alta de Cliente");
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 619, 389);
+		setBounds(100, 100, 619, 443);
 		contentPane = new JPanel();
 		contentPane.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setContentPane(contentPane);
@@ -88,10 +89,10 @@ public class NuevoCliente extends JFrame {
 		lblCuitOCuil.setBounds(59, 92, 106, 14);
 		contentPane.add(lblCuitOCuil);
 
-		JLabel lblNewLabel = new JLabel("Domicilio :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblNewLabel.setBounds(88, 119, 71, 14);
-		contentPane.add(lblNewLabel);
+		JLabel lblDomicilio = new JLabel("Domicilio :");
+		lblDomicilio.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		lblDomicilio.setBounds(88, 119, 71, 14);
+		contentPane.add(lblDomicilio);
 
 		JLabel lblTelefono = new JLabel("Telefono :");
 		lblTelefono.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
@@ -103,20 +104,30 @@ public class NuevoCliente extends JFrame {
 		lblCondicionAnteEl.setBounds(10, 173, 155, 14);
 		contentPane.add(lblCondicionAnteEl);
 
-		JLabel lblCategora = new JLabel("Categor\u00EDa :");
-		lblCategora.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblCategora.setBounds(88, 212, 85, 20);
-		contentPane.add(lblCategora);
+		JLabel lblCategoria = new JLabel("Categor\u00EDa :");
+		lblCategoria.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		lblCategoria.setBounds(88, 212, 85, 20);
+		contentPane.add(lblCategoria);
 
 		JLabel lblPersonaResponsable = new JLabel("Persona Responsable :");
 		lblPersonaResponsable.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblPersonaResponsable.setBounds(5, 245, 149, 14);
+		lblPersonaResponsable.setBounds(10, 245, 149, 14);
 		contentPane.add(lblPersonaResponsable);
 
-		JLabel lblContactoresponsable = new JLabel("Contacto (Responsable) :");
+		JLabel lblContactoresponsable = new JLabel("Contacto Responsable :");
 		lblContactoresponsable.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		lblContactoresponsable.setBounds(5, 272, 168, 14);
+		lblContactoresponsable.setBounds(10, 275, 168, 14);
 		contentPane.add(lblContactoresponsable);
+		
+		JLabel lblEmail = new JLabel("E-mail :");
+		lblEmail.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		lblEmail.setBounds(103, 304, 56, 16);
+		contentPane.add(lblEmail);
+		
+		tFEmail = new JTextField();
+		tFEmail.setBounds(186, 298, 191, 22);
+		contentPane.add(tFEmail);
+		tFEmail.setColumns(10);
 
 		cli_RazSocial = new JTextField();
 		cli_RazSocial.setBounds(185, 62, 167, 20);
@@ -153,7 +164,7 @@ public class NuevoCliente extends JFrame {
 		cli_Telefono.setColumns(10);
 
 		cli_Categ = new JTextField();
-		cli_Categ.setBounds(185, 203, 125, 20);
+		cli_Categ.setBounds(185, 203, 42, 20);
 		contentPane.add(cli_Categ);
 		cli_Categ.setColumns(10);
 
@@ -168,7 +179,7 @@ public class NuevoCliente extends JFrame {
 		cli_Contacto.setColumns(10);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(185, 169, 305, 22);
+		comboBox.setBounds(185, 169, 281, 22);
 		contentPane.add(comboBox);
 		
 		Conexion nc = new Conexion();
@@ -207,17 +218,20 @@ public class NuevoCliente extends JFrame {
 		
 		JButton btnGuardarCliente = new JButton("Guardar Cliente");
 		btnGuardarCliente.addActionListener(new ActionListener() {
+			@SuppressWarnings("unlikely-arg-type")
 			public void actionPerformed(ActionEvent arg0) {
 				
 				String Raz_Social= null;
-				String Cuil= null;
+				String Cuil = null;
 				String Domicilio = null;
-				Integer Categoria = null;
+				int Categoria = 0;
 				String Responsable = null;
 				String Contacto = null; 
 				String TipoIva = null;
 				String Telefono = null;
 				Integer condicion = null;
+				String email = null;
+				
 				
 				if(cli_RazSocial.getText().isEmpty())
 				 {
@@ -226,8 +240,7 @@ public class NuevoCliente extends JFrame {
 				 }else {
 					 Raz_Social=cli_RazSocial.getText();
 				 }
-				  
-		         
+						         
 				 if(cli_Cuil.getText().isEmpty() || cli_Cuil.getText().length() != 11)
 				 {
 					 cli_error1.setVisible(true);
@@ -235,8 +248,7 @@ public class NuevoCliente extends JFrame {
 				 } else {
 					 Cuil = cli_Cuil.getText();
 				 }
-				
-								     
+												     
                  if(cli_Domicilio.getText().isEmpty())
                  {
                 	 cli_error2.setVisible(true);
@@ -247,17 +259,19 @@ public class NuevoCliente extends JFrame {
                  
                  Telefono = cli_Telefono.getText();
                                                  
-				 if(cli_Categ.getText().isEmpty())
+				 if(cli_Categ.getText().equals(0))
 				 {
 				 	cli_error4.setVisible(true);
 				 	 flag = true;
 				 } else {
-					 Categoria = parceInt(cli_Categ.getText());
+					int Categoria1 = parceInt(cli_Categ.getText());
 				 }
 				 
 				 condicion = comboBox.getSelectedIndex()+1;				 
 				 Responsable = cli_PersResp.getText();
 				 Contacto = cli_Contacto.getText();
+				 if(!tFEmail.getText().isEmpty()) email = tFEmail.getText();
+				 
 				 StringBuilder objetivo = new StringBuilder(Cuil);
 				 objetivo = objetivo.insert(2,"-");
 				 objetivo = objetivo.insert(objetivo.length()-1, "-");
@@ -273,16 +287,19 @@ public class NuevoCliente extends JFrame {
 						try {
 							Conexion nc = new Conexion();
 							Connection conec = nc.conectar();
-							System.out.println (Raz_Social);
-							System.out.println (Cuil);
-							System.out.println (Domicilio);
-							System.out.println (Telefono);
-							System.out.println (condicion);
-							System.out.println (Categoria);
-							System.out.println (Responsable);
-							System.out.println (Contacto);						
+							
+							System.out.println(Raz_Social);
+							System.out.println(Cuil);
+							System.out.println(Domicilio);
+							System.out.println(Telefono);
+							System.out.println(condicion);
+							System.out.println(Categoria);
+							System.out.println(Responsable);
+							System.out.println(Contacto);	
+							System.out.println(email);
+							
 							Statement instruccion = conec.createStatement();
-							instruccion.execute("spnuevocliente '"+Raz_Social+"', '"+Cuil+"', "+Domicilio+", "+Telefono+","+condicion+","+Categoria+", "+Responsable+", "+Contacto+", NULL, 0");
+							instruccion.execute("spnuevocliente '"+Raz_Social+"', '"+Cuil+"', '"+Domicilio+"', "+Telefono+", "+condicion+", "+Categoria+", "+Responsable+", "+Contacto+", "+email+", 0");
 							JOptionPane.showMessageDialog(null, "Los Datos fueron Guardados Satisfactoriamente");
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
@@ -300,13 +317,15 @@ public class NuevoCliente extends JFrame {
 
 		
 		
-		btnGuardarCliente.setBounds(214, 306, 138, 23);
+		btnGuardarCliente.setBounds(214, 345, 138, 23);
 		contentPane.add(btnGuardarCliente);
 		
 		JLabel lblTitulo = new JLabel("Alta de Clientes");
 		lblTitulo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
 		lblTitulo.setBounds(177, 13, 125, 16);
 		contentPane.add(lblTitulo);
+		
+		
 		
 			
 
