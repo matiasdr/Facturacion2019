@@ -1,6 +1,7 @@
 package ventana;
 
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -38,12 +39,18 @@ public class NuevoProveedor extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		try {
-			NuevoProveedor frame = new NuevoProveedor();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
+		EventQueue.invokeLater(new Runnable() {
+		
+		
+		public void run() {
+			try {
+				NuevoProveedor frame = new NuevoProveedor();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		});
 	}
 
 	/**
@@ -243,6 +250,7 @@ public class NuevoProveedor extends JFrame {
 					
 				}
 				
+				dispose();
 				
 			}
 		});
