@@ -255,17 +255,14 @@ public class GenerarRecibo2 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				   
 				String nro_recibo = null;
-				String importe = null;
-				float imporRec = 0;
+				double imporRec = 0;
 				
 				if(!tFDatos.getText().isEmpty()) nro_recibo = tFDatos.getText();
 				
 				 				
 				 if(!tFImporte.getText().isEmpty()) {
 					 
-					    importe = tFImporte.getText();
-					    imporRec = parseFloat("importe");
-					    
+					   imporRec = Double.parseDouble(tFImporte.getText());					    
 					    tipoComp = "H";
 					    String comprobante = "Recibo";;
 					    int id_cuenta = 1;
@@ -282,7 +279,7 @@ public class GenerarRecibo2 extends JFrame {
 									
 							Connection conec = nc.conectar();
 							Statement instruccion = conec.createStatement();
-							instruccion.execute("spnuevoitemcuentacliente '"+id_cuenta+"', '"+tFImporte+"', '"+FechaAct+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_recibo+"', 0");
+							instruccion.execute("spnuevoitemcuentacliente '"+id_cuenta+"', '"+imporRec+"', '"+FechaAct+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_recibo+"', 0");
 							JOptionPane.showMessageDialog(null, "Los Datos fueron Guardados Satisfactoriamente");
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
@@ -295,10 +292,7 @@ public class GenerarRecibo2 extends JFrame {
 				 }
 			}
 
-			private float parseFloat(String importe) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
+			
 		});
 		btnConfirmar.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		btnConfirmar.setBounds(262, 320, 97, 25);
