@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -214,6 +215,9 @@ public class ListadoArticulos extends JDialog {
 		JButton btnSeleccionar = new JButton("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(table.getSelectedRow()<0) {
+					return;
+				}
 				Integer selec =(Integer) tablaModelo.getValueAt(table.getSelectedRow(), 0);
 				idArt = selec;
 				setVisible(false);

@@ -167,6 +167,9 @@ public class ElegirProveedor extends JDialog {
 		JButton btnSeleccionar = new JButton("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(table.getSelectedRow()<0) {
+					return;
+				}
 				Integer seleccion = (Integer) tablaModelo.getValueAt(table.getSelectedRow(), 0);
 				String selecNombre = (String) tablaModelo.getValueAt(table.getSelectedRow(), 1);
 				//provElegido=textField.getText().toString();

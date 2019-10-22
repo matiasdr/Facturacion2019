@@ -7,6 +7,7 @@ import java.awt.HeadlessException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -197,6 +198,17 @@ public class ModificarArticulo extends JFrame {
 					Connection conn = nc.conectar();
 					Statement instruccion = conn.createStatement();
 					instruccion.executeUpdate("UPDATE articulo SET ean = '"+ean+"',descripcion = '"+nombre+"',pvp = "+precio+",ivaporcent = "+iva+",cantidad = "+stock+",id_proveedor = "+idProv+" WHERE id_articulo="+idArticuloModificado);
+					JOptionPane.showMessageDialog(null, "Articulo Modificado Exitosamente");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				try {
+					dispose();
+					ModificarArticulo frame = new ModificarArticulo();
+					frame.setVisible(true);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

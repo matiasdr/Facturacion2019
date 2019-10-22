@@ -186,6 +186,16 @@ public class NuevoArticulo extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					
+					try {
+						dispose();
+						NuevoArticulo frame = new NuevoArticulo();
+						frame.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 			}
 		});

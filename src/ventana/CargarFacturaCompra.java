@@ -143,35 +143,6 @@ public class CargarFacturaCompra extends JFrame {
 		contentPane.add(lblElegirProveedor);
 
 		JButton btnNewButton = new JButton("Buscar");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ElegirProveedor ep = new ElegirProveedor(new java.awt.Frame(), true);
-					ep.setVisible(true);
-					lblNombreProveedor.setText(ep.getNombreProovedor());
-					idProveedor = ep.getProvElegido();
-					
-					if(ep.getCondFiscal()==1) {
-						rdbtna.setSelected(true);
-						btnCalcularIVA.setVisible(true);
-						lblesteEsEl.setVisible(true);
-						lblIvaFiscal.setVisible(true);	
-						lblMoneda.setVisible(true);
-					} else {
-						rdbtnc.setSelected(true);
-						btnCalcularIVA.setVisible(false);
-						lblesteEsEl.setVisible(false);
-						lblIvaFiscal.setVisible(false);
-						lblMoneda.setVisible(false);
-					}
-					
-				} catch (HeadlessException | SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-			}
-		});
 		btnNewButton.setBounds(135, 33, 89, 23);
 		contentPane.add(btnNewButton);
 
@@ -265,18 +236,18 @@ public class CargarFacturaCompra extends JFrame {
 		textFieldImporteFacturado.setColumns(10);
 
 		
-		lblIvaFiscal.setBounds(38, 430, 77, 14);
+		lblIvaFiscal.setBounds(29, 441, 77, 14);
 		contentPane.add(lblIvaFiscal);
 		
 		lblesteEsEl.setHorizontalAlignment(SwingConstants.LEFT);
 		
 
 		
-		lblesteEsEl.setBounds(164, 430, 125, 14);
+		lblesteEsEl.setBounds(155, 441, 125, 14);
 		contentPane.add(lblesteEsEl);
 
 		JButton btnCargarFactura = new JButton("Cargar Factura");
-		btnCargarFactura.setBounds(132, 486, 137, 23);
+		btnCargarFactura.setBounds(180, 500, 137, 23);
 		contentPane.add(btnCargarFactura);
 		btnCargarFactura.setEnabled(false);
 		
@@ -310,6 +281,8 @@ public class CargarFacturaCompra extends JFrame {
 					ali = ali.setScale(2, RoundingMode.HALF_UP);
 					lblesteEsEl.setText(String.valueOf(ali));
 				}
+				btnCargarFactura.setEnabled(true);
+				
 			}
 		});
 		btnCalcularIVA.setBounds(320, 401, 169, 23);
@@ -351,7 +324,7 @@ public class CargarFacturaCompra extends JFrame {
 		groupCondVenta.add(radioButtonCuentaCorriente);
 		
 		
-		lblMoneda.setBounds(135, 430, 24, 14);
+		lblMoneda.setBounds(126, 441, 24, 14);
 		contentPane.add(lblMoneda);
 		
 		JLabel label = new JLabel("$");
@@ -646,6 +619,83 @@ public class CargarFacturaCompra extends JFrame {
 				}
 			}
 		});
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ElegirProveedor ep = new ElegirProveedor(new java.awt.Frame(), true);
+					ep.setVisible(true);
+					lblNombreProveedor.setText(ep.getNombreProovedor());
+					idProveedor = ep.getProvElegido();
+					
+					if(ep.getCondFiscal()==1) {
+						rdbtna.setSelected(true);
+						btnCalcularIVA.setVisible(true);
+						lblesteEsEl.setVisible(true);
+						lblIvaFiscal.setVisible(true);	
+						lblMoneda.setVisible(true);
+					} else {
+						rdbtnc.setSelected(true);
+						btnCalcularIVA.setVisible(false);
+						lblesteEsEl.setVisible(false);
+						lblIvaFiscal.setVisible(false);
+						lblMoneda.setVisible(false);
+						lblImporteNetoTotal.setVisible(true);
+						textFieldImporteFacturado.setVisible(true);
+						btnCargarFactura.setEnabled(true);
+						
+						lblIva.setVisible(false);
+						lblIva_1.setVisible(false);
+						lblIva_2.setVisible(false);
+						lblImporteNeto.setVisible(false);
+						lblImporteNeto_1.setVisible(false);
+						lblImporteNeto_2.setVisible(false);
+						textFieldIVA10.setVisible(false);
+						textFieldIVA21.setVisible(false);
+						textFieldIVA27.setVisible(false);
+						textFieldNeto10.setVisible(false);
+						textFieldNeto21.setVisible(false);
+						textFieldNeto27.setVisible(false);
+						lblMonto.setVisible(false);
+						lblMontoTotal.setVisible(false);
+						btnCalcularImporteTotal.setVisible(false);
+						labelIVAPregunta.setVisible(false);
+						radioButtonNo.setVisible(false);
+						rdbtnSi.setVisible(false);
+					}
+					
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		lblIva.setVisible(true);
+		lblIva_1.setVisible(true);
+		lblIva_2.setVisible(true);
+		lblImporteNeto.setVisible(true);
+		lblImporteNeto_1.setVisible(true);
+		lblImporteNeto_2.setVisible(true);
+		textFieldIVA10.setVisible(true);
+		textFieldIVA21.setVisible(true);
+		textFieldIVA27.setVisible(true);
+		textFieldNeto10.setVisible(true);
+		textFieldNeto21.setVisible(true);
+		textFieldNeto27.setVisible(true);
+		lblMonto.setVisible(true);
+		lblMontoTotal.setVisible(true);
+		btnCalcularImporteTotal.setVisible(true);
+		
+		lblIvaFiscal.setVisible(false);
+		lblMoneda.setVisible(false);
+		lblImporteNetoTotal.setVisible(false);
+		label.setVisible(false);
+		textFieldImporteFacturado.setVisible(false);
+		lblAlcuotaDeIva.setVisible(false);
+		comboBoxIva.setVisible(false);
+		lblesteEsEl.setVisible(false);
+		btnCalcularIVA.setVisible(false);
 		
 	}
 }

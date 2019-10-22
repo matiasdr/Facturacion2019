@@ -163,7 +163,11 @@ public class GenerarRecibo extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				// borramos los datos anteriores si es que los hay
+					while(modeloTabla.getRowCount()>0) {
+						modeloTabla.removeRow(modeloTabla.getRowCount()-1);
+					}
+					labelSaldo.setText("0.0");
 				// aca deberiasmo llamar a un store procedure para cargar el listado de las facturas de ese proveedor
 				
 				try {
@@ -241,6 +245,9 @@ public class GenerarRecibo extends JFrame {
 					e1.printStackTrace();
 				}
 				
+				dispose();
+				GenerarRecibo frame = new GenerarRecibo();
+				frame.setVisible(true);
 			}
 		});
 		btnGenerarRecibo.setBounds(156, 235, 163, 45);
