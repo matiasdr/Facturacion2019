@@ -49,7 +49,7 @@ public class GenerarRecibo2 extends JFrame {
 	private Integer id_seleccion;
 	private int saldoC;
 	private String tipoComp;
-	
+	private int idcta;
 	
 	
 		/**
@@ -155,9 +155,15 @@ public class GenerarRecibo2 extends JFrame {
 					Statement instruccion;
 					try {
 						instruccion = conec.createStatement();
-						ResultSet resultado = instruccion.executeQuery("Select it.comprobante, it.numerocomprobante, it.saldo, it.debe_haber from itemcuentacliente it \r\n" + 
+						ResultSet resultado = instruccion.executeQuery("Select it.comprobante, it.numerocomprobante, it.saldo, it.debe_haber, it.id_cuenta from itemcuentacliente it \r\n" + 
 								"inner join cuenta_cliente cc on it.id_cuenta=cc.id_cuenta \r\n" + 
 								"inner join cliente c on c.id_cliente= cc.id_cliente where c.id_cliente =" + id_seleccion);
+						
+						
+						while(tablaModelo.getRowCount()>0) // LIMPIA EL JTABLE ANTES DE CARGARLO DE NUEVO
+						{
+							tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+						}
 						
 						while(resultado.next()) {
 							Object[] linea = new Object[3];
@@ -165,6 +171,8 @@ public class GenerarRecibo2 extends JFrame {
 							linea[1]= resultado.getInt("numerocomprobante");
 							linea[2]= resultado.getInt("saldo");
 							tipoComp = resultado.getString("debe_haber").trim();
+	                        idcta = resultado.getInt("id_cuenta");
+							 
 							tablaModelo.addRow(linea);
 						
 							
@@ -265,12 +273,11 @@ public class GenerarRecibo2 extends JFrame {
 					   imporRec = Double.parseDouble(tFImporte.getText());					    
 					    tipoComp = "H";
 					    String comprobante = "Recibo";;
-					    int id_cuenta = 1;
-					  
+					    					  
 					    try {
 							Conexion nc = new Conexion();
 							System.out.println();
-							System.out.println(id_cuenta);
+							System.out.println(idcta);
 							System.out.println(imporRec);
 							System.out.println(FechaAct);
 							System.out.println(tipoComp);
@@ -279,7 +286,10 @@ public class GenerarRecibo2 extends JFrame {
 									
 							Connection conec = nc.conectar();
 							Statement instruccion = conec.createStatement();
-							instruccion.execute("spnuevoitemcuentacliente '"+id_cuenta+"', '"+imporRec+"', '"+FechaAct+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_recibo+"', 0");
+							instruccion.execute("spnuevoitemcuentacliente '"+idcta+"', '"+imporRec+"', '"+FechaAct+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_recibo+"', 0");
+							
+							instruccion.executeUpdate("Update cuenta_cliente set saldo = saldo - "+imporRec+" where id_cliente = "+id_seleccion);
+							
 							JOptionPane.showMessageDialog(null, "Los Datos fueron Guardados Satisfactoriamente");
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
