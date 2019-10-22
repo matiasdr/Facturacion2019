@@ -12,6 +12,7 @@ import javax.swing.JSpinner;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import java.awt.Toolkit;
 
 public class CrearEmpresa extends JFrame {
 	private JTextField RazonSocial;
@@ -44,6 +45,8 @@ public class CrearEmpresa extends JFrame {
 	 * Create the dialog.
 	 */
 	public CrearEmpresa() {
+		setTitle("Crear Empresa");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CrearEmpresa.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 400);
 		contentPane = new JPanel();
@@ -51,12 +54,12 @@ public class CrearEmpresa extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNombreDe = new JLabel("Raz�n Social");
+		JLabel lblNombreDe = new JLabel("Raz\u00F3n Social");
 		lblNombreDe.setBounds(10, 11, 75, 14);
 		contentPane.add(lblNombreDe);
 
 		JLabel lblNombreDeFantasa = new JLabel("Nombre de Fantas\u00EDa");
-		lblNombreDeFantasa.setBounds(10, 36, 107, 14);
+		lblNombreDeFantasa.setBounds(10, 36, 135, 14);
 		contentPane.add(lblNombreDeFantasa);
 
 		JLabel lblCuit = new JLabel("CUIT");
@@ -64,79 +67,79 @@ public class CrearEmpresa extends JFrame {
 		contentPane.add(lblCuit);
 
 		JLabel lblDomicilio = new JLabel("Domicilio");
-		lblDomicilio.setBounds(10, 86, 49, 14);
+		lblDomicilio.setBounds(10, 86, 75, 14);
 		contentPane.add(lblDomicilio);
 
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(10, 111, 49, 14);
+		lblTelefono.setBounds(10, 111, 75, 14);
 		contentPane.add(lblTelefono);
 
 		JLabel lblNewLabel = new JLabel("Condicion ante el IVA");
-		lblNewLabel.setBounds(10, 136, 107, 14);
+		lblNewLabel.setBounds(10, 136, 135, 14);
 		contentPane.add(lblNewLabel);
 
 		JLabel lblNumeroDeIngresos = new JLabel("Numero de Ingresos Brutos");
-		lblNumeroDeIngresos.setBounds(10, 161, 135, 14);
+		lblNumeroDeIngresos.setBounds(10, 161, 167, 14);
 		contentPane.add(lblNumeroDeIngresos);
 
 		JLabel lblFechaDeInicio = new JLabel("Fecha de Inicio de Actividades");
-		lblFechaDeInicio.setBounds(10, 186, 150, 14);
+		lblFechaDeInicio.setBounds(10, 186, 185, 14);
 		contentPane.add(lblFechaDeInicio);
 
 		JLabel lblCantidadDePuntos = new JLabel("Cantidad de Puntos de venta");
-		lblCantidadDePuntos.setBounds(10, 211, 150, 14);
+		lblCantidadDePuntos.setBounds(10, 211, 167, 14);
 		contentPane.add(lblCantidadDePuntos);
 
 		JLabel lblMesDeInicio = new JLabel("Mes de Inicio de Actividades");
-		lblMesDeInicio.setBounds(10, 236, 150, 14);
+		lblMesDeInicio.setBounds(10, 236, 167, 14);
 		contentPane.add(lblMesDeInicio);
 
 		RazonSocial = new JTextField();
-		RazonSocial.setBounds(180, 11, 96, 20);
+		RazonSocial.setBounds(141, 8, 173, 20);
 		contentPane.add(RazonSocial);
 		RazonSocial.setColumns(10);
 
 		NomFantacia = new JTextField();
-		NomFantacia.setBounds(180, 33, 96, 20);
+		NomFantacia.setBounds(157, 33, 157, 20);
 		contentPane.add(NomFantacia);
 		NomFantacia.setColumns(10);
 
 		Cuit = new JTextField();
-		Cuit.setBounds(180, 58, 96, 20);
+		Cuit.setBounds(157, 58, 157, 20);
 		contentPane.add(Cuit);
 		Cuit.setColumns(10);
 
 		Domicilio = new JTextField();
-		Domicilio.setBounds(180, 83, 96, 20);
+		Domicilio.setBounds(157, 83, 157, 20);
 		contentPane.add(Domicilio);
 		Domicilio.setColumns(10);
 
 		Telefono = new JTextField();
-		Telefono.setBounds(180, 108, 96, 20);
+		Telefono.setBounds(157, 108, 157, 20);
 		contentPane.add(Telefono);
 		Telefono.setColumns(10);
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(180, 132, 96, 22);
+		comboBox.setBounds(167, 132, 147, 22);
 		contentPane.add(comboBox);
 
 		NumIngBrutos = new JTextField();
-		NumIngBrutos.setBounds(180, 158, 96, 20);
+		NumIngBrutos.setBounds(177, 158, 137, 20);
 		contentPane.add(NumIngBrutos);
 		NumIngBrutos.setColumns(10);
 
 		FecInAct = new JTextField();
-		FecInAct.setBounds(180, 183, 96, 20);
+		FecInAct.setBounds(187, 183, 127, 20);
 		contentPane.add(FecInAct);
 		FecInAct.setColumns(10);
 
 		CantPuntVtas = new JTextField();
-		CantPuntVtas.setBounds(180, 208, 96, 20);
+		CantPuntVtas.setBounds(189, 208, 125, 20);
 		contentPane.add(CantPuntVtas);
 		CantPuntVtas.setColumns(10);
 
 		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(180, 232, 96, 22);
+		comboBox_1.setBounds(189, 232, 125, 22);
 		contentPane.add(comboBox_1);
 
 		JButton btnCrearEmpresa = new JButton("Crear Empresa");

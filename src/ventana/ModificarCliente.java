@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Toolkit;
 
 public class ModificarCliente extends JFrame {
 
@@ -37,7 +38,10 @@ public class ModificarCliente extends JFrame {
 	private JTextField mod_cliCateg;
 	private JTextField mod_cliResp;
 	private JTextField mod_cliContacto;
+	
+	private int idcliente;
 	private JPanel contentPane;
+	private JTextField mod_Email;
 	/**
 	 * Launch the application.
 	 */
@@ -54,8 +58,10 @@ public class ModificarCliente extends JFrame {
 	 * Create the dialog.
 	 */
 	public ModificarCliente() throws SQLException {
+		setTitle("Modicar Datos del Cliente...");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModificarCliente.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 582, 348);
+		setBounds(100, 100, 582, 391);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -120,6 +126,10 @@ public class ModificarCliente extends JFrame {
 		JLabel lblContactoresponsable = new JLabel("Contacto (Responsable) :");
 		lblContactoresponsable.setBounds(42, 234, 171, 14);
 		contentPane.add(lblContactoresponsable);
+		
+		JLabel lblEmail = new JLabel("E-mail Responsable :");
+		lblEmail.setBounds(42, 261, 126, 16);
+		contentPane.add(lblEmail);
 
 		mod_cliRazSoc = new JTextField();
 		mod_cliRazSoc.setBounds(195, 56, 185, 20);
@@ -170,9 +180,14 @@ public class ModificarCliente extends JFrame {
 		mod_cliContacto.setBounds(195, 231, 136, 20);
 		contentPane.add(mod_cliContacto);
 		mod_cliContacto.setColumns(10);
+		
+		mod_Email = new JTextField();
+		mod_Email.setBounds(195, 255, 167, 22);
+		contentPane.add(mod_Email);
+		mod_Email.setColumns(10);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(198, 155, 164, 22);
+		comboBox.setBounds(198, 155, 243, 22);
 		contentPane.add(comboBox);
 		
 		Conexion nc = new Conexion();
@@ -196,6 +211,7 @@ public class ModificarCliente extends JFrame {
 					ec = new ElegirCliente(new java.awt.Frame(), true);
 					ec.setVisible(true);
 					id_cli=ec.getClienElegido();
+					idcliente = id_cli;
 				} catch (HeadlessException e1) {
 					e1.printStackTrace();
 				} catch (SQLException e1) {
@@ -207,6 +223,8 @@ public class ModificarCliente extends JFrame {
 				try {
 					Statement instruccion = conec.createStatement();
 					ResultSet resultado = instruccion.executeQuery("Select * from cliente where id_cliente = "+id_cli);
+					
+					
 					// ahora rellenamos todos los campos con los datos de la consulta
 					while(resultado.next()) {
 					mod_cliRazSoc.setText(resultado.getString("nombre"));
@@ -220,6 +238,7 @@ public class ModificarCliente extends JFrame {
 					String cadena = resultado.getString("cuilcuit");
 					cadena = cadena.replace("-", "");
 					mod_cliCuit.setText(cadena);
+					mod_Email.setText(resultado.getString("email"));
 					
 					}
 				} catch (SQLException e1) {
@@ -238,13 +257,15 @@ public class ModificarCliente extends JFrame {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nombre=null;
-				String cuitProv=null;
+				String cuitClie=null;
 				String domicilio=null;
 				String telefono=null;
 				String categoria=null;
 				String personaResponsable=null;
 				String contacto=null;
-				String condicion=null;
+				String c_email=null;
+				
+				int condicion = 0;;
 				boolean error = false;
 				
 				
@@ -260,7 +281,7 @@ public class ModificarCliente extends JFrame {
 					error=true;
 					lblerrorCuil.setVisible(true);
 				} else {
-					cuitProv= mod_cliCuit.getText();
+					cuitClie= mod_cliCuit.getText();
 					lblerrorCuil.setVisible(false);
 				}
 				
@@ -276,23 +297,38 @@ public class ModificarCliente extends JFrame {
 					error = true;
 					lblerrorCateg.setVisible(true);
 				} else {
-					condicion = comboBox.getSelectedItem().toString();
+					condicion = comboBox.getSelectedIndex()+1;
 					lblerrorCateg.setVisible(false);
 				}
+				
+//				condicion = comboBox.getSelectedIndex()+1;
 				
 				if(!mod_cliDom.getText().isEmpty()) domicilio = mod_cliDom.getText();
 				if(!mod_cliTelef.getText().isEmpty()) telefono = mod_cliTelef.getText();
 				if(!mod_cliResp.getText().isEmpty()) personaResponsable = mod_cliResp.getText();
 				if(!mod_cliContacto.getText().isEmpty()) contacto = mod_cliContacto.getText();
+				if(!mod_Email.getText().isEmpty())  c_email = mod_Email.getText();
 				
 				if(error) {
 					JOptionPane.showMessageDialog(null, "Error en algun campo");
 				} else {
+					
+					try {
+						Conexion nc = new Conexion();
+						Connection conn= nc.conectar();
+						Statement instruccion = conn.createStatement();
+						instruccion.executeUpdate("UPDATE cliente SET nombre = '"+nombre+"', cuilcuit = '"+cuitClie+"',domicilio = '"+domicilio+"', telefono = '"+telefono+"', id_condicion_fiscal = '"+condicion+"', categoria = "+categoria+", nombrecontacto = '"+personaResponsable+"', telefonocontacto = '"+contacto+"', email = '"+c_email+"' WHERE id_cliente ="+idcliente);
+						JOptionPane.showMessageDialog(null, "Modificacion realizada con exito");
+						nc.desconectar();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
 				}
 			}
 		});
-		btnGuardar.setBounds(273, 264, 89, 23);
+		btnGuardar.setBounds(273, 294, 89, 23);
 		contentPane.add(btnGuardar);
 		
 		

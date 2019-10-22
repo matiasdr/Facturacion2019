@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTable;
+import java.awt.Toolkit;
 
 public class ListadoIVACompras extends JFrame {
 
@@ -37,6 +38,8 @@ public class ListadoIVACompras extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoIVACompras() {
+		setTitle("Lista de IVA Compras");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoIVACompras.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 590, 508);
 		contentPane = new JPanel();
@@ -44,16 +47,16 @@ public class ListadoIVACompras extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblSeleccioneElPerodo = new JLabel("Periodo");
-		lblSeleccioneElPerodo.setBounds(10, 11, 64, 14);
+		JLabel lblSeleccioneElPerodo = new JLabel("Periodo :");
+		lblSeleccioneElPerodo.setBounds(10, 11, 59, 14);
 		contentPane.add(lblSeleccioneElPerodo);
 		
 		JLabel lblDesde = new JLabel("Desde");
-		lblDesde.setBounds(84, 11, 43, 14);
+		lblDesde.setBounds(68, 11, 43, 14);
 		contentPane.add(lblDesde);
 		
 		JLabel lblHasta = new JLabel("Hasta");
-		lblHasta.setBounds(234, 11, 49, 14);
+		lblHasta.setBounds(223, 11, 49, 14);
 		contentPane.add(lblHasta);
 		
 		JButton btnImprimir = new JButton("Imprimir");
@@ -61,15 +64,15 @@ public class ListadoIVACompras extends JFrame {
 		contentPane.add(btnImprimir);
 		
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(124, 5, 100, 20);
+		dateChooser.setBounds(111, 5, 100, 20);
 		contentPane.add(dateChooser);
 		
 		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(269, 5, 93, 20);
+		dateChooser_1.setBounds(262, 5, 93, 20);
 		contentPane.add(dateChooser_1);
 		
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(363, 7, 89, 23);
+		btnBuscar.setBounds(367, 7, 89, 23);
 		contentPane.add(btnBuscar);
 		
 		table = new JTable();

@@ -34,6 +34,7 @@ import conexion.Conexion;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
+import java.awt.Toolkit;
 
 public class CargarFacturaCompra extends JFrame {
 	private JTextField textField;
@@ -72,6 +73,7 @@ public class CargarFacturaCompra extends JFrame {
 	 * Create the dialog.
 	 */
 	public CargarFacturaCompra() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CargarFacturaCompra.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Cargar Facturas de Compras");
 		setBounds(100, 100, 530, 592);

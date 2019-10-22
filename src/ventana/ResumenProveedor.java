@@ -52,28 +52,30 @@ public class ResumenProveedor extends JFrame {
 	 * Create the dialog.
 	 */
 	public ResumenProveedor() {
+		setTitle("Resumen de Cuenta Proveedores");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 487, 339);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 52, 404, 172);
 		contentPanel.add(scrollPane);
-		
+
 		Object[] encabezado = new Object[3];
 		encabezado[0] = "Tipo Comprobante";
 		encabezado[1] = "Numero Comprobante";
 		encabezado[2] = "Importe";
-		
+
 		DefaultTableModel modeloTabla = new DefaultTableModel(encabezado, 0);
-		
+
 		table = new JTable(modeloTabla);
 		scrollPane.setViewportView(table);
-		
-		
-		
+
+
+
 		contentPane.setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(contentPanel, BorderLayout.CENTER);
@@ -101,19 +103,19 @@ public class ResumenProveedor extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 					while(modeloTabla.getRowCount()>0) {
 						modeloTabla.removeRow(modeloTabla.getRowCount()-1);
 					}
-					
+
 				// aca deberiasmo llamar a un store procedure para cargar el listado de las facturas de ese proveedor
-				
+
 				try {
 					Conexion nc = new Conexion();
 					Connection conn = nc.conectar();
 					Statement instruccion = conn.createStatement();
 					ResultSet resultado = instruccion.executeQuery("select * from itemcuentaproveedor join cuenta_proveedor on cuenta_proveedor.id_cuenta = itemcuentaproveedor.id_cuenta where id_proveedor = "+idProveedor);
-					
+
 					while(resultado.next()) {
 						Object[] fila = new Object[3];
 						fila[0] = resultado.getString("comprobante");
@@ -121,19 +123,19 @@ public class ResumenProveedor extends JFrame {
 						fila[2] = resultado.getDouble("saldo");
 						modeloTabla.addRow(fila);
 					}
-					
+
 					nc.desconectar();
 				} catch (HeadlessException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 			btnBuscarProveedor.setBounds(153, 12, 81, 23);
 			contentPanel.add(btnBuscarProveedor);
 		}
-		
-		
+
+
 	}
 }

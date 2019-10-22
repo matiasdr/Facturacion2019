@@ -39,7 +39,7 @@ public class NuevoCliente extends JFrame {
 	private JTextField cli_PersResp;
 	private JTextField cli_Contacto;
 	private JPanel contentPane;
-	private int Categoria;
+	
 	
 	private boolean flag;
 	
@@ -224,7 +224,7 @@ public class NuevoCliente extends JFrame {
 				String Raz_Social= null;
 				String Cuil = null;
 				String Domicilio = null;
-				int Categoria = 0;
+				String Categoria = null;
 				String Responsable = null;
 				String Contacto = null; 
 				String TipoIva = null;
@@ -264,7 +264,7 @@ public class NuevoCliente extends JFrame {
 				 	cli_error4.setVisible(true);
 				 	 flag = true;
 				 } else {
-					int Categoria1 = parceInt(cli_Categ.getText());
+				   Categoria = cli_Categ.getText();
 				 }
 				 
 				 condicion = comboBox.getSelectedIndex()+1;				 
@@ -287,21 +287,8 @@ public class NuevoCliente extends JFrame {
 						try {
 							Conexion nc = new Conexion();
 							Connection conec = nc.conectar();
-							
-							System.out.println(Raz_Social);
-							System.out.println(Cuil);
-							System.out.println(Domicilio);
-							System.out.println(Telefono);
-							System.out.println(condicion);
-							System.out.println(Categoria);
-							System.out.println(Responsable);
-							System.out.println(Contacto);	
-							System.out.println(email);
-							
 							Statement instruccion = conec.createStatement();
-
-							instruccion.execute("spnuevocliente '"+Raz_Social+"', '"+Cuil+"', '"+Domicilio+"', '"+Telefono+"',"+condicion+","+Categoria+", '"+Responsable+"', '"+Contacto+"', NULL, 0");
-
+							instruccion.execute("spnuevocliente '"+Raz_Social+"', '"+Cuil+"', '"+Domicilio+"', "+Telefono+", "+condicion+", "+Categoria+", '"+Responsable+"', '"+Contacto+"', '"+email+"', 0");
 							JOptionPane.showMessageDialog(null, "Los Datos fueron Guardados Satisfactoriamente");
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block

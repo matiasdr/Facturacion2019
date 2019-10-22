@@ -27,6 +27,7 @@ import conexion.Conexion;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.Toolkit;
 
 public class ListadoSaldosProv extends JFrame {
 
@@ -50,6 +51,8 @@ public class ListadoSaldosProv extends JFrame {
 	 * Create the dialog.
 	 */
 	public ListadoSaldosProv() {
+		setTitle("Listado de Saldo de Proveedores");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoSaldosProv.class.getResource("/logos/logo4.png")));
 
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 526, 290);
@@ -58,7 +61,7 @@ public class ListadoSaldosProv extends JFrame {
 		setContentPane(contentPane);
 
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(185, 5, 102, 20);
+		dateChooser.setBounds(201, 5, 102, 20);
 		contentPanel.add(dateChooser);
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		Date today = Calendar.getInstance().getTime();

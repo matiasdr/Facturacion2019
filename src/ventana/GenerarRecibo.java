@@ -33,6 +33,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 public class GenerarRecibo extends JFrame {
 	private JTextField textField_2;
@@ -62,6 +63,8 @@ public class GenerarRecibo extends JFrame {
 	 * Create the dialog.
 	 */
 	public GenerarRecibo() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GenerarRecibo.class.getResource("/logos/logo4.png")));
+		setTitle("Recibo Provisorio Pago a Proveedores..");
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 785, 422);
 		contentPane = new JPanel();

@@ -18,7 +18,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import conexion.Conexion;
-//import ui.MenuInicio;
 
 import javax.swing.JComboBox;
 import java.awt.GridLayout;

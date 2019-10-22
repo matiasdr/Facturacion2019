@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.awt.Toolkit;
 
 public class ModificarProveedor extends JFrame {
 
@@ -56,8 +57,10 @@ public class ModificarProveedor extends JFrame {
 	 * @throws SQLException 
 	 */
 	public ModificarProveedor() throws SQLException {
+		setTitle("Modificar Datos del  Proveedor");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModificarProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 515, 346);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -67,22 +70,22 @@ public class ModificarProveedor extends JFrame {
 
 		
 		JLabel lblErrorRazon = new JLabel("Campo Invalido");
-		lblErrorRazon.setBounds(331, 59, 103, 14);
+		lblErrorRazon.setBounds(394, 59, 103, 14);
 		contentPane.add(lblErrorRazon);
 		lblErrorRazon.setVisible(false);
 		
 		JLabel labelErrorCuit = new JLabel("Campo Invalido");
-		labelErrorCuit.setBounds(331, 84, 103, 14);
+		labelErrorCuit.setBounds(394, 84, 103, 14);
 		contentPane.add(labelErrorCuit);
 		labelErrorCuit.setVisible(false);
 		
 		JLabel labelErrorCondicion = new JLabel("Campo Invalido");
-		labelErrorCondicion.setBounds(331, 159, 103, 14);
+		labelErrorCondicion.setBounds(394, 159, 103, 14);
 		contentPane.add(labelErrorCondicion);
 		labelErrorCondicion.setVisible(false);
 		
 		JLabel labelErrorCategoria = new JLabel("Campo Invalido");
-		labelErrorCategoria.setBounds(331, 184, 103, 14);
+		labelErrorCategoria.setBounds(394, 184, 103, 14);
 		contentPane.add(labelErrorCategoria);
 		labelErrorCategoria.setVisible(false);
 		
@@ -119,7 +122,7 @@ public class ModificarProveedor extends JFrame {
 		contentPane.add(lblContactoresponsable);
 
 		textFieldRazon = new JTextField();
-		textFieldRazon.setBounds(225, 56, 96, 20);
+		textFieldRazon.setBounds(192, 56, 190, 20);
 		contentPane.add(textFieldRazon);
 		textFieldRazon.setColumns(10);
 		
@@ -138,37 +141,37 @@ public class ModificarProveedor extends JFrame {
 				}
 			}
 		});
-		textFieldCuit.setBounds(225, 81, 96, 20);
+		textFieldCuit.setBounds(192, 81, 129, 20);
 		contentPane.add(textFieldCuit);
 		textFieldCuit.setColumns(10);
 
 		textFieldDomicilio = new JTextField();
-		textFieldDomicilio.setBounds(225, 106, 96, 20);
+		textFieldDomicilio.setBounds(192, 106, 156, 20);
 		contentPane.add(textFieldDomicilio);
 		textFieldDomicilio.setColumns(10);
 
 		textFieldTelefono = new JTextField();
-		textFieldTelefono.setBounds(225, 131, 96, 20);
+		textFieldTelefono.setBounds(192, 131, 129, 20);
 		contentPane.add(textFieldTelefono);
 		textFieldTelefono.setColumns(10);
 
 		textFieldCategoria = new JTextField();
-		textFieldCategoria.setBounds(225, 181, 96, 20);
+		textFieldCategoria.setBounds(192, 181, 44, 20);
 		contentPane.add(textFieldCategoria);
 		textFieldCategoria.setColumns(10);
 
 		textFieldPersResp = new JTextField();
-		textFieldPersResp.setBounds(225, 206, 96, 20);
+		textFieldPersResp.setBounds(192, 206, 156, 20);
 		contentPane.add(textFieldPersResp);
 		textFieldPersResp.setColumns(10);
 
 		textFieldContacto = new JTextField();
-		textFieldContacto.setBounds(225, 231, 96, 20);
+		textFieldContacto.setBounds(192, 231, 156, 20);
 		contentPane.add(textFieldContacto);
 		textFieldContacto.setColumns(10);
 		
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(225, 155, 96, 22);
+		comboBox.setBounds(192, 155, 156, 22);
 		contentPane.add(comboBox);
 
 		
@@ -308,7 +311,7 @@ public class ModificarProveedor extends JFrame {
 				
 			}
 		});
-		btnGuardar.setBounds(331, 230, 89, 23);
+		btnGuardar.setBounds(179, 261, 89, 23);
 		contentPane.add(btnGuardar);
 		
 	}

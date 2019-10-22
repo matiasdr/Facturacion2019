@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class ModificarArticulo extends JFrame {
 
@@ -53,51 +54,53 @@ public class ModificarArticulo extends JFrame {
 	 * @throws SQLException 
 	 */
 	public ModificarArticulo() throws SQLException {
+		setTitle("Modificar Articulo");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModificarArticulo.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 476, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblNombreODescripcion = new JLabel("Nombre o Descripcion del art\u00EDculo");
-		lblNombreODescripcion.setBounds(74, 59, 167, 14);
+		lblNombreODescripcion.setBounds(60, 59, 204, 14);
 		contentPane.add(lblNombreODescripcion);
 		
 		JLabel lblEan = new JLabel("EAN");
-		lblEan.setBounds(74, 84, 49, 14);
+		lblEan.setBounds(60, 84, 30, 14);
 		contentPane.add(lblEan);
 		
 		JLabel lblStock = new JLabel("Stock");
-		lblStock.setBounds(74, 109, 49, 14);
+		lblStock.setBounds(60, 107, 49, 14);
 		contentPane.add(lblStock);
 		
 		JLabel lblPrecio = new JLabel("Precio");
-		lblPrecio.setBounds(74, 134, 49, 14);
+		lblPrecio.setBounds(60, 134, 49, 14);
 		contentPane.add(lblPrecio);
 		
 		textFieldDescripcion = new JTextField();
-		textFieldDescripcion.setBounds(249, 56, 96, 20);
+		textFieldDescripcion.setBounds(276, 56, 156, 20);
 		contentPane.add(textFieldDescripcion);
 		textFieldDescripcion.setColumns(10);
 		
 		textFieldEAN = new JTextField();
-		textFieldEAN.setBounds(249, 81, 96, 20);
+		textFieldEAN.setBounds(276, 81, 122, 20);
 		contentPane.add(textFieldEAN);
 		textFieldEAN.setColumns(10);
 		
 		textFieldStock = new JTextField();
-		textFieldStock.setBounds(249, 106, 96, 20);
+		textFieldStock.setBounds(276, 106, 96, 20);
 		contentPane.add(textFieldStock);
 		textFieldStock.setColumns(10);
 		
 		textFieldPrecio = new JTextField();
-		textFieldPrecio.setBounds(249, 131, 96, 20);
+		textFieldPrecio.setBounds(276, 131, 96, 20);
 		contentPane.add(textFieldPrecio);
 		textFieldPrecio.setColumns(10);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(249, 162, 96, 20);
+		comboBox.setBounds(276, 156, 122, 20);
 		contentPane.add(comboBox);
 		
 		Conexion nc = new Conexion();
@@ -111,18 +114,18 @@ public class ModificarArticulo extends JFrame {
 		
 		
 		JLabel lblProveedor = new JLabel("Proveedor");
-		lblProveedor.setBounds(74, 159, 49, 14);
+		lblProveedor.setBounds(60, 159, 81, 14);
 		contentPane.add(lblProveedor);
 		
 		JLabel labelIVA = new JLabel("IVA del Articulo");
-		labelIVA.setBounds(74, 190, 134, 14);
+		labelIVA.setBounds(60, 190, 134, 14);
 		contentPane.add(labelIVA);
 		
 		double iva21=21;
 		double iva10=10.5;
 		double iva27=27;		
 		JComboBox comboBoxIVA = new JComboBox();
-		comboBoxIVA.setBounds(249, 193, 96, 20);
+		comboBoxIVA.setBounds(276, 187, 96, 20);
 		contentPane.add(comboBoxIVA);
 		comboBoxIVA.addItem(iva21);
 		comboBoxIVA.addItem(iva10);
