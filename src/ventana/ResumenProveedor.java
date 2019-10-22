@@ -43,7 +43,7 @@ public class ResumenProveedor extends JFrame {
 	 * Create the dialog.
 	 */
 	public ResumenProveedor() {
-		setTitle("Resumen de Cuenta Cliente");
+		setTitle("Resumen de Cuenta Proveedores");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 487, 339);
