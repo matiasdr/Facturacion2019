@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class DefinirPeriodoDeTrabajo extends JFrame {
 	private JPanel contentPane;
@@ -35,6 +36,8 @@ public class DefinirPeriodoDeTrabajo extends JFrame {
 	 * Create the dialog.
 	 */
 	public DefinirPeriodoDeTrabajo() {
+		setTitle("Periodo de Trabajo..");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(DefinirPeriodoDeTrabajo.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

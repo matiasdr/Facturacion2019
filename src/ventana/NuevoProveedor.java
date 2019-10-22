@@ -25,6 +25,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.awt.Toolkit;
 
 public class NuevoProveedor extends JFrame {
 	private JTextField textFieldRazonSocial;
@@ -58,67 +59,69 @@ public class NuevoProveedor extends JFrame {
 	 * @throws SQLException 
 	 */
 	public NuevoProveedor() throws SQLException {
+		setTitle("Alta de Proveedores");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(NuevoProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 593, 399);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JLabel labelRazon = new JLabel("Campo Inv\u00E1lido");
-		labelRazon.setBounds(299, 11, 125, 14);
+		labelRazon.setBounds(309, 51, 125, 14);
 		contentPane.add(labelRazon);
 		labelRazon.setVisible(false);
 		
 		JLabel labelCuit = new JLabel("Campo Inv\u00E1lido");
-		labelCuit.setBounds(299, 36, 125, 14);
+		labelCuit.setBounds(309, 78, 125, 14);
 		contentPane.add(labelCuit);
 		labelCuit.setVisible(false);
 		
 		JLabel labelCondicion = new JLabel("Campo Inv\u00E1lido");
-		labelCondicion.setBounds(299, 111, 125, 14);
+		labelCondicion.setBounds(438, 137, 125, 22);
 		contentPane.add(labelCondicion);
 		labelCondicion.setVisible(false);
 		
 		JLabel labelCategoria = new JLabel("Campo Inv\u00E1lido");
-		labelCategoria.setBounds(299, 136, 125, 14);
+		labelCategoria.setBounds(281, 208, 125, 14);
 		contentPane.add(labelCategoria);
 		labelCategoria.setVisible(false);
 		
 		contentPane.setLayout(null);
 		JLabel lblNombreORazn = new JLabel("Nombre o Raz\u00F3n Social");
-		lblNombreORazn.setBounds(10, 11, 173, 14);
+		lblNombreORazn.setBounds(10, 51, 173, 14);
 		contentPane.add(lblNombreORazn);
 
 		JLabel lblCuitOCuil = new JLabel("CUIT o CUIL");
-		lblCuitOCuil.setBounds(10, 36, 173, 14);
+		lblCuitOCuil.setBounds(10, 78, 173, 14);
 		contentPane.add(lblCuitOCuil);
 
 		JLabel lblDomicilio = new JLabel("Domicilio");
-		lblDomicilio.setBounds(10, 61, 173, 14);
+		lblDomicilio.setBounds(10, 105, 173, 14);
 		contentPane.add(lblDomicilio);
 
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(10, 86, 173, 14);
+		lblTelefono.setBounds(10, 145, 173, 14);
 		contentPane.add(lblTelefono);
 
 		JLabel lblCondicionAnteEl = new JLabel("Condicion ante el IVA");
-		lblCondicionAnteEl.setBounds(10, 111, 173, 14);
+		lblCondicionAnteEl.setBounds(10, 181, 173, 14);
 		contentPane.add(lblCondicionAnteEl);
 
 		JLabel lblCategora = new JLabel("Categor\u00EDa");
-		lblCategora.setBounds(10, 136, 173, 14);
+		lblCategora.setBounds(10, 205, 173, 20);
 		contentPane.add(lblCategora);
 
 		JLabel lblPersonaResponsable = new JLabel("Persona Responsable");
-		lblPersonaResponsable.setBounds(10, 161, 173, 14);
+		lblPersonaResponsable.setBounds(10, 241, 173, 14);
 		contentPane.add(lblPersonaResponsable);
 
-		JLabel lblContactoresponsable = new JLabel("Contacto (Responsable)");
-		lblContactoresponsable.setBounds(10, 186, 173, 14);
+		JLabel lblContactoresponsable = new JLabel("Contacto Responsable");
+		lblContactoresponsable.setBounds(10, 274, 173, 14);
 		contentPane.add(lblContactoresponsable);
 
 		textFieldRazonSocial = new JTextField();
-		textFieldRazonSocial.setBounds(193, 8, 96, 20);
+		textFieldRazonSocial.setBounds(195, 48, 96, 20);
 		contentPane.add(textFieldRazonSocial);
 		textFieldRazonSocial.setColumns(10);
 
@@ -137,37 +140,37 @@ public class NuevoProveedor extends JFrame {
 				}
 			}
 		});
-		textFieldCuit.setBounds(193, 33, 96, 20);
+		textFieldCuit.setBounds(195, 75, 96, 20);
 		contentPane.add(textFieldCuit);
 		textFieldCuit.setColumns(10);
 
 		textFieldDomicilio = new JTextField();
-		textFieldDomicilio.setBounds(193, 58, 96, 20);
+		textFieldDomicilio.setBounds(195, 102, 140, 20);
 		contentPane.add(textFieldDomicilio);
 		textFieldDomicilio.setColumns(10);
 		
 		textFieldTelefono = new JTextField();
-		textFieldTelefono.setBounds(193, 83, 96, 20);
+		textFieldTelefono.setBounds(193, 138, 156, 20);
 		contentPane.add(textFieldTelefono);
 		textFieldTelefono.setColumns(10);
 
 		textFieldCategoria = new JTextField();
-		textFieldCategoria.setBounds(193, 133, 96, 20);
+		textFieldCategoria.setBounds(193, 205, 52, 20);
 		contentPane.add(textFieldCategoria);
 		textFieldCategoria.setColumns(10);
 
 		textFieldPersResponsable = new JTextField();
-		textFieldPersResponsable.setBounds(193, 158, 96, 20);
+		textFieldPersResponsable.setBounds(195, 238, 191, 20);
 		contentPane.add(textFieldPersResponsable);
 		textFieldPersResponsable.setColumns(10);
 
 		textFieldContacto = new JTextField();
-		textFieldContacto.setBounds(193, 183, 96, 20);
+		textFieldContacto.setBounds(194, 271, 173, 20);
 		contentPane.add(textFieldContacto);
 		textFieldContacto.setColumns(10);
 		
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(193, 107, 96, 22);
+		comboBox.setBounds(193, 173, 231, 22);
 		contentPane.add(comboBox);
 
 		
@@ -254,8 +257,12 @@ public class NuevoProveedor extends JFrame {
 				
 			}
 		});
-		btnGuardarProveedor.setBounds(140, 214, 167, 23);
+		btnGuardarProveedor.setBounds(182, 304, 167, 23);
 		contentPane.add(btnGuardarProveedor);
+		
+		JLabel lblNewLabel = new JLabel("Alta de Proveedores");
+		lblNewLabel.setBounds(189, 13, 125, 16);
+		contentPane.add(lblNewLabel);
 
 		
 

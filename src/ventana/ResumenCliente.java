@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import java.awt.Toolkit;
 
 public class ResumenCliente extends JFrame {
 
@@ -31,8 +32,10 @@ public class ResumenCliente extends JFrame {
 	 * Create the dialog.
 	 */
 	public ResumenCliente() {
+		setTitle("Resumen de Cliente");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenCliente.class.getResource("/logos/logo4.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 551, 377);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -43,57 +46,57 @@ public class ResumenCliente extends JFrame {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Cliente");
-			lblSeleccioneElCliente.setBounds(10, 11, 101, 14);
+			lblSeleccioneElCliente.setBounds(10, 11, 152, 14);
 			contentPanel.add(lblSeleccioneElCliente);
 		}
 		{
 			JButton btnBuscarCliente = new JButton("Buscar Cliente");
-			btnBuscarCliente.setBounds(121, 7, 113, 23);
+			btnBuscarCliente.setBounds(221, 7, 113, 23);
 			contentPanel.add(btnBuscarCliente);
 		}
 		{
 			JLabel lblNombreDelCliente = new JLabel("NOMBRE DEL CLIENTE");
-			lblNombreDelCliente.setBounds(244, 11, 142, 14);
+			lblNombreDelCliente.setBounds(363, 11, 142, 14);
 			contentPanel.add(lblNombreDelCliente);
 		}
 		{
 			JLabel lblSeleccioneElPeriodo = new JLabel("Seleccione el periodo");
-			lblSeleccioneElPeriodo.setBounds(10, 36, 113, 14);
+			lblSeleccioneElPeriodo.setBounds(10, 36, 126, 14);
 			contentPanel.add(lblSeleccioneElPeriodo);
 		}
 		{
 			JLabel lblDesde = new JLabel("Desde: ");
-			lblDesde.setBounds(121, 36, 49, 14);
+			lblDesde.setBounds(148, 38, 49, 14);
 			contentPanel.add(lblDesde);
 		}
 		{
 			JButton button = new JButton("New button");
-			button.setBounds(163, 32, 59, 23);
+			button.setBounds(209, 32, 110, 23);
 			contentPanel.add(button);
 		}
 		{
 			JLabel lblHasta = new JLabel("Hasta: ");
-			lblHasta.setBounds(235, 36, 49, 14);
+			lblHasta.setBounds(331, 36, 49, 14);
 			contentPanel.add(lblHasta);
 		}
 		{
 			JButton btnNewButton = new JButton("New button");
-			btnNewButton.setBounds(275, 32, 59, 23);
+			btnNewButton.setBounds(392, 32, 113, 23);
 			contentPanel.add(btnNewButton);
 		}
 		{
 			JButton btnListar = new JButton("Listar");
-			btnListar.setBounds(10, 61, 89, 23);
+			btnListar.setBounds(24, 249, 89, 23);
 			contentPanel.add(btnListar);
 		}
 		{
 			JList list = new JList();
-			list.setBounds(10, 96, 402, 122);
+			list.setBounds(10, 68, 495, 150);
 			contentPanel.add(list);
 		}
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(198, 61, 89, 23);
+			btnImprimir.setBounds(221, 249, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
 		{

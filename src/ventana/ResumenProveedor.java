@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
+import java.awt.Toolkit;
 
 
 public class ResumenProveedor extends JFrame {
@@ -42,8 +43,10 @@ public class ResumenProveedor extends JFrame {
 	 * Create the dialog.
 	 */
 	public ResumenProveedor() {
+		setTitle("Resumen de Cuenta Cliente");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 487, 339);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -60,7 +63,7 @@ public class ResumenProveedor extends JFrame {
 			contentPanel.add(lblSeleccioneElProveedor);
 		}
 		{
-			lblNombreDelCliente.setBounds(244, 11, 142, 14);
+			lblNombreDelCliente.setBounds(311, 11, 142, 14);
 			contentPanel.add(lblNombreDelCliente);
 		}
 		{
@@ -79,32 +82,32 @@ public class ResumenProveedor extends JFrame {
 					}					
 				}
 			});
-			btnBuscarProveedor.setBounds(153, 7, 81, 23);
+			btnBuscarProveedor.setBounds(164, 7, 89, 23);
 			contentPanel.add(btnBuscarProveedor);
 		}
 		
 		{
 			JLabel lblSeleccioneElPeriodo = new JLabel("Seleccione el periodo");
-			lblSeleccioneElPeriodo.setBounds(10, 36, 113, 14);
+			lblSeleccioneElPeriodo.setBounds(10, 44, 142, 14);
 			contentPanel.add(lblSeleccioneElPeriodo);
 		}
 		{
 			JLabel lblDesde = new JLabel("Desde: ");
-			lblDesde.setBounds(121, 36, 49, 14);
+			lblDesde.setBounds(151, 44, 49, 14);
 			contentPanel.add(lblDesde);
 		}
 		{
 			JLabel lblHasta = new JLabel("Hasta: ");
-			lblHasta.setBounds(269, 36, 49, 14);
+			lblHasta.setBounds(303, 44, 49, 14);
 			contentPanel.add(lblHasta);
 		}
 		JDateChooser fechaDesde = new JDateChooser();
-		fechaDesde.setBounds(164, 30, 89, 20);
+		fechaDesde.setBounds(202, 38, 89, 20);
 		contentPanel.add(fechaDesde);
 		fechaDesde.setDateFormatString("dd-MM-yy");
 		
 		JDateChooser fechaHasta = new JDateChooser();
-		fechaHasta.setBounds(316, 30, 89, 20);
+		fechaHasta.setBounds(364, 38, 89, 20);
 		contentPanel.add(fechaHasta);
 		fechaHasta.setDateFormatString("dd-MM-yy");
 		{
@@ -117,17 +120,17 @@ public class ResumenProveedor extends JFrame {
 					// aca llamariamos al store procedure y le pasariamos como parametros el nomrbe del proveedor y las fechas
 				}
 			});
-			btnListar.setBounds(10, 61, 89, 23);
+			btnListar.setBounds(30, 89, 89, 23);
 			contentPanel.add(btnListar);
 		}
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(198, 61, 89, 23);
+			btnImprimir.setBounds(265, 89, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
 		
 		table = new JTable();
-		table.setBounds(10, 99, 404, 109);
+		table.setBounds(10, 125, 443, 109);
 		contentPanel.add(table);
 		
 	

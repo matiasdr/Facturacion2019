@@ -27,6 +27,7 @@ import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
 
 import javax.swing.JTable;
+import java.awt.Toolkit;
 
 public class ListadoProvTodos extends JFrame {
 	private final JPanel contentPanel = new JPanel();
@@ -52,6 +53,8 @@ public class ListadoProvTodos extends JFrame {
 	 * @throws SQLException 
 	 */
 	public ListadoProvTodos() throws SQLException {
+		setTitle("Listados de Proveedores");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoProvTodos.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setBounds(100, 100, 591, 358);

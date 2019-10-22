@@ -25,6 +25,7 @@ import javax.swing.JDialog;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class ListadoArticulos extends JDialog {
 
@@ -56,6 +57,8 @@ public class ListadoArticulos extends JDialog {
 	 */
 	public ListadoArticulos(java.awt.Frame parent, boolean modal) throws SQLException {
 		super(parent, modal);
+		setTitle("Listado de Articulos");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoArticulos.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 622, 405);
 		contentPane = new JPanel();
@@ -219,7 +222,7 @@ public class ListadoArticulos extends JDialog {
 				setVisible(false);
 			}
 		});
-		btnSeleccionar.setBounds(461, 314, 89, 23);
+		btnSeleccionar.setBounds(451, 314, 99, 23);
 		contentPanel.add(btnSeleccionar);
 		
 		JScrollPane scrollPane = new JScrollPane();

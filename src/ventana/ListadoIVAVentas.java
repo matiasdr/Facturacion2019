@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.Toolkit;
 
 public class ListadoIVAVentas extends JFrame {
 
@@ -40,6 +41,8 @@ public class ListadoIVAVentas extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoIVAVentas() {
+		setTitle("Listado IVA Ventas");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoIVAVentas.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1008, 508);
 		contentPane = new JPanel();

@@ -47,7 +47,7 @@ public class GenerarRecibo2 extends JFrame {
 	private JTable table;
 
 	private Integer id_seleccion;
-	private int saldoC;
+	private Double saldoC;
 	private String tipoComp;
 	private int idcta;
 	
@@ -149,6 +149,7 @@ public class GenerarRecibo2 extends JFrame {
           //		lblNombreClie.setText(String.valueOf(id_seleccion));
 					
 					
+					Double saldoC = 0.00;
 					
 					Conexion nc = new Conexion();
 					Connection conec = nc.conectar();
@@ -160,16 +161,12 @@ public class GenerarRecibo2 extends JFrame {
 								"inner join cliente c on c.id_cliente= cc.id_cliente where c.id_cliente =" + id_seleccion);
 						
 						
-						while(tablaModelo.getRowCount()>0) // LIMPIA EL JTABLE ANTES DE CARGARLO DE NUEVO
-						{
-							tablaModelo.removeRow(tablaModelo.getRowCount()-1);
-						}
 						
 						while(resultado.next()) {
 							Object[] linea = new Object[3];
 							linea[0]= resultado.getString("comprobante");
 							linea[1]= resultado.getInt("numerocomprobante");
-							linea[2]= resultado.getInt("saldo");
+							linea[2]= resultado.getDouble("saldo");
 							tipoComp = resultado.getString("debe_haber").trim();
 	                        idcta = resultado.getInt("id_cuenta");
 							 
@@ -178,12 +175,12 @@ public class GenerarRecibo2 extends JFrame {
 							
 							if(tipoComp.toString().equals("H")) {
 							
-								saldoC -= resultado.getInt("saldo");
+								saldoC -= resultado.getDouble("saldo");
 							}
 							else
 								if(tipoComp.toString().equals("D"))
 							{
-								saldoC += resultado.getInt("saldo");
+								saldoC += resultado.getDouble("saldo");
 							}
 							
 							
@@ -288,7 +285,64 @@ public class GenerarRecibo2 extends JFrame {
 							Statement instruccion = conec.createStatement();
 							instruccion.execute("spnuevoitemcuentacliente '"+idcta+"', '"+imporRec+"', '"+FechaAct+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_recibo+"', 0");
 							
-							instruccion.executeUpdate("Update cuenta_cliente set saldo = saldo - "+imporRec+" where id_cliente = "+id_seleccion);
+							instruccion.executeUpdate("Update cuenta_cliente set saldo = saldo + "+imporRec+" where id_cliente = "+id_seleccion);
+							
+							while(tablaModelo.getRowCount()>0) // LIMPIA EL JTABLE ANTES DE CARGARLO DE NUEVO
+							{
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							// volver a cargar el JTable despues de confirmar el Recibo...
+							saldoC = 0.00;
+							Conexion cr = new Conexion();
+							Connection conecRec = nc.conectar();
+							Statement instruccion1;
+							try {
+								instruccion1 = conec.createStatement();
+								ResultSet resultado = instruccion1.executeQuery("Select it.comprobante, it.numerocomprobante, it.saldo, it.debe_haber, it.id_cuenta from itemcuentacliente it \r\n" + 
+										"inner join cuenta_cliente cc on it.id_cuenta=cc.id_cuenta \r\n" + 
+										"inner join cliente c on c.id_cliente= cc.id_cliente where c.id_cliente =" + id_seleccion);
+															
+								while(resultado.next()) {
+									Object[] linea = new Object[3];
+									linea[0]= resultado.getString("comprobante");
+									linea[1]= resultado.getInt("numerocomprobante");
+									linea[2]= resultado.getDouble("saldo");
+									tipoComp = resultado.getString("debe_haber").trim();
+			                        idcta = resultado.getInt("id_cuenta");
+									 
+									tablaModelo.addRow(linea);
+																	
+									if(tipoComp.toString().equals("H")) {
+									
+										saldoC -= resultado.getDouble("saldo");
+									}
+									else
+										if(tipoComp.toString().equals("D"))
+									{
+										saldoC += resultado.getDouble("saldo");
+									}
+																	
+								}								
+									if(saldoC >= 1) {
+										lblimporteSaldo.setText(String.valueOf(saldoC));
+										lblTipsaldo.setText("Saldo Pendiente :");
+										lblimporteSaldo.setForeground(Color.RED);
+									}
+									else
+									{
+										if(saldoC < 0) {
+											lblimporteSaldo.setText(String.valueOf(saldoC*-1));
+											lblTipsaldo.setText("Saldo a Favor :");
+											lblimporteSaldo.setForeground(Color.BLACK);
+									    }
+									}
+		        				
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							cr.desconectar();
 							
 							JOptionPane.showMessageDialog(null, "Los Datos fueron Guardados Satisfactoriamente");
 						} catch (SQLException e1) {

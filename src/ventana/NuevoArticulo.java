@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import java.awt.Toolkit;
 
 public class NuevoArticulo extends JFrame {
 
@@ -51,6 +52,8 @@ public class NuevoArticulo extends JFrame {
 	 * @throws SQLException 
 	 */
 	public NuevoArticulo() throws SQLException {
+		setTitle("Alta de Articulos");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(NuevoArticulo.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 490, 287);
 		contentPane = new JPanel();
@@ -75,22 +78,22 @@ public class NuevoArticulo extends JFrame {
 		contentPane.add(lblPrecio);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(301, 8, 96, 20);
+		txtNombre.setBounds(211, 8, 186, 20);
 		contentPane.add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		txtEAN = new JTextField();
-		txtEAN.setBounds(301, 33, 96, 20);
+		txtEAN.setBounds(211, 33, 149, 20);
 		contentPane.add(txtEAN);
 		txtEAN.setColumns(10);
 		
 		txtStock = new JTextField();
-		txtStock.setBounds(301, 58, 96, 20);
+		txtStock.setBounds(211, 58, 96, 20);
 		contentPane.add(txtStock);
 		txtStock.setColumns(10);
 		
 		txtPrecio = new JTextField();
-		txtPrecio.setBounds(301, 83, 96, 20);
+		txtPrecio.setBounds(211, 83, 96, 20);
 		contentPane.add(txtPrecio);
 		txtPrecio.setColumns(10);
 		
@@ -104,7 +107,7 @@ public class NuevoArticulo extends JFrame {
 		contentPane.add(btnNewButton_1);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(301, 114, 96, 20);
+		comboBox.setBounds(211, 114, 96, 20);
 		contentPane.add(comboBox);
 		
 		Conexion nc = new Conexion();
@@ -127,7 +130,7 @@ public class NuevoArticulo extends JFrame {
 		double iva10=10.5;
 		double iva27=27;
 		JComboBox comboBoIVA = new JComboBox();
-		comboBoIVA.setBounds(301, 145, 96, 20);
+		comboBoIVA.setBounds(211, 147, 96, 20);
 		contentPane.add(comboBoIVA);
 		comboBoIVA.addItem(iva21);
 		comboBoIVA.addItem(iva10);

@@ -34,6 +34,7 @@ import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
 import javax.swing.JScrollPane;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 public class GenerarFactura extends JFrame {
 	private JTextField textFieldVencimiento;
@@ -69,6 +70,8 @@ public class GenerarFactura extends JFrame {
 	 * @throws SQLException 
 	 */
 	public GenerarFactura() throws SQLException {
+		setTitle("Generar Factura...");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GenerarFactura.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 898, 670);
 		contentPane = new JPanel();
@@ -80,7 +83,7 @@ public class GenerarFactura extends JFrame {
 		JLabel lblNombreDelCliente = new JLabel("Nombre del CLiente");
 
 		JLabel lblSeleccionarCliente = new JLabel("Seleccionar Cliente");
-		lblSeleccionarCliente.setBounds(78, 22, 93, 14);
+		lblSeleccionarCliente.setBounds(78, 22, 119, 14);
 		contentPane.add(lblSeleccionarCliente);
 
 		JButton btnBuscar = new JButton("Buscar Cliente");
@@ -118,16 +121,16 @@ public class GenerarFactura extends JFrame {
 				
 			}
 		});
-		btnBuscar.setBounds(220, 18, 183, 23);
+		btnBuscar.setBounds(209, 18, 183, 23);
 		contentPane.add(btnBuscar);
 		
 		textFieldVencimiento = new JTextField();
-		textFieldVencimiento.setBounds(220, 85, 96, 20);
+		textFieldVencimiento.setBounds(248, 86, 96, 20);
 		contentPane.add(textFieldVencimiento);
 		textFieldVencimiento.setColumns(10);
 
 		
-		lblNombreDelCliente.setBounds(447, 22, 132, 14);
+		lblNombreDelCliente.setBounds(434, 22, 132, 14);
 		contentPane.add(lblNombreDelCliente);
 		
 		JRadioButton rdbtnContado = new JRadioButton("Contado");
@@ -159,11 +162,11 @@ public class GenerarFactura extends JFrame {
 		});
 
 		JLabel lblCondicionDeVenta = new JLabel("Condicion de venta:");
-		lblCondicionDeVenta.setBounds(78, 59, 97, 14);
+		lblCondicionDeVenta.setBounds(78, 59, 119, 14);
 		contentPane.add(lblCondicionDeVenta);
 
 		JLabel lblDasDeVencimiento = new JLabel("D\u00EDas de Vencimiento:");
-		lblDasDeVencimiento.setBounds(78, 84, 111, 14);
+		lblDasDeVencimiento.setBounds(88, 89, 132, 14);
 		contentPane.add(lblDasDeVencimiento);		
 		
 		Object[] fila=new Object[6];
@@ -214,7 +217,7 @@ public class GenerarFactura extends JFrame {
 		contentPane.add(lblPorNombre);
 		
 		textFieldCantidad = new JTextField();
-		textFieldCantidad.setBounds(783, 224, 60, 20);
+		textFieldCantidad.setBounds(753, 228, 60, 20);
 		contentPane.add(textFieldCantidad);
 		textFieldCantidad.setColumns(10);
 
@@ -457,7 +460,7 @@ public class GenerarFactura extends JFrame {
 		contentPane.add(btnCancelar);
 
 		JLabel lblElegirCantidad = new JLabel("Ingresar Cantidad");
-		lblElegirCantidad.setBounds(753, 188, 119, 14);
+		lblElegirCantidad.setBounds(714, 191, 119, 14);
 		contentPane.add(lblElegirCantidad);
 
 		

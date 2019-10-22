@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Toolkit;
 
 public class ModificarCliente extends JFrame {
 
@@ -57,6 +58,8 @@ public class ModificarCliente extends JFrame {
 	 * Create the dialog.
 	 */
 	public ModificarCliente() throws SQLException {
+		setTitle("Modicar Datos del Cliente...");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModificarCliente.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 582, 391);
 		contentPane = new JPanel();
