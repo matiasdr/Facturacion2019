@@ -169,25 +169,26 @@ public class GenerarFactura extends JFrame {
 		lblDasDeVencimiento.setBounds(88, 89, 132, 14);
 		contentPane.add(lblDasDeVencimiento);		
 		
-		Object[] fila=new Object[6];
+		Object[] fila=new Object[7];
 		fila[0]="EAN";
 		fila[1]="Articulo";
 		fila[2]="Cantidad";
 		fila[3]="Precio Unitario";
 		fila[4]="Precio Total";
 		fila[5]="ID";
+		fila[6]="IVA %";
 		
 		DefaultTableModel modelTabla = new DefaultTableModel(fila, 0);
 		
 		
 		
-		Object[] encabe=new Object[5];
+		Object[] encabe=new Object[6];
 		encabe[0]="EAN";
 		encabe[1]="Descripcion";
 		encabe[2]="Stock";
 		encabe[3]="Precio Unitario";
 		encabe[4]="ID";
-		
+		encabe[5]="IVA %";
 		
 		DefaultTableModel modelTablaProductos = new DefaultTableModel(encabe, 0);
 		
@@ -197,12 +198,13 @@ public class GenerarFactura extends JFrame {
 		ResultSet resultado = instruccion.executeQuery("Select * from articulo");
 		
 		while(resultado.next()) {
-			Object[] linea = new Object[5];
+			Object[] linea = new Object[6];
 			linea[0]= resultado.getString("ean");
 			linea[1]= resultado.getString("descripcion");
 			linea[2]= resultado.getInt("cantidad");
 			linea[3]= resultado.getDouble("pvp");
 			linea[4]= resultado.getInt("id_articulo");
+			linea[5]= resultado.getDouble("ivaporcent");
 			modelTablaProductos.addRow(linea);
 			
 		}
@@ -247,12 +249,13 @@ public class GenerarFactura extends JFrame {
 					}
 					
 					while(resultado1.next()) {
-						Object[] linea = new Object[5];
+						Object[] linea = new Object[6];
 						linea[0]= resultado1.getString("ean");
 						linea[1]= resultado1.getString("descripcion");
 						linea[2]= resultado1.getInt("cantidad");
 						linea[3]= resultado1.getDouble("pvp");
 						linea[4]= resultado1.getInt("id_articulo");
+						linea[5]= resultado.getDouble("ivaporcent");
 						modelTablaProductos.addRow(linea);
 					}
 				} catch (SQLException e1) {
@@ -289,6 +292,7 @@ public class GenerarFactura extends JFrame {
 				String descripcion = (String) modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 1);
 				Integer stock = (Integer)modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 2);
 				Integer idArtic= (Integer)modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 4);
+				Double porc = (Double)modelTablaProductos.getValueAt(tablaProductos.getSelectedRow(), 5);
 				// verificamos que no se intente obtener una cantidad mayor a la que hay en existencia
 				
 				if(cant>stock || cant<=0) {
@@ -300,13 +304,14 @@ public class GenerarFactura extends JFrame {
 				
 				// creamos un Arreglo de 5 y le pasamos los valores
 				
-				Object[] nuevaFila = new Object[6];
+				Object[] nuevaFila = new Object[7];
 				nuevaFila[0]=ean; //aca debemos traer de la base de datos el correspondiente
 				nuevaFila[1]= descripcion; // este es el nombre del articulo
 				nuevaFila[2]= cant; // la cantidad del artiuclo;
 				nuevaFila[3]= precio; // este es el precio Unitario de nuestro articulo
 				nuevaFila[4]= total; // el total de ese articulo
 				nuevaFila[5]= idArtic;
+				nuevaFila[6]= porc;
 				// hacemos un addROw para agregar a la vista un item
 			
 				modelTabla.addRow(nuevaFila);
@@ -354,6 +359,12 @@ public class GenerarFactura extends JFrame {
 				String condicion=null;
 				Integer idFacturaGenerada=null;
 				String numeroFinal="";
+				Double neto21=0.0;
+				Double neto27=0.0;
+				Double neto10=0.0;
+				Double iva21=0.0;
+				Double iva27=0.0;
+				Double iva10=0.0;
 				if(rdbtnContado.isSelected()) {
 					condicion="Contado";
 				} else {
@@ -365,6 +376,26 @@ public class GenerarFactura extends JFrame {
 				} else {
 					tipoComprobante="B";
 				}
+				for(int i = 0; i<table.getRowCount();i++ ) {
+					if((double)table.getValueAt(i, 6)==21.00) {
+						Double aux = ((double) table.getValueAt(i, 4))/1.21;
+						neto21 = neto21 + aux;
+						iva21 = aux*0.21;
+					//	System.out.println(String.valueOf(neto21+" "+iva21));
+					} else 
+					if((double)table.getValueAt(i, 6)==27.00) {
+						Double aux = ((double) table.getValueAt(i, 4))/1.27;
+						neto27 = neto27 + aux;
+						iva27 = aux*0.27;
+					} else 
+					if((double)table.getValueAt(i, 6)==10.50) {
+						Double aux = ((double) table.getValueAt(i, 4))/1.105;
+						neto10 = neto10 + aux;
+						iva10 = aux*0.105;
+					}
+				}
+				
+				
 				try {
 					Conexion nc = new Conexion();
 					Connection conn = nc.conectar();
@@ -376,7 +407,9 @@ public class GenerarFactura extends JFrame {
 					}
 					numeroFinal="000"+numFactura;
 					instruccion = conn.createStatement();
-					instruccion.execute("spnuevafactura '"+numeroFinal+"', "+tipoComprobante+", '"+fecha+"', "+idCliente+", 1, "+condicion+", "+importeTotal+", NULL");
+					String sql="insert into factura(numero, tipo, fecha, id_cliente, id_empresa, condicion_venta, importe_total, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27) VALUES ('"+numeroFinal+"', '"+tipoComprobante+"', '"+fecha+"', "+idCliente+", 1, '"+condicion+"', "+importeTotal+", "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+")";
+					System.out.println(sql);
+					instruccion.executeUpdate(sql);
 					ResultSet resul = instruccion.executeQuery("select top 1 id_factura from factura order by id_factura desc");
 					while(resul.next()) {
 						idFacturaGenerada = resul.getInt("id_factura");
@@ -412,7 +445,7 @@ public class GenerarFactura extends JFrame {
 							System.out.println(sql);
 							instruccion.executeUpdate(sql);
 							
-							// ahora actualizamos el salo en la tabla cuenta_cliente
+							// ahora actualizamos el saldo en la tabla cuenta_cliente
 							
 							instruccion.executeUpdate("Update cuenta_cliente set saldo = saldo + "+importeTotal+" where id_cliente = "+idCliente);
 							

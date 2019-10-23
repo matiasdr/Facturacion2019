@@ -52,6 +52,8 @@ public class CargarFacturaCompra extends JFrame {
 	private JTextField textFieldNeto27;
 	private JTextField textFieldIVA27;
 	private Integer idProveedor;
+	private String tipoFactura;
+	private String conceptoCompra;
 
 	/**
 	 * Launch the application.
@@ -103,6 +105,7 @@ public class CargarFacturaCompra extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+					tipoFactura="C";
 					btnCalcularIVA.setVisible(false);
 					lblesteEsEl.setVisible(false);
 					lblIvaFiscal.setVisible(false);
@@ -117,6 +120,7 @@ public class CargarFacturaCompra extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				tipoFactura="B";
 				btnCalcularIVA.setVisible(true);
 				lblesteEsEl.setVisible(true);
 				lblIvaFiscal.setVisible(true);
@@ -129,6 +133,7 @@ public class CargarFacturaCompra extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				tipoFactura="A";
 				btnCalcularIVA.setVisible(true);
 				lblesteEsEl.setVisible(true);
 				lblIvaFiscal.setVisible(true);	
@@ -512,33 +517,84 @@ public class CargarFacturaCompra extends JFrame {
 				String fecha = sdf.format(dateChooser.getDate());
 				String puntoDeVenta=textField.getText();
 				Double total=0.0;
-				if(radioButtonManual.isSelected()) {
-					Double neto21 = 0.0;
-					Double neto10 = 0.0;
-					Double neto27 = 0.0;
-					Double iva10 = 0.0;
-					Double iva21 = 0.0;
-					Double iva27 = 0.0;
-					total = Double.valueOf(lblMonto.getText());
-					if(!textFieldNeto10.getText().isEmpty()) {
-						neto10 = Double.valueOf(textFieldNeto10.getText());
+				conceptoCompra = (String) comboBox.getSelectedItem();
+				if(tipoFactura.equals("A")) {
+					if(radioButtonManual.isSelected()) {
+						Double neto21 = 0.0;
+						Double neto10 = 0.0;
+						Double neto27 = 0.0;
+						Double iva10 = 0.0;
+						Double iva21 = 0.0;
+						Double iva27 = 0.0;
+						total = Double.valueOf(lblMonto.getText());
+						if(!textFieldNeto10.getText().isEmpty()) {
+							neto10 = Double.valueOf(textFieldNeto10.getText());
+						}
+						if(!textFieldNeto21.getText().isEmpty()) {
+							neto21 = Double.valueOf(textFieldNeto21.getText());
+						}
+						if(!textFieldNeto27.getText().isEmpty()) {
+							neto27 = Double.valueOf(textFieldNeto27.getText());
+						}
+						if(!textFieldIVA10.getText().isEmpty()) {
+							iva10 = Double.valueOf(textFieldIVA10.getText());
+						}
+						if(!textFieldIVA21.getText().isEmpty()) {
+							iva21 = Double.valueOf(textFieldIVA21.getText());
+						}
+						if(!textFieldIVA27.getText().isEmpty()) {
+							iva27 = Double.valueOf(textFieldIVA27.getText());
+						}
+						String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+						System.out.println(sql);
+						try {
+							Conexion nc = new Conexion();
+							Connection conn = nc.conectar();
+							Statement instruccion;
+							instruccion = conn.createStatement();
+							instruccion.executeUpdate(sql);
+							
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					
+					} else {
+						String query="";
+						if(comboBoxIva.getSelectedItem().equals("21%")) {
+							Double iva21 = Double.valueOf(lblesteEsEl.getText());
+							total = Double.valueOf(textFieldImporteFacturado.getText());
+							Double neto21 = total-iva21;
+							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+						}
+						if(comboBoxIva.getSelectedItem().equals("10.5")) {
+							Double iva10 = Double.valueOf(lblesteEsEl.getText());
+							total = Double.valueOf(textFieldImporteFacturado.getText());
+							Double neto10 = total-iva10;
+							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+						}
+						if(comboBoxIva.getSelectedItem().equals("27%")) {
+							Double iva27 = Double.valueOf(lblesteEsEl.getText());
+							total = Double.valueOf(textFieldImporteFacturado.getText());
+							Double neto27 = total-iva27;
+							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+						}
+						try {
+							Conexion nc = new Conexion();
+							Connection conn = nc.conectar();
+							Statement instruccion;
+							instruccion = conn.createStatement();
+							instruccion.executeUpdate(query);
+							
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}				
+						
 					}
-					if(!textFieldNeto21.getText().isEmpty()) {
-						neto21 = Double.valueOf(textFieldNeto21.getText());
-					}
-					if(!textFieldNeto27.getText().isEmpty()) {
-						neto27 = Double.valueOf(textFieldNeto27.getText());
-					}
-					if(!textFieldIVA10.getText().isEmpty()) {
-						iva10 = Double.valueOf(textFieldIVA10.getText());
-					}
-					if(!textFieldIVA21.getText().isEmpty()) {
-						iva21 = Double.valueOf(textFieldIVA21.getText());
-					}
-					if(!textFieldIVA27.getText().isEmpty()) {
-						iva27 = Double.valueOf(textFieldIVA27.getText());
-					}
-					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+")";
+				} else {
+					total = Double.valueOf(textFieldImporteFacturado.getText());
+					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
 					System.out.println(sql);
 					try {
 						Conexion nc = new Conexion();
@@ -552,38 +608,6 @@ public class CargarFacturaCompra extends JFrame {
 						e1.printStackTrace();
 					}
 				
-				} else {
-					String query="";
-					if(comboBoxIva.getSelectedItem().equals("21%")) {
-						Double iva21 = Double.valueOf(lblesteEsEl.getText());
-						total = Double.valueOf(textFieldImporteFacturado.getText());
-						Double neto21 = total-iva21;
-						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+")";
-					}
-					if(comboBoxIva.getSelectedItem().equals("10.5")) {
-						Double iva10 = Double.valueOf(lblesteEsEl.getText());
-						total = Double.valueOf(textFieldImporteFacturado.getText());
-						Double neto10 = total-iva10;
-						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+")";
-					}
-					if(comboBoxIva.getSelectedItem().equals("27%")) {
-						Double iva27 = Double.valueOf(lblesteEsEl.getText());
-						total = Double.valueOf(textFieldImporteFacturado.getText());
-						Double neto27 = total-iva27;
-						query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+")";
-					}
-					try {
-						Conexion nc = new Conexion();
-						Connection conn = nc.conectar();
-						Statement instruccion;
-						instruccion = conn.createStatement();
-						instruccion.executeUpdate(query);
-						
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}				
-					
 				}
 				if(radioButtonCuentaCorriente.isSelected()) {
 					try {
@@ -632,12 +656,14 @@ public class CargarFacturaCompra extends JFrame {
 					
 					if(ep.getCondFiscal()==1) {
 						rdbtna.setSelected(true);
+						tipoFactura="A";
 						btnCalcularIVA.setVisible(true);
 						lblesteEsEl.setVisible(true);
 						lblIvaFiscal.setVisible(true);	
 						lblMoneda.setVisible(true);
 					} else {
 						rdbtnc.setSelected(true);
+						tipoFactura="C";
 						btnCalcularIVA.setVisible(false);
 						lblesteEsEl.setVisible(false);
 						lblIvaFiscal.setVisible(false);
@@ -664,12 +690,15 @@ public class CargarFacturaCompra extends JFrame {
 						labelIVAPregunta.setVisible(false);
 						radioButtonNo.setVisible(false);
 						rdbtnSi.setVisible(false);
+						radioButtonManual.setVisible(false);
+						radioButtonAutomatico.setVisible(false);
 					}
 					
 				} catch (HeadlessException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			
 				
 			}
 		});

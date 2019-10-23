@@ -253,7 +253,17 @@ public class NuevoProveedor extends JFrame {
 					
 				}
 				
-				dispose();
+				
+				try {
+					dispose();
+					NuevoProveedor frame;
+					frame = new NuevoProveedor();
+					frame.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				
 			}
 		});
