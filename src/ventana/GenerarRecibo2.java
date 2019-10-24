@@ -27,6 +27,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
@@ -44,12 +46,17 @@ public class GenerarRecibo2 extends JFrame {
 	private JTextField tFImporte;
 	private JTextField tFfecha;
 	private JTable tablaFactPend;
+	private JTextField tFnro_Rec;
 	private JTable table;
 
 	private Integer id_seleccion;
 	private Double saldoC;
 	private String tipoComp;
 	private int idcta;
+	private int nro_rec;
+	private String forma_pago;
+	
+	
 	
 	
 		/**
@@ -76,7 +83,7 @@ public class GenerarRecibo2 extends JFrame {
 		setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
 		setTitle("Generar Recibo de Cobro a Cliente");
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 842, 407);
+		setBounds(100, 100, 874, 407);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -90,10 +97,45 @@ public class GenerarRecibo2 extends JFrame {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); //formatear la fecha en una cadena
 		tFfecha.setText(sdf.format(fecha)); //setear la representacion en cadena de la fecha
 		tFfecha.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		tFfecha.setBounds(703, 65, 79, 22);
+		tFfecha.setBounds(740, 34, 79, 22);
 		contentPane.add(tFfecha);
 		tFfecha.setColumns(10);
-		String FechaAct = sdf.format(fecha);
+		String FechaAct = sdf.format(fecha); 
+		
+		JLabel lblFechaRec = new JLabel("Fecha :");
+		lblFechaRec.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
+		lblFechaRec.setBounds(672, 36, 64, 16);
+		contentPane.add(lblFechaRec);
+		
+		JLabel lblnro_rec = new JLabel("Recibo Numero :");
+		lblnro_rec.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		lblnro_rec.setBounds(621, 68, 106, 16);
+		contentPane.add(lblnro_rec);
+		
+		tFnro_Rec = new JTextField();
+		tFnro_Rec.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		tFnro_Rec.setBounds(740, 65, 91, 22);
+		contentPane.add(tFnro_Rec);
+		tFnro_Rec.setColumns(10);
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion;
+		try {
+			instruccion = conec.createStatement();
+	    	ResultSet resultado = instruccion.executeQuery("select top 1 numerocomprobante from itemcuentacliente where debe_haber = 'H' order by numerocomprobante desc");
+			
+	    	while(resultado.next()) {	    	
+	    	nro_rec = resultado.getInt("numerocomprobante") +1;
+			tFnro_Rec.setText(String.valueOf(nro_rec));
+	    	}
+	    	
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		nc.desconectar();
+		
 		
 		JLabel lblTitulo = new JLabel("Generar Recibo de Cobro ");
 		lblTitulo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
@@ -102,12 +144,12 @@ public class GenerarRecibo2 extends JFrame {
 		
 		JLabel lblSelecCli = new JLabel("Seleccione el Cliente :");
 		lblSelecCli.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblSelecCli.setBounds(26, 68, 153, 16);
+		lblSelecCli.setBounds(12, 68, 153, 16);
 		contentPane.add(lblSelecCli);
 		
 		JLabel lblNombreClie = new JLabel("");
 		lblNombreClie.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 25));
-		lblNombreClie.setBounds(340, 59, 276, 25);
+		lblNombreClie.setBounds(333, 59, 276, 25);
 		contentPane.add(lblNombreClie);
 		
 		JLabel lblimporteSaldo = new JLabel("");
@@ -220,20 +262,20 @@ public class GenerarRecibo2 extends JFrame {
 			}
 		});
 		btnIniBus.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		btnIniBus.setBounds(191, 64, 137, 25);
+		btnIniBus.setBounds(172, 64, 137, 25);
 		contentPane.add(btnIniBus);
 		
 		
 
-		JLabel lblDatos = new JLabel("Datos del Comprobante :");
+		JLabel lblDatos = new JLabel("Detalle del Comprobante :");
 		lblDatos.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblDatos.setBounds(26, 124, 171, 16);
+		lblDatos.setBounds(26, 195, 178, 16);
 		contentPane.add(lblDatos);
 		
 		tFDatos = new JTextField();
 		tFDatos.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		tFDatos.setColumns(10);
-		tFDatos.setBounds(196, 121, 211, 22);
+		tFDatos.setBounds(204, 190, 211, 22);
 		contentPane.add(tFDatos);
 		
 		JLabel lblFacPend = new JLabel("Listado de Movimientos");
@@ -253,16 +295,31 @@ public class GenerarRecibo2 extends JFrame {
 		tFImporte.setBounds(172, 236, 116, 22);
 		contentPane.add(tFImporte);
 		
+		JComboBox comboBoxMedPag = new JComboBox();
+		comboBoxMedPag.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		comboBoxMedPag.setBounds(148, 134, 211, 22);
+		contentPane.add(comboBoxMedPag);
+		comboBoxMedPag.addItem("Efectivo");
+		comboBoxMedPag.addItem("Tarjeta de Credito/Debito");
+		comboBoxMedPag.addItem("Transferencia");
+		comboBoxMedPag.addItem("Cheque");
+		
+		forma_pago = (String) comboBoxMedPag.getSelectedItem();
+		
 		
 		JButton btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.addActionListener(new ActionListener() {
 			@SuppressWarnings("unlikely-arg-type")
 			public void actionPerformed(ActionEvent e) {
+				
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+				LocalDateTime now = LocalDateTime.now(); 
+				String fecha = dtf.format(now);
 				   
-				String nro_recibo = null;
+				String detalle = null;
 				double imporRec = 0;
 				
-				if(!tFDatos.getText().isEmpty()) nro_recibo = tFDatos.getText();
+				if(!tFDatos.getText().isEmpty()) detalle = tFDatos.getText();
 				
 				 				
 				 if(!tFImporte.getText().isEmpty()) {
@@ -273,17 +330,11 @@ public class GenerarRecibo2 extends JFrame {
 					    					  
 					    try {
 							Conexion nc = new Conexion();
-							System.out.println();
-							System.out.println(idcta);
-							System.out.println(imporRec);
-							System.out.println(FechaAct);
-							System.out.println(tipoComp);
-							System.out.println(comprobante);
-							System.out.println(nro_recibo);
-									
 							Connection conec = nc.conectar();
 							Statement instruccion = conec.createStatement();
-							instruccion.execute("spnuevoitemcuentacliente '"+idcta+"', '"+imporRec+"', '"+FechaAct+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_recibo+"', 0");
+							String sql = "spnuevoitemcuentacliente '"+idcta+"', '"+imporRec+"', '"+fecha+"', '"+tipoComp+"', '"+comprobante+"', '"+nro_rec+"', '"+detalle+"', '"+forma_pago+"', 0";
+							System.out.println(sql);
+							instruccion.execute(sql);
 							
 							instruccion.executeUpdate("Update cuenta_cliente set saldo = saldo + "+imporRec+" where id_cliente = "+id_seleccion);
 							
@@ -363,6 +414,12 @@ public class GenerarRecibo2 extends JFrame {
 		contentPane.add(btnConfirmar);
 		
 		JButton btnEmitirRec = new JButton("Cancelar");
+		btnEmitirRec.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				setVisible(false);
+			}
+		});
 		btnEmitirRec.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		btnEmitirRec.setBounds(420, 320, 123, 25);
 		contentPane.add(btnEmitirRec);
@@ -371,17 +428,11 @@ public class GenerarRecibo2 extends JFrame {
 		
 		JLabel lblMedioPago = new JLabel("Medio de Pago :");
 		lblMedioPago.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblMedioPago.setBounds(26, 177, 116, 25);
+		lblMedioPago.setBounds(26, 139, 116, 25);
 		contentPane.add(lblMedioPago);
 		
-		JComboBox comboBoxMedPag = new JComboBox();
-		comboBoxMedPag.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		comboBoxMedPag.setBounds(148, 178, 211, 22);
-		contentPane.add(comboBoxMedPag);
-		comboBoxMedPag.addItem("Efectivo");
-		comboBoxMedPag.addItem("Tarjeta de Credito/Debito");
-		comboBoxMedPag.addItem("Transferencia");
-		comboBoxMedPag.addItem("Cheque");
+		
+		
 		
 		
 		
@@ -389,10 +440,11 @@ public class GenerarRecibo2 extends JFrame {
 		table.setBounds(756, 440, -581, -95);
 		contentPane.add(table);
 		
-		JLabel lblNewLabel = new JLabel("Fecha :");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
-		lblNewLabel.setBounds(644, 68, 64, 16);
-		contentPane.add(lblNewLabel);
+		
+		
+		
+		
+		
 	}
 
 }

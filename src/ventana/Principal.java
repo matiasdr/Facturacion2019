@@ -197,6 +197,14 @@ public class Principal {
 		mnClientes.add(mntmListadoDeSaldos);
 		
 		JMenuItem mntmResumenDeCliente = new JMenuItem("Resumen de Cliente");
+		mntmResumenDeCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ResumenCliente rsc;
+				rsc = new ResumenCliente();
+				rsc.setVisible(true);
+			}
+		});
 		mnClientes.add(mntmResumenDeCliente);
 		
 		JMenu mnProveedores = new JMenu("Proveedores");
