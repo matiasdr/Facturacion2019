@@ -1,6 +1,7 @@
 package ventana;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -14,7 +15,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JRadioButton;
 import java.awt.Toolkit;
 import com.toedter.calendar.JDateChooser;
+
+import conexion.Conexion;
+
 import javax.swing.JCheckBox;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.event.ActionEvent;
 
 public class CargarFacturaVenta extends JFrame {
 	private JPanel contentPane;
@@ -31,6 +43,9 @@ public class CargarFacturaVenta extends JFrame {
 	private JTextField textFieldTotalFacturado;
 	private JTextField textFieldPuntodeVenta;
 	private JTextField textFieldNumeroFactura;
+	private Integer idCliente;
+	private String nombreCliente;
+	private Integer condicionFiscalCliente;
 	/**
 	 * Launch the application.
 	 */
@@ -100,56 +115,68 @@ public class CargarFacturaVenta extends JFrame {
 		JLabel lblIva = new JLabel("IVA 21% ");
 		lblIva.setBounds(10, 286, 77, 14);
 		contentPane.add(lblIva);
+		lblIva.setVisible(false);
 		
 		JLabel lblIva_1 = new JLabel("IVA 10.5% ");
 		lblIva_1.setBounds(170, 286, 77, 14);
 		contentPane.add(lblIva_1);
+		lblIva_1.setVisible(false);
 		
 		JLabel lblIva_2 = new JLabel("IVA 27% ");
 		lblIva_2.setBounds(341, 289, 77, 14);
 		contentPane.add(lblIva_2);
+		lblIva_2.setVisible(false);
 		
 		JLabel lblImporteNeto = new JLabel("Importe Neto 21%");
 		lblImporteNeto.setBounds(10, 247, 103, 14);
 		contentPane.add(lblImporteNeto);
+		lblImporteNeto.setVisible(false);
 		
 		textFieldNeto21 = new JTextField();
 		textFieldNeto21.setBounds(113, 241, 54, 20);
 		contentPane.add(textFieldNeto21);
 		textFieldNeto21.setColumns(10);
+		textFieldNeto21.setVisible(false);
 		
 		textFieldIVA21 = new JTextField();
 		textFieldIVA21.setColumns(10);
 		textFieldIVA21.setBounds(113, 283, 54, 20);
 		contentPane.add(textFieldIVA21);
+		textFieldIVA21.setVisible(false);
 		
 		JLabel lblImporteNeto_1 = new JLabel("Importe Neto 10.5%");
 		lblImporteNeto_1.setBounds(169, 247, 103, 14);
 		contentPane.add(lblImporteNeto_1);
+		lblImporteNeto_1.setVisible(false);
 		
 		JLabel lblImporteNeto_2 = new JLabel("Importe Neto 27%");
 		lblImporteNeto_2.setBounds(343, 247, 93, 14);
 		contentPane.add(lblImporteNeto_2);
+		lblImporteNeto_2.setVisible(false);
 		
 		textFieldNeto10 = new JTextField();
 		textFieldNeto10.setColumns(10);
 		textFieldNeto10.setBounds(276, 241, 54, 20);
 		contentPane.add(textFieldNeto10);
+		textFieldNeto10.setVisible(false);
 		
 		textFieldIVA10 = new JTextField();
 		textFieldIVA10.setColumns(10);
 		textFieldIVA10.setBounds(276, 283, 54, 20);
 		contentPane.add(textFieldIVA10);
+		textFieldIVA10.setVisible(false);
 		
 		textFieldNeto27 = new JTextField();
 		textFieldNeto27.setColumns(10);
 		textFieldNeto27.setBounds(435, 241, 54, 20);
 		contentPane.add(textFieldNeto27);
+		textFieldNeto27.setVisible(false);
 		
 		textFieldIVA27 = new JTextField();
 		textFieldIVA27.setColumns(10);
 		textFieldIVA27.setBounds(435, 283, 54, 20);
 		contentPane.add(textFieldIVA27);
+		textFieldIVA27.setVisible(false);
 		
 		JLabel lblAlcuotaDeIva = new JLabel("Al\u00EDcuota de IVA");
 		lblAlcuotaDeIva.setBounds(10, 318, 103, 14);
@@ -201,6 +228,20 @@ public class CargarFacturaVenta extends JFrame {
 		textFieldNumeroFactura.setBounds(367, 103, 96, 20);
 		contentPane.add(textFieldNumeroFactura);
 		textFieldNumeroFactura.setColumns(10);
+		textFieldNumeroFactura.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char validar = e.getKeyChar();
+				if(Character.isLetter(validar)) {
+					getToolkit().beep();
+					e.consume();
+				}
+				String contenido = textFieldNumeroFactura.getText();
+				if(contenido.length()>=8) {
+					e.consume();
+				}
+			}
+		});
 		
 		JLabel lblNumeroDeFactura = new JLabel("Numero de Factura");
 		lblNumeroDeFactura.setBounds(247, 106, 110, 14);
@@ -220,12 +261,43 @@ public class CargarFacturaVenta extends JFrame {
 		grupoTipoAB.add(rdbtnB);
 		
 		JButton btnBuscarCliente = new JButton("Buscar Cliente");
+
 		btnBuscarCliente.setBounds(113, 23, 134, 23);
 		contentPane.add(btnBuscarCliente);
 		
 		JLabel lblNombreCliente = new JLabel("--");
-		lblNombreCliente.setBounds(276, 27, 49, 14);
+		lblNombreCliente.setBounds(276, 27, 160, 14);
 		contentPane.add(lblNombreCliente);
+		
+		btnBuscarCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ElegirCliente ec = new ElegirCliente(new java.awt.Frame(), true);
+					ec.setVisible(true);
+					idCliente=ec.getClienElegido();
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				Conexion nc = new Conexion();
+				Connection connec = nc.conectar();
+				try {
+					Statement instruccion = connec.createStatement();
+					ResultSet resultado = instruccion.executeQuery("Select * from cliente where id_cliente = "+idCliente);
+					while(resultado.next()) {
+						nombreCliente = resultado.getString("nombre");
+						condicionFiscalCliente = resultado.getInt("id_condicion_fiscal");
+					}
+					lblNombreCliente.setText(nombreCliente);
+
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 
 	}
 }
