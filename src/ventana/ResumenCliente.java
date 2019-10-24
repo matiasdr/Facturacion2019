@@ -11,11 +11,42 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import java.awt.Toolkit;
+import javax.swing.JTable;
+import java.awt.Font;
+import java.awt.HeadlessException;
+
+import com.toedter.calendar.JDayChooser;
+
+import conexion.Conexion;
+
+import com.toedter.calendar.JDateChooser;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+
+import java.awt.Color;
 
 public class ResumenCliente extends JFrame {
 
 	private final JPanel contentPanel = new JPanel();
 	private JPanel contentPane;
+	private JTable table;
+	
+	private Date fHasta;
+	private Date fDesde;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -34,8 +65,8 @@ public class ResumenCliente extends JFrame {
 	public ResumenCliente() {
 		setTitle("Resumen de Cliente");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenCliente.class.getResource("/logos/logo4.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 551, 377);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 613, 433);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -44,77 +75,150 @@ public class ResumenCliente extends JFrame {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
+		
+		
+		DefaultTableModel tablaModelo = new DefaultTableModel(0,3);
+		Object[] fila = new Object[3];
+		fila[0]= "Tipo Comprobante";
+		fila[1]= "Numero";
+		fila[2]= "Saldo";
+		tablaModelo.addRow(fila);
+		
+		table = new JTable(tablaModelo);
+		table.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		table.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		table.setBounds(10, 113, 568, 179);
+		contentPanel.add(table);
+		
+		JDateChooser desdeDia = new JDateChooser();
+		desdeDia.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		desdeDia.setBounds(247, 47, 114, 22);
+		contentPanel.add(desdeDia);
+		desdeDia.setDateFormatString("yyyy-MM-dd");
+		
+		JDateChooser hastaDia = new JDateChooser();
+		hastaDia.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		hastaDia.setBounds(451, 47, 122, 22);
+		contentPanel.add(hastaDia);
+		hastaDia.setDateFormatString("yyyy-MM-dd");
+				
 		{
-			JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Cliente");
-			lblSeleccioneElCliente.setBounds(10, 11, 152, 14);
-			contentPanel.add(lblSeleccioneElCliente);
+			JLabel lblNombreClie = new JLabel("Seleccione el Cliente :");
+			lblNombreClie.setFont(new Font("Times New Roman", Font.BOLD, 15));
+			lblNombreClie.setBounds(34, 82, 152, 23);
+			contentPanel.add(lblNombreClie);
 		}
+		
+		JLabel lblSeleccionCliente = new JLabel("");
+		lblSeleccionCliente.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
+		lblSeleccionCliente.setBounds(333, 76, 240, 29);
+		contentPanel.add(lblSeleccionCliente);
+		
 		{
 			JButton btnBuscarCliente = new JButton("Buscar Cliente");
-			btnBuscarCliente.setBounds(221, 7, 113, 23);
+			btnBuscarCliente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					ElegirCliente ec;
+					try {
+						ec = new ElegirCliente(new java.awt.Frame(), true);
+						ec.setVisible(true);
+						lblSeleccionCliente.setText(ec.getNombreCliente());
+						Integer id_seleccion = ec.getClienElegido();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						String fDesde = sdf.format(desdeDia.getDate());
+						String fHasta = sdf.format(hastaDia.getDate());
+						
+						
+						System.out.println(fDesde);
+						System.out.println(fHasta);
+						
+															
+						try {
+							Conexion nc = new Conexion();
+							Connection conec = nc.conectar();
+							Statement instruccion = conec.createStatement();
+							String sql = "Select it.comprobante, it.numerocomprobante, it.saldo from itemcuentacliente it "
+									+ "inner join cuenta_cliente cc on it.id_cuenta=cc.id_cuenta "
+									+ "inner join cliente c on c.id_cliente= cc.id_cliente where it.fecha >= cast('"+ fDesde + "'as date) and it.fecha <= cast('" + fHasta+ "'as date) and c.id_cliente =" + id_seleccion ;
+							
+							System.out.print(sql);				
+							ResultSet resultado = instruccion.executeQuery(sql); 
+							 
+		
+							while(resultado.next()) {
+								Object[] linea = new Object[3];
+								linea[0]= resultado.getString("comprobante");
+								linea[1]= resultado.getInt("numerocomprobante");
+								linea[2]= resultado.getDouble("saldo");
+								tablaModelo.addRow(linea);
+							}
+					 								
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			 }
+			});
+			btnBuscarCliente.setFont(new Font("Times New Roman", Font.BOLD, 15));
+			btnBuscarCliente.setBounds(189, 82, 132, 23);
 			contentPanel.add(btnBuscarCliente);
 		}
+		
+		
+		
 		{
-			JLabel lblNombreDelCliente = new JLabel("NOMBRE DEL CLIENTE");
-			lblNombreDelCliente.setBounds(363, 11, 142, 14);
-			contentPanel.add(lblNombreDelCliente);
-		}
-		{
-			JLabel lblSeleccioneElPeriodo = new JLabel("Seleccione el periodo");
-			lblSeleccioneElPeriodo.setBounds(10, 36, 126, 14);
+			JLabel lblSeleccioneElPeriodo = new JLabel("Seleccione el periodo :");
+			lblSeleccioneElPeriodo.setFont(new Font("Times New Roman", Font.BOLD, 15));
+			lblSeleccioneElPeriodo.setBounds(34, 51, 152, 18);
 			contentPanel.add(lblSeleccioneElPeriodo);
 		}
+		
 		{
 			JLabel lblDesde = new JLabel("Desde: ");
-			lblDesde.setBounds(148, 38, 49, 14);
+			lblDesde.setFont(new Font("Times New Roman", Font.BOLD, 14));
+			lblDesde.setBounds(198, 55, 49, 14);
 			contentPanel.add(lblDesde);
 		}
-		{
-			JButton button = new JButton("New button");
-			button.setBounds(209, 32, 110, 23);
-			contentPanel.add(button);
-		}
+		
 		{
 			JLabel lblHasta = new JLabel("Hasta: ");
-			lblHasta.setBounds(331, 36, 49, 14);
+			lblHasta.setFont(new Font("Times New Roman", Font.BOLD, 14));
+			lblHasta.setBounds(397, 55, 49, 14);
 			contentPanel.add(lblHasta);
 		}
-		{
-			JButton btnNewButton = new JButton("New button");
-			btnNewButton.setBounds(392, 32, 113, 23);
-			contentPanel.add(btnNewButton);
-		}
-		{
-			JButton btnListar = new JButton("Listar");
-			btnListar.setBounds(24, 249, 89, 23);
-			contentPanel.add(btnListar);
-		}
-		{
-			JList list = new JList();
-			list.setBounds(10, 68, 495, 150);
-			contentPanel.add(list);
-		}
-		{
-			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(221, 249, 89, 23);
-			contentPanel.add(btnImprimir);
-		}
+		
+		
+		JLabel lblTitulo = new JLabel("Resumen de Cliente");
+		lblTitulo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 19));
+		lblTitulo.setBounds(201, 0, 168, 29);
+		contentPanel.add(lblTitulo);
+		
+		
+		
+		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Cerrar");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						setVisible(false);
+					}
+				});
+				cancelButton.setFont(new Font("Times New Roman", Font.BOLD, 15));
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 	}
-
 }

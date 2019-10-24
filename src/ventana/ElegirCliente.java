@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class ElegirCliente extends JDialog {
 	private JTextField textField;
@@ -62,6 +63,7 @@ public class ElegirCliente extends JDialog {
 		textField.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		btnBuscar.setBounds(394, 12, 135, 23);
 		getContentPane().add(btnBuscar);
 		
@@ -84,6 +86,7 @@ public class ElegirCliente extends JDialog {
 		getContentPane().add(table);
 		
 		JButton btnSeleccionar = new JButton("Seleccionar");
+		btnSeleccionar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
