@@ -295,7 +295,10 @@ public class CargarFacturaCompra extends JFrame {
 		btnCalcularIVA.setBounds(320, 401, 169, 23);
 		contentPane.add(btnCalcularIVA);
 		
-		JRadioButton rdbtnSi = new JRadioButton("Si");
+		///////////////////////////////////////////////////////////////////Codigo Comentado de generar stock
+		
+		
+		/*JRadioButton rdbtnSi = new JRadioButton("Si");
 		rdbtnSi.setBounds(145, 199, 54, 23);
 		contentPane.add(rdbtnSi);
 		rdbtnSi.setEnabled(false);
@@ -312,7 +315,7 @@ public class CargarFacturaCompra extends JFrame {
 		
 		JLabel lblDeseaGenerarStock = new JLabel("Desea generar Stock?");
 		lblDeseaGenerarStock.setBounds(10, 203, 203, 14);
-		contentPane.add(lblDeseaGenerarStock);
+		contentPane.add(lblDeseaGenerarStock);*/
 		
 		JLabel lblCondicinoDeVenta = new JLabel("Condicion de Venta");
 		lblCondicinoDeVenta.setBounds(10, 231, 145, 26);
@@ -321,6 +324,7 @@ public class CargarFacturaCompra extends JFrame {
 		JRadioButton rdbtnContado = new JRadioButton("Contado");
 		rdbtnContado.setBounds(164, 234, 111, 23);
 		contentPane.add(rdbtnContado);
+		rdbtnContado.setSelected(true);
 		
 		JRadioButton radioButtonCuentaCorriente = new JRadioButton("Cuenta Corriente");
 		radioButtonCuentaCorriente.setBounds(276, 233, 161, 23);
@@ -643,6 +647,12 @@ public class CargarFacturaCompra extends JFrame {
 						e1.printStackTrace();
 					}
 				}
+				
+				JOptionPane.showMessageDialog(null, "Factura Cargada con Éxito");
+				
+				dispose();
+				CargarFacturaCompra frame = new CargarFacturaCompra();
+				frame.setVisible(true);
 			}
 		});
 		
@@ -688,8 +698,8 @@ public class CargarFacturaCompra extends JFrame {
 						lblMontoTotal.setVisible(false);
 						btnCalcularImporteTotal.setVisible(false);
 						labelIVAPregunta.setVisible(false);
-						radioButtonNo.setVisible(false);
-						rdbtnSi.setVisible(false);
+					//	radioButtonNo.setVisible(false);
+					//	rdbtnSi.setVisible(false);
 						radioButtonManual.setVisible(false);
 						radioButtonAutomatico.setVisible(false);
 					}

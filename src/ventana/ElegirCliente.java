@@ -24,7 +24,7 @@ import java.awt.Font;
 public class ElegirCliente extends JDialog {
 	private JTextField textField;
 	private JTable table;
-	private Integer clienElegido;
+	private Integer clienElegido=0;
 	private String nombreCliente;
 	private Integer condicionFiscal;
 

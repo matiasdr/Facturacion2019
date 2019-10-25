@@ -37,6 +37,7 @@ import java.awt.Toolkit;
 
 public class Principal {
 
+
 	private JFrame frmSistemaDeGestion;
 	private String permisos;
 	private String nombreUsuario;
@@ -48,7 +49,9 @@ public class Principal {
 			public void run() {
 				try {
 					Principal window = new Principal();
+
 					window.frmSistemaDeGestion.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -104,6 +107,8 @@ public class Principal {
 			}
 		});
 		mntmCrearEmpresa.setEnabled(false);
+		mntmCrearEmpresa.setVisible(false);
+		
 		
 		JMenuItem mntmIngresar = new JMenuItem("Ingresar");
 		
@@ -418,6 +423,7 @@ public class Principal {
 		JMenu mnUsuarios = new JMenu("Usuarios");
 		menuBar.add(mnUsuarios);
 		mnUsuarios.setEnabled(false);
+		mnUsuarios.setVisible(false);
 		
 		JMenuItem mntmAgregarOModificar = new JMenuItem("Agregar o Modificar Usuario");
 		mnUsuarios.add(mntmAgregarOModificar);
