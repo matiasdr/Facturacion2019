@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import conexion.Conexion;
+
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
@@ -21,7 +24,7 @@ import javax.swing.JMenuItem;
 public class Principal {
 
 	private JFrame frame;
-
+	Conexion c = new Conexion();
 	/**
 	 * Launch the application.
 	 */
@@ -31,6 +34,7 @@ public class Principal {
 				try {
 					Principal window = new Principal();
 					window.frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
