@@ -1,26 +1,47 @@
 package ventana;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import conexion.Conexion;
+
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.awt.event.ActionEvent;
+import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.Font;
+import java.awt.Toolkit;
 
 public class GenerarRecibo extends JFrame {
-	private JTextField textField;
-	private JTextField textField_1;
 	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField importeParcial;
 	private JPanel contentPane;
+	private JTable table;
+	private Integer idProveedor=0;
+	private Integer idCuenta=0;
 
 	/**
 	 * Launch the application.
@@ -42,173 +63,198 @@ public class GenerarRecibo extends JFrame {
 	 * Create the dialog.
 	 */
 	public GenerarRecibo() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 450);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GenerarRecibo.class.getResource("/logos/logo4.png")));
+		setTitle("Recibo Provisorio Pago a Proveedores..");
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 785, 422);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblGeneracinDeRecibos = new JLabel("Generaci\u00F3n de Recibos");
-		lblGeneracinDeRecibos.setBounds(224, 11, 142, 14);
+		JLabel lblGeneracinDeRecibos = new JLabel("Generaci\u00F3n de Recibos Por Pagos Hechos a Proveedores");
+		lblGeneracinDeRecibos.setBounds(207, 13, 376, 23);
 		contentPane.add(lblGeneracinDeRecibos);
-
-		JLabel lblTipoDeRecibo = new JLabel("Tipo de Recibo");
-		lblTipoDeRecibo.setBounds(10, 30, 73, 14);
-		contentPane.add(lblTipoDeRecibo);
-
-		JRadioButton rdbtnPagoRecibido = new JRadioButton("Cobro a Clientes");
-		rdbtnPagoRecibido.setBounds(112, 26, 111, 23);
-		contentPane.add(rdbtnPagoRecibido);
-
-		JRadioButton rdbtnPorPagoEfectuado = new JRadioButton("Por Pago a Proveedores");
-		rdbtnPorPagoEfectuado.setBounds(383, 26, 148, 23);
-		contentPane.add(rdbtnPorPagoEfectuado);
-
-		JLabel lblSeleccionarCliente = new JLabel("Seleccionar Cliente");
-		lblSeleccionarCliente.setBounds(10, 55, 99, 14);
-		contentPane.add(lblSeleccionarCliente);
-
-		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(103, 51, 89, 23);
-		contentPane.add(btnBuscar);
-
-		JLabel lblNombreCliente = new JLabel("Nombre cliente");
-		lblNombreCliente.setBounds(202, 56, 99, 14);
-		contentPane.add(lblNombreCliente);
-
-		JLabel lblConcepto = new JLabel("Datos del Comprobante.");
-		lblConcepto.setBounds(10, 78, 111, 14);
-		contentPane.add(lblConcepto);
-
-		textField = new JTextField();
-		textField.setBounds(127, 75, 142, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-
-		JLabel lblMedioDePago = new JLabel("Medio de Pago");
-		lblMedioDePago.setBounds(10, 103, 99, 14);
-		contentPane.add(lblMedioDePago);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(127, 99, 28, 22);
-		contentPane.add(comboBox);
-
-		JLabel lblesUnImporte = new JLabel("\u00BFEs un importe parcial?");
-		lblesUnImporte.setBounds(10, 128, 145, 14);
-		contentPane.add(lblesUnImporte);
-
-		JRadioButton rdbtnSi = new JRadioButton("Si");
-		rdbtnSi.setBounds(127, 124, 48, 23);
-		contentPane.add(rdbtnSi);
-
-		JRadioButton rdbtnNo = new JRadioButton("No");
-		rdbtnNo.setBounds(173, 124, 73, 23);
-		contentPane.add(rdbtnNo);
-
-		JLabel lblImporte = new JLabel("Importe:");
-		lblImporte.setBounds(10, 153, 49, 14);
-		contentPane.add(lblImporte);
-
-		textField_1 = new JTextField();
-		textField_1.setBounds(127, 153, 142, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-
-		JLabel lblSeleccionarFactura = new JLabel("Seleccionar Factura");
-		lblSeleccionarFactura.setBounds(10, 184, 125, 14);
-		contentPane.add(lblSeleccionarFactura);
-
-		JList list = new JList();
-		list.setBounds(127, 184, 142, 77);
-		contentPane.add(list);
-
-		JButton btnSeleccionar = new JButton("Seleccionar");
-		btnSeleccionar.setBounds(20, 222, 89, 23);
-		contentPane.add(btnSeleccionar);
-
-		JLabel lblImporteTotalSeleccionado = new JLabel("Importe total Seleccionado");
-		lblImporteTotalSeleccionado.setBounds(60, 273, 163, 14);
-		contentPane.add(lblImporteTotalSeleccionado);
-
-		JButton btnEmitirRecibo = new JButton("Emitir Recibo");
-		btnEmitirRecibo.setBounds(66, 318, 142, 23);
-		contentPane.add(btnEmitirRecibo);
+		
+		ButtonGroup elec = new ButtonGroup();
 
 		JLabel lblSeleccionarProveedor = new JLabel("Seleccionar Proveedor");
-		lblSeleccionarProveedor.setBounds(283, 50, 99, 14);
+		lblSeleccionarProveedor.setBounds(39, 62, 147, 14);
 		contentPane.add(lblSeleccionarProveedor);
+		
+		JLabel lblNombreProveedor = new JLabel("Nombre del Proveedor");
+		lblNombreProveedor.setBounds(320, 62, 142, 14);
+		contentPane.add(lblNombreProveedor);
 
 		JButton button = new JButton("Buscar");
-		button.setBounds(376, 46, 89, 23);
+		button.setBounds(177, 58, 89, 23);
 		contentPane.add(button);
 
-		JLabel label_1 = new JLabel("Nombre cliente");
-		label_1.setBounds(475, 51, 99, 14);
-		contentPane.add(label_1);
-
-		JSeparator separator = new JSeparator();
-		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(279, 55, 1, 312);
-		contentPane.add(separator);
-
 		JLabel label = new JLabel("Datos del Comprobante.");
-		label.setBounds(293, 78, 111, 14);
+		label.setBounds(39, 103, 142, 14);
 		contentPane.add(label);
 
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(410, 75, 142, 20);
+		textField_2.setBounds(177, 100, 142, 20);
 		contentPane.add(textField_2);
 
 		JLabel label_2 = new JLabel("Medio de Pago");
-		label_2.setBounds(294, 103, 99, 14);
+		label_2.setBounds(39, 143, 125, 18);
 		contentPane.add(label_2);
 
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(411, 103, 28, 22);
+		JComboBox<String> comboBox_1 = new JComboBox<String>();
+		comboBox_1.setBounds(177, 141, 142, 22);
 		contentPane.add(comboBox_1);
+		comboBox_1.addItem("Efectivo");
+		comboBox_1.addItem("Tarjeta de Credito");
+		comboBox_1.addItem("Transferencia");
+		comboBox_1.addItem("Cheque");
+		
+		importeParcial = new JTextField();
+		importeParcial.setColumns(10);
+		importeParcial.setBounds(177, 184, 142, 20);
+		contentPane.add(importeParcial);
+		
+		JLabel lblIngreseAquiEl = new JLabel("Importe a abonar");
+		lblIngreseAquiEl.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIngreseAquiEl.setBounds(11, 172, 153, 45);
+		contentPane.add(lblIngreseAquiEl);
 
-		JLabel label_3 = new JLabel("\u00BFEs un importe parcial?");
-		label_3.setBounds(293, 132, 145, 14);
-		contentPane.add(label_3);
-
-		JRadioButton radioButton = new JRadioButton("Si");
-		radioButton.setBounds(410, 128, 48, 23);
-		contentPane.add(radioButton);
-
-		JRadioButton radioButton_1 = new JRadioButton("No");
-		radioButton_1.setBounds(456, 128, 73, 23);
-		contentPane.add(radioButton_1);
-
-		JLabel label_4 = new JLabel("Importe:");
-		label_4.setBounds(293, 157, 49, 14);
-		contentPane.add(label_4);
-
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(410, 157, 142, 20);
-		contentPane.add(textField_3);
-
-		JLabel label_5 = new JLabel("Seleccionar Factura");
-		label_5.setBounds(290, 184, 125, 14);
-		contentPane.add(label_5);
-
-		JList list_1 = new JList();
-		list_1.setBounds(410, 183, 142, 77);
-		contentPane.add(list_1);
-
-		JLabel label_6 = new JLabel("Importe total Seleccionado");
-		label_6.setBounds(350, 273, 163, 14);
-		contentPane.add(label_6);
-
-		JButton button_1 = new JButton("Emitir Recibo");
-		button_1.setBounds(350, 318, 142, 23);
-		contentPane.add(button_1);
-
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(239, 378, 89, 23);
-		contentPane.add(btnCancelar);
+		JLabel lblSeleccionarFacturaA = new JLabel("Resumen de ultimos movimientos");
+		lblSeleccionarFacturaA.setBounds(420, 103, 266, 14);
+		contentPane.add(lblSeleccionarFacturaA);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(340, 138, 394, 179);
+		contentPane.add(scrollPane);
+		
+		Object[] encabezado = new Object[3];
+		encabezado[0] = "Tipo de Comprobante";
+		encabezado[1] = "Numero";
+		encabezado[2] = "Importe";
+		
+	    DefaultTableModel modeloTabla = new DefaultTableModel(encabezado, 0);
+		
+		table = new JTable(modeloTabla);
+		scrollPane.setViewportView(table);
+		
+		JButton btnImprimiRecibo = new JButton("Imprimir Recibo");
+		btnImprimiRecibo.setBounds(166, 306, 153, 45);
+		contentPane.add(btnImprimiRecibo);
+		btnImprimiRecibo.setEnabled(false);
+		
+		JLabel lblSaldoAPagar = new JLabel("Saldo a Pagar: $");
+		lblSaldoAPagar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblSaldoAPagar.setBounds(340, 328, 131, 23);
+		contentPane.add(lblSaldoAPagar);
+		
+		JLabel labelSaldo = new JLabel("0.0");
+		labelSaldo.setFont(new Font("Tahoma", Font.BOLD, 13));
+		labelSaldo.setBounds(478, 328, 89, 23);
+		contentPane.add(labelSaldo);
+		
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ElegirProveedor ep;
+				try {
+					ep = new ElegirProveedor(new java.awt.Frame(), true);
+					ep.setVisible(true);
+					lblNombreProveedor.setText(ep.getNombreProovedor());
+					idProveedor=ep.getProvElegido();
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				// borramos los datos anteriores si es que los hay
+					while(modeloTabla.getRowCount()>0) {
+						modeloTabla.removeRow(modeloTabla.getRowCount()-1);
+					}
+					labelSaldo.setText("0.0");
+				// aca deberiasmo llamar a un store procedure para cargar el listado de las facturas de ese proveedor
+				
+				try {
+					Conexion nc = new Conexion();
+					Connection conn = nc.conectar();
+					Statement instruccion = conn.createStatement();
+					ResultSet resultado = instruccion.executeQuery("select * from itemcuentaproveedor join cuenta_proveedor on cuenta_proveedor.id_cuenta = itemcuentaproveedor.id_cuenta where id_proveedor = "+idProveedor);
+					
+					while(resultado.next()) {
+						Object[] fila = new Object[3];
+						fila[0] = resultado.getString("comprobante");
+						fila[1] = resultado.getString("numerocomprobante");
+						fila[2] = resultado.getDouble("saldo");
+						modeloTabla.addRow(fila);
+					}
+					
+					nc.desconectar();
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try {
+					Conexion nc = new Conexion();
+					Connection conn = nc.conectar();
+					Statement instruccion = conn.createStatement();
+					ResultSet resultado = instruccion.executeQuery("Select * from cuenta_proveedor where id_proveedor ="+idProveedor);
+					
+					while(resultado.next()) {
+						labelSaldo.setText(String.valueOf(resultado.getDouble("saldo")));
+						idCuenta= resultado.getInt("id_cuenta");
+					}
+					
+					nc.desconectar();
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		JButton btnGenerarRecibo = new JButton("Generar Recibo");
+		btnGenerarRecibo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(idProveedor.equals(0)) {
+					JOptionPane.showMessageDialog(null, "No eligio el proveedor");
+					return;
+				}
+				if(importeParcial.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "No ingreso el importe del recibo");
+					return;
+				}
+				
+				Double importeTotal = Double.valueOf(importeParcial.getText());
+				String datoRecibo = textField_2.getText();
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+				LocalDateTime now = LocalDateTime.now(); 
+				String fecha = dtf.format(now);
+				
+				try {
+					Conexion nc = new Conexion();
+					Connection conn = nc.conectar();
+					Statement instruccion;
+					instruccion = conn.createStatement();
+					instruccion.executeUpdate("Insert into itemcuentaproveedor (id_cuenta, saldo, fecha, comprobante, numerocomprobante) values ("+idCuenta+", "+importeTotal+", '"+fecha+"', 'recibo', '"+datoRecibo+"')");
+					// aca actualizamos el salod de cuenta proveedor
+						
+					instruccion.executeUpdate("Update cuenta_proveedor set saldo = saldo - "+importeTotal+" where id_proveedor = "+idProveedor);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				dispose();
+				GenerarRecibo frame = new GenerarRecibo();
+				frame.setVisible(true);
+			}
+		});
+		btnGenerarRecibo.setBounds(156, 235, 163, 45);
+		contentPane.add(btnGenerarRecibo);
 
 	}
 }

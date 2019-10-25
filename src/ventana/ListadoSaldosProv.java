@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,7 +22,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
+
+import conexion.Conexion;
+
 import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import java.awt.Toolkit;
 
 public class ListadoSaldosProv extends JFrame {
 
@@ -42,15 +51,17 @@ public class ListadoSaldosProv extends JFrame {
 	 * Create the dialog.
 	 */
 	public ListadoSaldosProv() {
+		setTitle("Listado de Saldo de Proveedores");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoSaldosProv.class.getResource("/logos/logo4.png")));
 
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 526, 290);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(185, 5, 102, 20);
+		dateChooser.setBounds(201, 5, 102, 20);
 		contentPanel.add(dateChooser);
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		Date today = Calendar.getInstance().getTime();
@@ -61,30 +72,16 @@ public class ListadoSaldosProv extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblSeleccioneLaFecha = new JLabel("Seleccione la fecha");
+			JLabel lblSeleccioneLaFecha = new JLabel("Seleccione la fecha ");
 
-			lblSeleccioneLaFecha.setBounds(30, 11, 94, 14);
+			lblSeleccioneLaFecha.setBounds(30, 11, 114, 14);
 			contentPanel.add(lblSeleccioneLaFecha);
 		}
 		{
 			JLabel lblHasta = new JLabel("Hasta: ");
 
-			lblHasta.setBounds(134, 11, 49, 14);
+			lblHasta.setBounds(154, 11, 49, 14);
 			contentPanel.add(lblHasta);
-		}
-		{
-			DefaultTableModel tablaSaldos= new DefaultTableModel(0, 4);
-			Object[] encabezado = new Object[4];
-			encabezado[0]="CUIT";
-			encabezado[1]="Razon Social";
-			encabezado[2]="Fecha Ultimo Movimiento";
-			encabezado[3]="Saldo";
-			tablaSaldos.addRow(encabezado);
-			table = new JTable();
-			table.setBounds(10, 41, 404, 142);
-			table.setModel(tablaSaldos);
-			contentPanel.add(table);
-
 		}
 		{
 			JButton btnNewButton_2 = new JButton("Buscar");
@@ -105,26 +102,42 @@ public class ListadoSaldosProv extends JFrame {
 		}
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(166, 194, 89, 23);
+			btnImprimir.setBounds(198, 208, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
+		Object[] encabezado = new Object[3];
+		encabezado[0]="CUIT";
+		encabezado[1]="Razon Social";
+		encabezado[2]="Saldo";			
+		DefaultTableModel tablaSaldos= new DefaultTableModel(encabezado, 0);
 		
 		
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			contentPane.add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(37, 54, 427, 143);
+		contentPanel.add(scrollPane);
+		table = new JTable(tablaSaldos);
+		scrollPane.setViewportView(table);
+		
+		Conexion ltc = new Conexion();
+		Connection conec = ltc.conectar();
+		Statement instruccion;
+		try {
+			instruccion = conec.createStatement();
+			ResultSet resultado = instruccion.executeQuery("select c.cuilcuit, c.nombre, cc.saldo from proveedor c "
+					+ "inner join cuenta_proveedor cc on c.id_proveedor = cc.id_proveedor");
+						
+			while(resultado.next()) {
+				Object[] linea = new Object[3];
+				linea[0]= resultado.getString("cuilcuit");
+				linea[1]= resultado.getString("nombre");
+				linea[2]= resultado.getInt("saldo");
+		    	tablaSaldos.addRow(linea);
 			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		ltc.desconectar();	
+		
 	}
 }

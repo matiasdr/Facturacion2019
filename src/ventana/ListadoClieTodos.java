@@ -7,20 +7,31 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import conexion.Conexion;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JSplitPane;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JTable;
 
 public class ListadoClieTodos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
+	private JTextField tfBusqueda;
 	private JPanel contentPane;
+	private JTable table;
+	private String clieSeleccion;
 
 	/**
 	 * Launch the application.
@@ -38,7 +49,8 @@ public class ListadoClieTodos extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListadoClieTodos() {
-		setBounds(100, 100, 505, 339);
+		setTitle("Listado de Cliente");
+		setBounds(100, 100, 548, 339);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -46,42 +58,130 @@ public class ListadoClieTodos extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(28, 69, 414, 165);
-		contentPanel.add(scrollPane);
 		{
 			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(28, 19, 89, 23);
+			btnImprimir.setBounds(12, 19, 89, 23);
 			contentPanel.add(btnImprimir);
 		}
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(179, 19, 128, 22);
+		contentPanel.add(comboBox);
+		{
+			JLabel lblBuscarPor = new JLabel("Buscar por");
+			lblBuscarPor.setBounds(113, 23, 73, 14);
+			contentPanel.add(lblBuscarPor);
+		}
+		comboBox.addItem("Razon Social");
+		comboBox.addItem("Cuil/Cuit");
+		
+		
+		 
+			Object[] fila = new Object[3];
+			fila[0]= "ID Cliente";
+			fila[1]= "Nombre";
+			fila[2]= "CUIT";
+			
+			DefaultTableModel tablaModelo = new DefaultTableModel(fila, 0);
+	
 		{
 			JButton btnBuscarPor = new JButton("Buscar");
 			btnBuscarPor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+				 String itemcombo = comboBox.getSelectedItem().toString();
+				 String busqueda = tfBusqueda.getText();
+				 
+				 if(itemcombo.equals("Razon Social"))
+				 {
+					 //iniciar busqueda por nombre
+						Conexion ltc = new Conexion();
+						Connection conec = ltc.conectar();
+						ltc.listarClientes();
+						Statement instruccion;
+						try {
+							instruccion = conec.createStatement();
+							ResultSet resultado = instruccion.executeQuery("Select * from cliente where nombre like '%"+busqueda+"%'");
+							
+							while(tablaModelo.getRowCount()>0) // LIMPIA EL JTABLE ANTES DE CARGARLO DE NUEVO
+							{
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							
+							while(resultado.next()) {
+								Object[] linea = new Object[3];
+								linea[0]= resultado.getInt("id_cliente");
+								linea[1]= resultado.getString("nombre");
+								linea[2]= resultado.getString("cuilcuit");
+						    	tablaModelo.addRow(linea);
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}	
+						ltc.desconectar();			
+					}
+								
+				 if(itemcombo.equals("Cuil/Cuit"))
+		    	{
+				   // iniciar busqueda por cuit o cuil
+						Conexion ltc = new Conexion();
+						Connection conec = ltc.conectar();
+						ltc.listarClientes();
+						Statement instruccion;
+						try {
+							instruccion = conec.createStatement();
+							ResultSet resultado = instruccion.executeQuery("Select * from cliente where cuilcuit like '%"+busqueda+"%'");
+							
+							while(tablaModelo.getRowCount()>0) {
+								tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+							}
+							
+							while(resultado.next()) {
+								Object[] linea = new Object[3];
+								linea[0]= resultado.getInt("id_cliente");
+								linea[1]= resultado.getString("nombre");
+								linea[2]= resultado.getString("cuilcuit");
+						    	tablaModelo.addRow(linea);
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}	
+						ltc.desconectar();			 
+					 
+			    }
+					
 				}
+				
 			});
-			btnBuscarPor.setBounds(376, 17, 89, 23);
+			
+			
+			btnBuscarPor.setBounds(427, 19, 89, 23);
 			contentPanel.add(btnBuscarPor);
+		
+
 		}
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(211, 19, 28, 22);
-		contentPanel.add(comboBox);
+		tfBusqueda = new JTextField();
+		tfBusqueda.setBounds(319, 20, 96, 20);
+		contentPanel.add(tfBusqueda);
+		tfBusqueda.setColumns(10);
 		{
-			JLabel lblBuscarPor = new JLabel("Buscar por");
-			lblBuscarPor.setBounds(122, 23, 73, 14);
-			contentPanel.add(lblBuscarPor);
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(12, 55, 504, 192);
+			contentPanel.add(scrollPane);
+			
+		    table = new JTable();
+		    scrollPane.setViewportView(table);
+		    table.setModel(tablaModelo);
 		}
-
-		textField = new JTextField();
-		textField.setBounds(251, 20, 96, 20);
-		contentPanel.add(textField);
-		textField.setColumns(10);
+		
+		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
+				
 			{
 				JButton okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
@@ -94,5 +194,10 @@ public class ListadoClieTodos extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+    public String getProv() {
+		
+		return clieSeleccion;
 	}
 }

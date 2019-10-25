@@ -2,6 +2,7 @@ package ventana;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,10 +13,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import conexion.Conexion;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.Toolkit;
 
 public class ModificarProveedor extends JFrame {
 
@@ -28,6 +38,7 @@ public class ModificarProveedor extends JFrame {
 	private JTextField textFieldPersResp;
 	private JTextField textFieldContacto;
 	private JPanel contentPane;
+	private Integer idProvElegido;
 	
 	/**
 	 * Launch the application.
@@ -43,10 +54,13 @@ public class ModificarProveedor extends JFrame {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ModificarProveedor() {
+	public ModificarProveedor() throws SQLException {
+		setTitle("Modificar Datos del  Proveedor");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModificarProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 515, 346);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -56,22 +70,22 @@ public class ModificarProveedor extends JFrame {
 
 		
 		JLabel lblErrorRazon = new JLabel("Campo Invalido");
-		lblErrorRazon.setBounds(331, 59, 103, 14);
+		lblErrorRazon.setBounds(394, 59, 103, 14);
 		contentPane.add(lblErrorRazon);
 		lblErrorRazon.setVisible(false);
 		
 		JLabel labelErrorCuit = new JLabel("Campo Invalido");
-		labelErrorCuit.setBounds(331, 84, 103, 14);
+		labelErrorCuit.setBounds(394, 84, 103, 14);
 		contentPane.add(labelErrorCuit);
 		labelErrorCuit.setVisible(false);
 		
 		JLabel labelErrorCondicion = new JLabel("Campo Invalido");
-		labelErrorCondicion.setBounds(331, 159, 103, 14);
+		labelErrorCondicion.setBounds(394, 159, 103, 14);
 		contentPane.add(labelErrorCondicion);
 		labelErrorCondicion.setVisible(false);
 		
 		JLabel labelErrorCategoria = new JLabel("Campo Invalido");
-		labelErrorCategoria.setBounds(331, 184, 103, 14);
+		labelErrorCategoria.setBounds(394, 184, 103, 14);
 		contentPane.add(labelErrorCategoria);
 		labelErrorCategoria.setVisible(false);
 		
@@ -108,10 +122,10 @@ public class ModificarProveedor extends JFrame {
 		contentPane.add(lblContactoresponsable);
 
 		textFieldRazon = new JTextField();
-		textFieldRazon.setBounds(225, 56, 96, 20);
+		textFieldRazon.setBounds(192, 56, 190, 20);
 		contentPane.add(textFieldRazon);
 		textFieldRazon.setColumns(10);
-
+		
 		textFieldCuit = new JTextField();
 		textFieldCuit.addKeyListener(new KeyAdapter() {
 			@Override
@@ -127,44 +141,47 @@ public class ModificarProveedor extends JFrame {
 				}
 			}
 		});
-		textFieldCuit.setBounds(225, 81, 96, 20);
+		textFieldCuit.setBounds(192, 81, 129, 20);
 		contentPane.add(textFieldCuit);
 		textFieldCuit.setColumns(10);
 
 		textFieldDomicilio = new JTextField();
-		textFieldDomicilio.setBounds(225, 106, 96, 20);
+		textFieldDomicilio.setBounds(192, 106, 156, 20);
 		contentPane.add(textFieldDomicilio);
 		textFieldDomicilio.setColumns(10);
 
 		textFieldTelefono = new JTextField();
-		textFieldTelefono.setBounds(225, 131, 96, 20);
+		textFieldTelefono.setBounds(192, 131, 129, 20);
 		contentPane.add(textFieldTelefono);
 		textFieldTelefono.setColumns(10);
 
 		textFieldCategoria = new JTextField();
-		textFieldCategoria.setBounds(225, 181, 96, 20);
+		textFieldCategoria.setBounds(192, 181, 44, 20);
 		contentPane.add(textFieldCategoria);
 		textFieldCategoria.setColumns(10);
 
 		textFieldPersResp = new JTextField();
-		textFieldPersResp.setBounds(225, 206, 96, 20);
+		textFieldPersResp.setBounds(192, 206, 156, 20);
 		contentPane.add(textFieldPersResp);
 		textFieldPersResp.setColumns(10);
 
 		textFieldContacto = new JTextField();
-		textFieldContacto.setBounds(225, 231, 96, 20);
+		textFieldContacto.setBounds(192, 231, 156, 20);
 		contentPane.add(textFieldContacto);
 		textFieldContacto.setColumns(10);
-
+		
 		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(225, 155, 96, 22);
+		comboBox.setBounds(192, 155, 156, 22);
 		contentPane.add(comboBox);
-		comboBox.addItem("Resp Inscripto");
-		comboBox.addItem("Consumidor final");
-		comboBox.addItem("Monotributista");
-		comboBox.addItem("Exento");
-		comboBox.addItem("");
 
+		
+		Conexion nc = new Conexion();
+		Connection conec = nc.conectar();
+		Statement instruccion = conec.createStatement();
+		ResultSet resultado = instruccion.executeQuery("Select * from condicion_fiscal");
+		while(resultado.next()) {
+			comboBox.addItem(resultado.getString("descripcion"));
+		}
 		JLabel lblSeleccioneElCliente = new JLabel("Seleccione el Proveedor");
 		lblSeleccioneElCliente.setBounds(42, 11, 170, 14);
 		contentPane.add(lblSeleccioneElCliente);
@@ -172,10 +189,49 @@ public class ModificarProveedor extends JFrame {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ElegirProveedor ep= new ElegirProveedor(new java.awt.Frame(), true);
-				ep.setVisible(true);
+				Integer id_prov=null;
+				try {
+					ElegirProveedor ep;
+					ep = new ElegirProveedor(new java.awt.Frame(), true);
+					ep.setVisible(true);
+					id_prov=ep.getProvElegido();
+					idProvElegido=id_prov;
+					//textFieldRazon.setText(ep.getProvElegido());
+				} catch (HeadlessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Conexion nc = new Conexion();
+				Connection conec = nc.conectar();
+				try {
+					Statement instruccion = conec.createStatement();
+					ResultSet resultado = instruccion.executeQuery("Select * from proveedor where id_proveedor = "+id_prov);
+					// ahora rellenamos todos los campos con los datos de la consulta
+					while(resultado.next()) {
+					textFieldRazon.setText(resultado.getString("nombre"));
+					textFieldCategoria.setText(resultado.getString("categoria"));
+					textFieldDomicilio.setText(resultado.getString("domicilio"));
+					textFieldPersResp.setText(resultado.getString("nombrecontacto"));
+					textFieldContacto.setText(resultado.getString("telefonocontacto"));
+					textFieldTelefono.setText(resultado.getString("telefono"));
+					int seleccion = resultado.getInt("id_condicion_fiscal");
+					comboBox.setSelectedIndex(seleccion-1);
+					String cadena = resultado.getString("cuilcuit");
+					cadena = cadena.replace("-", "");
+					textFieldCuit.setText(cadena);
+					
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
-				textFieldRazon.setText(ep.getProvElegido());
+				nc.desconectar();
+				
+				
 			}
 		});
 		btnBuscar.setBounds(225, 11, 89, 23);
@@ -191,7 +247,7 @@ public class ModificarProveedor extends JFrame {
 				String categoria=null;
 				String personaResponsable=null;
 				String contacto=null;
-				String condicion=null;
+				Integer condicion=null;
 				Boolean error=false;
 				
 				if(textFieldRazon.getText().isEmpty()) {
@@ -222,7 +278,7 @@ public class ModificarProveedor extends JFrame {
 					error = true;
 					labelErrorCondicion.setVisible(true);
 				} else {
-					condicion = comboBox.getSelectedItem().toString();
+					condicion = comboBox.getSelectedIndex()+1;
 					labelErrorCondicion.setVisible(false);
 				}
 				
@@ -230,16 +286,32 @@ public class ModificarProveedor extends JFrame {
 				if(!textFieldTelefono.getText().isEmpty()) telefono = textFieldTelefono.getText();
 				if(!textFieldPersResp.getText().isEmpty()) personaResponsable = textFieldPersResp.getText();
 				if(!textFieldContacto.getText().isEmpty()) contacto = textFieldContacto.getText();
+				StringBuilder objetivo = new StringBuilder(cuitProv);
+				objetivo = objetivo.insert(2,"-");
+				objetivo = objetivo.insert(objetivo.length()-1, "-");
+				cuitProv=objetivo.toString();
+				
 				
 				if(error) {
 					JOptionPane.showMessageDialog(null, "Error en algun campo");
 				} else {
-					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
+					try {
+						Conexion nc = new Conexion();
+						Connection conn= nc.conectar();
+						Statement instruccion = conn.createStatement();
+						instruccion.executeUpdate("UPDATE proveedor SET nombre = '"+nombre+"',cuilcuit = '"+cuitProv+"',domicilio = '"+domicilio+"',telefono = '"+telefono+"',id_condicion_fiscal = "+condicion+",categoria = "+categoria+",nombrecontacto = '"+personaResponsable+"',telefonocontacto = '"+contacto+"',email = 'NULL' WHERE id_proveedor ="+idProvElegido);
+						JOptionPane.showMessageDialog(null, "Modificacion realizada con exito");
+						nc.desconectar();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 				
 			}
 		});
-		btnGuardar.setBounds(331, 230, 89, 23);
+		btnGuardar.setBounds(179, 261, 89, 23);
 		contentPane.add(btnGuardar);
 		
 	}
