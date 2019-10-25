@@ -37,6 +37,7 @@ import java.awt.Toolkit;
 
 public class Principal {
 
+
 	private JFrame frmSistemaDeGestion;
 	private String permisos;
 	private String nombreUsuario;
@@ -48,7 +49,9 @@ public class Principal {
 			public void run() {
 				try {
 					Principal window = new Principal();
+
 					window.frmSistemaDeGestion.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
