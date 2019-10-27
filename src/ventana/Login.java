@@ -94,14 +94,7 @@ public class Login extends JDialog {
 		lblCredencialesInvalidas.setVisible(false);
 		contentPane.add(lblCredencialesInvalidas);
 		
-		JLabel lblDireccionIpServidor = new JLabel("Direccion IP Servidor");
-		lblDireccionIpServidor.setBounds(47, 76, 138, 14);
-		contentPane.add(lblDireccionIpServidor);
-		
-		textFieldipServidor = new JTextField();
-		textFieldipServidor.setBounds(198, 73, 96, 20);
-		contentPane.add(textFieldipServidor);
-		textFieldipServidor.setColumns(10);
+	
 		
 		JButton btnIngresar = new JButton("Ingresar");
 		btnIngresar.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
@@ -127,7 +120,8 @@ public class Login extends JDialog {
 					if(Arrays.equals(pass, correct)) {
 						JOptionPane.showMessageDialog(null, "Credenciales Correctas! Bienvenid@ "+nombreUsuario);
 					} else {
-						JOptionPane.showMessageDialog(null, "Credenciales Incorrectas");
+					//	JOptionPane.showMessageDialog(null, "Credenciales Incorrectas");
+						lblCredencialesInvalidas.setVisible(true);
 						cargo=0;
 					}
 					

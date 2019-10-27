@@ -58,11 +58,6 @@ public class ListadoClieTodos extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		{
-			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(12, 19, 89, 23);
-			contentPanel.add(btnImprimir);
-		}
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(179, 19, 128, 22);
@@ -181,17 +176,15 @@ public class ListadoClieTodos extends JDialog {
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
-				
+		
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
+				JButton cancelButton = new JButton("Cerrar");
 				buttonPane.add(cancelButton);
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						setVisible(false);
+					}
+				});
 			}
 		}
 	}

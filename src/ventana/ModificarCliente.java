@@ -325,6 +325,17 @@ public class ModificarCliente extends JFrame {
 						e1.printStackTrace();
 					}
 					JOptionPane.showMessageDialog(null, "Todos los campos completados correctamente");
+					dispose();
+					
+					try {
+						ModificarCliente frame;
+						frame = new ModificarCliente();
+						frame.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 			}
 		});

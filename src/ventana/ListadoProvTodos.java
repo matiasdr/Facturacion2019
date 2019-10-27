@@ -96,11 +96,7 @@ public class ListadoProvTodos extends JFrame {
 		textFieldCondicion.setBounds(325, 21, 106, 20);
 		contentPanel.add(textFieldCondicion);
 		textFieldCondicion.setColumns(10);
-		{
-			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(0, 20, 89, 23);
-			contentPanel.add(btnImprimir);
-		}
+	
 		{
 			JButton btnBuscarPor = new JButton("Buscar");
 			btnBuscarPor.addActionListener(new ActionListener() {
@@ -215,16 +211,15 @@ public class ListadoProvTodos extends JFrame {
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane, BorderLayout.SOUTH);
+			
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
+				JButton cancelButton = new JButton("Cerrar");
 				buttonPane.add(cancelButton);
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						setVisible(false);
+					}
+				});
 			}
 		}
 	}

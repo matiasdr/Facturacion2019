@@ -69,20 +69,15 @@ public class ListadoSaldosClie extends JFrame {
 			buttonPane.setBounds(0, 218, 513, 35);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			contentPane.add(buttonPane);
+			
 			{
-				JButton btnImprimir = new JButton("Imprimir");
-				buttonPane.add(btnImprimir);
-			}
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
+				JButton cancelButton = new JButton("Cerrar");
 				buttonPane.add(cancelButton);
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						setVisible(false);
+					}
+				});
 			}
 		}
 		

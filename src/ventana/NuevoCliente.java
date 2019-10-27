@@ -295,6 +295,17 @@ public class NuevoCliente extends JFrame {
 							e1.printStackTrace();
 						} 
 						nc.desconectar();
+						dispose();
+						
+						try {
+							NuevoCliente frame;
+							frame = new NuevoCliente();
+							frame.setVisible(true);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 				 }
 			}
 

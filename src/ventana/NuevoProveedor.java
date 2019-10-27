@@ -229,15 +229,16 @@ public class NuevoProveedor extends JFrame {
 				if(!textFieldTelefono.getText().isEmpty()) telefono = textFieldTelefono.getText();
 				if(!textFieldPersResponsable.getText().isEmpty()) personaResponsable = textFieldPersResponsable.getText();
 				if(!textFieldContacto.getText().isEmpty()) contacto = textFieldContacto.getText();
-				StringBuilder objetivo = new StringBuilder(cuitProv);
-				objetivo = objetivo.insert(2,"-");
-				objetivo = objetivo.insert(objetivo.length()-1, "-");
-				cuitProv=objetivo.toString();
 				
 				
 				if(error) {
 					JOptionPane.showMessageDialog(null, "Error en algun campo");
 				} else {
+					StringBuilder objetivo = new StringBuilder(cuitProv);
+					objetivo = objetivo.insert(2,"-");
+					objetivo = objetivo.insert(objetivo.length()-1, "-");
+					cuitProv=objetivo.toString();
+					
 					try {
 						Conexion nc = new Conexion();
 						Connection conn = nc.conectar();
@@ -251,19 +252,17 @@ public class NuevoProveedor extends JFrame {
 						e1.printStackTrace();
 					}
 					
+					try {
+						dispose();
+						NuevoProveedor frame;
+						frame = new NuevoProveedor();
+						frame.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
-				
-				
-				try {
-					dispose();
-					NuevoProveedor frame;
-					frame = new NuevoProveedor();
-					frame.setVisible(true);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
 				
 			}
 		});

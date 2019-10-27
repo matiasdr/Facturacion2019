@@ -247,6 +247,7 @@ public class GenerarRecibo extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				JOptionPane.showMessageDialog(null, "Recibo Generado Correctamente");
 				
 				dispose();
 				GenerarRecibo frame = new GenerarRecibo();

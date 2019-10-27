@@ -44,7 +44,7 @@ public class GenerarFactura extends JFrame {
 	private JTable table;
 	private JTable tablaProductos;
 	private String nombreCliente;
-	private Integer condicionFiscalCliente;
+	private Integer condicionFiscalCliente=0;
 	private Integer idCliente;
 	
 	
@@ -255,7 +255,7 @@ public class GenerarFactura extends JFrame {
 						linea[2]= resultado1.getInt("cantidad");
 						linea[3]= resultado1.getDouble("pvp");
 						linea[4]= resultado1.getInt("id_articulo");
-						linea[5]= resultado.getDouble("ivaporcent");
+						linea[5]= resultado1.getDouble("ivaporcent");
 						modelTablaProductos.addRow(linea);
 					}
 				} catch (SQLException e1) {
@@ -351,6 +351,10 @@ public class GenerarFactura extends JFrame {
 		JButton btnGenerarComprobante = new JButton("Emitir Factura");
 		btnGenerarComprobante.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(modelTabla.getRowCount()==0) {
+					JOptionPane.showMessageDialog(null, "No ingresó Productos a la factura");
+					return;
+				}
 				String tipoComprobante=null;
 				Integer numFactura=null;
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
@@ -371,6 +375,10 @@ public class GenerarFactura extends JFrame {
 					condicion="Cuenta";
 				}
 				Double importeTotal = Double.valueOf(totalFactura.getText());
+				if(condicionFiscalCliente==0) {
+					JOptionPane.showMessageDialog(null, "Debe seleccionar el Cliente");
+					return;
+				}
 				if(condicionFiscalCliente==1) {
 					tipoComprobante="A";
 				} else {
@@ -467,6 +475,8 @@ public class GenerarFactura extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+				JOptionPane.showMessageDialog(null, "Factura generada Correctamente");
 				
 				// Ahora recargamos la página para que se actualice el stock
 				

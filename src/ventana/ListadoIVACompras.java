@@ -22,6 +22,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class ListadoIVACompras extends JFrame {
@@ -95,10 +97,12 @@ public class ListadoIVACompras extends JFrame {
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(111, 5, 100, 20);
 		contentPane.add(dateChooser);
+		dateChooser.setDate(new Date());
 		
 		JDateChooser dateChooser_1 = new JDateChooser();
 		dateChooser_1.setBounds(323, 5, 93, 20);
 		contentPane.add(dateChooser_1);
+		dateChooser_1.setDate(new Date());
 		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setBounds(708, 7, 89, 23);
@@ -225,13 +229,27 @@ public class ListadoIVACompras extends JFrame {
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				while(tablaModelo.getRowCount()>0) {
+					tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+				}
+				totalNeto0=0.0;
+				totalNeto21=0.0;
+				totalNeto27=0.0;
+				totalNeto10=0.0;
+				totalIVA21=0.0;
+				totalIVA27=0.0;
+				totalIVA10=0.0;
+				totalIVA0=0.0;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String fechaDesde = sdf.format(dateChooser.getDate());
+				String fechaHasta = sdf.format(dateChooser_1.getDate());
 				
 				try {
 					Conexion nc = new Conexion();
 					Connection conn = nc.conectar();
 					Statement instruccion;
 					instruccion = conn.createStatement();
-					ResultSet resultado = instruccion.executeQuery("select * from remito R join proveedor P on P.id_proveedor= R.id_proveedor");
+					ResultSet resultado = instruccion.executeQuery("select * from remito R join proveedor P on P.id_proveedor= R.id_proveedor where fecha>=cast('"+fechaDesde+"' as date) and fecha<=cast('"+fechaHasta+"' as date)");
 					while(resultado.next()) {
 						if(resultado.getString("tipo").equals("B") || resultado.getString("tipo").equals("C")) {
 							Object[] fila = new Object[9];

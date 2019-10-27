@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
 
@@ -51,7 +52,7 @@ public class CargarFacturaCompra extends JFrame {
 	private JTextField textFieldIVA10;
 	private JTextField textFieldNeto27;
 	private JTextField textFieldIVA27;
-	private Integer idProveedor;
+	private Integer idProveedor=0;
 	private String tipoFactura;
 	private String conceptoCompra;
 
@@ -262,6 +263,7 @@ public class CargarFacturaCompra extends JFrame {
 		dateChooser.setBounds(113, 143, 96, 20);
 		contentPane.add(dateChooser);
 		dateChooser.setDateFormatString("yyyy-MM-dd");
+		dateChooser.setDate(new Date());
 		
 		
 		
@@ -521,6 +523,16 @@ public class CargarFacturaCompra extends JFrame {
 				String fecha = sdf.format(dateChooser.getDate());
 				String puntoDeVenta=textField.getText();
 				Double total=0.0;
+				String condicionCompra=null;
+				if(idProveedor==0) {
+					JOptionPane.showMessageDialog(null, "Debe elegir el Proveedor");
+					return;
+				}
+				if(radioButtonCuentaCorriente.isSelected()) {
+					condicionCompra="cuenta";
+				} else {
+					condicionCompra="contado";
+				}
 				conceptoCompra = (String) comboBox.getSelectedItem();
 				if(tipoFactura.equals("A")) {
 					if(radioButtonManual.isSelected()) {
@@ -549,7 +561,7 @@ public class CargarFacturaCompra extends JFrame {
 						if(!textFieldIVA27.getText().isEmpty()) {
 							iva27 = Double.valueOf(textFieldIVA27.getText());
 						}
-						String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+						String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo, condicion_compra) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", "+neto10+", "+neto27+", "+iva21+", "+iva10+", "+iva27+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"', '"+condicionCompra+"')";
 						System.out.println(sql);
 						try {
 							Conexion nc = new Conexion();
@@ -569,19 +581,19 @@ public class CargarFacturaCompra extends JFrame {
 							Double iva21 = Double.valueOf(lblesteEsEl.getText());
 							total = Double.valueOf(textFieldImporteFacturado.getText());
 							Double neto21 = total-iva21;
-							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo, condicion_compra) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+neto21+", 0.0, 0.0, "+iva21+", 0.0, 0.0, "+total+", '"+conceptoCompra+"', '"+tipoFactura+"', '"+condicionCompra+"')";
 						}
 						if(comboBoxIva.getSelectedItem().equals("10.5")) {
 							Double iva10 = Double.valueOf(lblesteEsEl.getText());
 							total = Double.valueOf(textFieldImporteFacturado.getText());
 							Double neto10 = total-iva10;
-							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo, condicion_compra) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, "+neto10+", 0.0, 0.0, "+iva10+", 0.0, "+total+", '"+conceptoCompra+"', '"+tipoFactura+"', '"+condicionCompra+"')";
 						}
 						if(comboBoxIva.getSelectedItem().equals("27%")) {
 							Double iva27 = Double.valueOf(lblesteEsEl.getText());
 							total = Double.valueOf(textFieldImporteFacturado.getText());
 							Double neto27 = total-iva27;
-							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+							query="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo, condicion_compra) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", 0.0, 0.0, "+neto27+", 0.0, 0.0, "+iva27+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"', '"+condicionCompra+"')";
 						}
 						try {
 							Conexion nc = new Conexion();
@@ -598,7 +610,7 @@ public class CargarFacturaCompra extends JFrame {
 					}
 				} else {
 					total = Double.valueOf(textFieldImporteFacturado.getText());
-					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"')";
+					String sql="INSERT INTO remito (id_empresa, numero_factura, fecha, id_proveedor, punto_venta, importe_neto21, importe_neto10, importe_neto27, iva_21, iva_10, iva_27,importe_total, concepto, tipo, condicion_compra) VALUES (1, "+numerofac+", '"+fecha+"', "+idProveedor+", "+puntoDeVenta+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+0.0+", "+total+", '"+conceptoCompra+"', '"+tipoFactura+"', '"+condicionCompra+"')";
 					System.out.println(sql);
 					try {
 						Conexion nc = new Conexion();

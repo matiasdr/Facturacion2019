@@ -101,9 +101,14 @@ public class ListadoSaldosProv extends JFrame {
 			contentPanel.add(btnNewButton_2);
 		}
 		{
-			JButton btnImprimir = new JButton("Imprimir");
-			btnImprimir.setBounds(198, 208, 89, 23);
-			contentPanel.add(btnImprimir);
+			JButton btnCerrar = new JButton("Cerrar");
+			btnCerrar.setBounds(198, 208, 89, 23);
+			contentPanel.add(btnCerrar);
+			btnCerrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+				}
+			});
 		}
 		Object[] encabezado = new Object[3];
 		encabezado[0]="CUIT";

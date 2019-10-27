@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class ListadoIVAVentas extends JFrame {
@@ -100,10 +102,12 @@ public class ListadoIVAVentas extends JFrame {
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(176, 11, 98, 20);
 		contentPane.add(dateChooser);
+		dateChooser.setDate(new Date());
 		
 		JDateChooser dateChooser_1 = new JDateChooser();
 		dateChooser_1.setBounds(472, 11, 98, 20);
 		contentPane.add(dateChooser_1);
+		dateChooser_1.setDate(new Date());
 		
 		JButton btnBuscar = new JButton("Buscar");
 		
@@ -207,13 +211,28 @@ public class ListadoIVAVentas extends JFrame {
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				while(tablaModelo.getRowCount()>0) {
+					tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+				}
+				totalNeto0=0.0;
+				totalNeto21=0.0;
+				totalNeto27=0.0;
+				totalNeto10=0.0;
+				totalIVA21=0.0;
+				totalIVA27=0.0;
+				totalIVA10=0.0;
+				totalIVA0=0.0;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String fechaDesde = sdf.format(dateChooser.getDate());
+				String fechaHasta = sdf.format(dateChooser_1.getDate());
+				
 				
 				try {
 					Conexion nc = new Conexion();
 					Connection conn = nc.conectar();
 					Statement instruccion;
 					instruccion = conn.createStatement();
-					ResultSet resultado = instruccion.executeQuery("select * from factura F join cliente C on C.id_cliente = F.id_cliente");
+					ResultSet resultado = instruccion.executeQuery("select * from factura F join cliente C on C.id_cliente = F.id_cliente where fecha>=cast('"+fechaDesde+"' as date) and fecha<=cast('"+fechaHasta+"' as date)");
 					while(resultado.next()) {
 						if(resultado.getDouble("iva_21")!=0.0) {
 							Object[] fila = new Object[9];
