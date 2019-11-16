@@ -36,6 +36,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class ResumenCliente extends JFrame {
 
@@ -46,6 +47,7 @@ public class ResumenCliente extends JFrame {
 	private Date fHasta;
 	private Date fDesde;
 	private JTable tablecdo;
+	private String tipoComp;
 	
 	
 	/**
@@ -67,7 +69,7 @@ public class ResumenCliente extends JFrame {
 		setTitle("Resumen de Cliente");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenCliente.class.getResource("/logos/logo4.png")));
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 614, 637);
+		setBounds(100, 100, 819, 724);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -77,24 +79,28 @@ public class ResumenCliente extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
+		JLabel lblSaldo = new JLabel("Saldo :   $  ");
+		lblSaldo.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		lblSaldo.setBounds(622, 382, 86, 16);
+		contentPanel.add(lblSaldo);
+			
 		
-		
-		DefaultTableModel tablaModeloctacte = new DefaultTableModel(0,3);
-		Object[] fila = new Object[3];
-		fila[0]= "Tipo Comprobante";
-		fila[1]= "Numero";
-		fila[2]= "Saldo";
+		DefaultTableModel tablaModeloctacte = new DefaultTableModel(0,6);
+		Object[] fila = new Object[6];
+		fila[0]= "Fecha";
+		fila[1]= "Tipo Comprobante";
+		fila[2]= "Numero";
+		fila[3]= "Debe";
+		fila[4]= "Haber";
+		fila[5]= "Saldo";	
 		tablaModeloctacte.addRow(fila);
 		
 		tablectacte = new JTable(tablaModeloctacte);
 		tablectacte.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		tablectacte.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		tablectacte.setBounds(5, 160, 568, 179);
+		tablectacte.setBounds(12, 160, 767, 209);
 		contentPanel.add(tablectacte);
-		
-		
-		
-		
+				
 		JLabel lblTitulo = new JLabel("Resumen de Cliente");
 		lblTitulo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 19));
 		lblTitulo.setBounds(201, 0, 168, 29);
@@ -102,26 +108,32 @@ public class ResumenCliente extends JFrame {
 		
 		JLabel lblTituloctacte = new JLabel("Movimientos en Cuenta Corriente");
 		lblTituloctacte.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
-		lblTituloctacte.setBounds(189, 131, 240, 16);
+		lblTituloctacte.setBounds(260, 137, 240, 16);
 		contentPanel.add(lblTituloctacte);
 		
 		JLabel lblTituloContado = new JLabel("Movimientos en Cuenta de Contado");
 		lblTituloContado.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
-		lblTituloContado.setBounds(178, 352, 261, 16);
+		lblTituloContado.setBounds(260, 435, 261, 16);
 		contentPanel.add(lblTituloContado);
 		
 		DefaultTableModel tablaModelocdo = new DefaultTableModel(0,3);
 		Object[] fila1= new Object[3];
 		fila1[0]= "Tipo Comprobante";
 		fila1[1]= "Numero";
-		fila1[2]= "Fecha";
+		fila1[2]= "Fecha";		
 		tablaModelocdo.addRow(fila1);
 		
 		tablecdo = new JTable(tablaModelocdo);
 		tablecdo.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		tablecdo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		tablecdo.setBounds(5, 381, 569, 135);
+		tablecdo.setBounds(61, 464, 669, 153);
 		contentPanel.add(tablecdo);
+		
+		JLabel lblSaldoCli = new JLabel("0000,00");
+		lblSaldoCli.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSaldoCli.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
+		lblSaldoCli.setBounds(695, 376, 84, 29);
+		contentPanel.add(lblSaldoCli);
 		
 			
 		JDateChooser desdeDia = new JDateChooser();
@@ -139,13 +151,13 @@ public class ResumenCliente extends JFrame {
 		{
 			JLabel lblNombreClie = new JLabel("Seleccione el Cliente :");
 			lblNombreClie.setFont(new Font("Times New Roman", Font.BOLD, 15));
-			lblNombreClie.setBounds(34, 82, 152, 23);
+			lblNombreClie.setBounds(34, 99, 152, 23);
 			contentPanel.add(lblNombreClie);
 		}
 		
 		JLabel lblSeleccionCliente = new JLabel("");
 		lblSeleccionCliente.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
-		lblSeleccionCliente.setBounds(333, 76, 240, 29);
+		lblSeleccionCliente.setBounds(331, 95, 312, 29);
 		contentPanel.add(lblSeleccionCliente);
 		
 		{
@@ -166,13 +178,13 @@ public class ResumenCliente extends JFrame {
 						
 						System.out.println(fDesde);
 						System.out.println(fHasta);
-						
+						int saldocli = 0;
 															
 						try {
 							Conexion nc = new Conexion();
 							Connection conec = nc.conectar();
 							Statement instruccion = conec.createStatement();
-							String sql = "Select it.comprobante, it.numerocomprobante, it.saldo from itemcuentacliente it "
+							String sql = "Select it.comprobante, it.numerocomprobante, it.saldo, it.debe_haber, it.fecha from itemcuentacliente it "
 									+ "inner join cuenta_cliente cc on it.id_cuenta=cc.id_cuenta "
 									+ "inner join cliente c on c.id_cliente= cc.id_cliente where it.fecha >= cast('"+ fDesde + "'as date) and it.fecha <= cast('" + fHasta+ "'as date) and c.id_cliente =" + id_seleccion ;
 							ResultSet resultado = instruccion.executeQuery(sql);
@@ -182,11 +194,29 @@ public class ResumenCliente extends JFrame {
 							ResultSet resultado1 = instruccion1.executeQuery(sql1); 
 		
 							while(resultado.next()) {
-								Object[] linea = new Object[3];
-								linea[0]= resultado.getString("comprobante");
-								linea[1]= resultado.getInt("numerocomprobante");
-								linea[2]= resultado.getDouble("saldo");
+								Object[] linea = new Object[6];
+								linea[0]= resultado.getString("fecha");
+								linea[1]= resultado.getString("comprobante");
+								linea[2]= resultado.getInt("numerocomprobante");
+								tipoComp = resultado.getString("debe_haber").trim();
+								
+								if(tipoComp.toString().equals("D"))
+								{
+									linea[3]= resultado.getInt("saldo");
+									linea[4]= 0;
+									saldocli = saldocli+resultado.getInt("saldo"); 
+								}
+								else
+									if(tipoComp.toString().equals("H"))
+									{
+										linea[3]= 0;
+										linea[4]= resultado.getInt("saldo");
+										saldocli = saldocli-resultado.getInt("saldo");
+									}
+								linea[5]= saldocli;
+								lblSaldoCli.setText(String.valueOf(saldocli));								
 								tablaModeloctacte.addRow(linea);
+								
 							}
 							
 							while(resultado1.next()) {
@@ -209,7 +239,7 @@ public class ResumenCliente extends JFrame {
 			 }
 			});
 			btnBuscarCliente.setFont(new Font("Times New Roman", Font.BOLD, 15));
-			btnBuscarCliente.setBounds(189, 82, 132, 23);
+			btnBuscarCliente.setBounds(187, 99, 132, 23);
 			contentPanel.add(btnBuscarCliente);
 		}
 		
@@ -235,7 +265,6 @@ public class ResumenCliente extends JFrame {
 			lblHasta.setBounds(397, 55, 49, 14);
 			contentPanel.add(lblHasta);
 		}
-	
 		
 		{
 			JPanel buttonPane = new JPanel();

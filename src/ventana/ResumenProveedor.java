@@ -31,6 +31,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
+import java.awt.Color;
 
 
 public class ResumenProveedor extends JFrame {
@@ -41,6 +44,8 @@ public class ResumenProveedor extends JFrame {
 	private JTable table;
 	private Integer idProveedor=0;
 	private JTable tableContado;
+	
+	private String tipocomp;
 	/**
 	 * Launch the application.
 	 */
@@ -60,13 +65,14 @@ public class ResumenProveedor extends JFrame {
 		setTitle("Resumen de Cuenta Proveedores");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ResumenProveedor.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 604, 631);
+		setBounds(100, 100, 757, 761);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(7, 102, 542, 239);
+		scrollPane.setViewportBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		scrollPane.setBounds(10, 165, 691, 239);
 		contentPanel.add(scrollPane);
 		
 		JLabel label = new JLabel("Seleccione el periodo :");
@@ -80,6 +86,7 @@ public class ResumenProveedor extends JFrame {
 		contentPanel.add(label_1);
 		
 		JDateChooser dateChooserDesde = new JDateChooser();
+		dateChooserDesde.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		dateChooserDesde.setBounds(223, 11, 114, 22);
 		contentPanel.add(dateChooserDesde);
 		dateChooserDesde.setDateFormatString("yyyy-MM-dd");
@@ -91,6 +98,7 @@ public class ResumenProveedor extends JFrame {
 		contentPanel.add(label_2);
 		
 		JDateChooser dateChooserHasta = new JDateChooser();
+		dateChooserHasta.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		dateChooserHasta.setBounds(427, 11, 122, 22);
 		contentPanel.add(dateChooserHasta);
 		dateChooserHasta.setDateFormatString("yyyy-MM-dd");
@@ -100,24 +108,34 @@ public class ResumenProveedor extends JFrame {
 		
 		JLabel label_3 = new JLabel("Movimientos en Cuenta Corriente");
 		label_3.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
-		label_3.setBounds(128, 80, 339, 16);
+		label_3.setBounds(220, 137, 248, 16);
 		contentPanel.add(label_3);
 		
 		JLabel label_4 = new JLabel("Movimientos en Cuenta de Contado");
 		label_4.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
-		label_4.setBounds(135, 354, 261, 16);
+		label_4.setBounds(222, 475, 261, 16);
 		contentPanel.add(label_4);
 		
 		JScrollPane scrollPaneContado = new JScrollPane();
-		scrollPaneContado.setBounds(10, 385, 542, 176);
+		scrollPaneContado.setViewportBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		scrollPaneContado.setBounds(36, 504, 636, 176);
 		contentPanel.add(scrollPaneContado);
 		
-		Object[] encabezado = new Object[3];
-		encabezado[0] = "Tipo Comprobante";
-		encabezado[1] = "Numero Comprobante";
-		encabezado[2] = "Importe";
+		Object[] encabezado = new Object[6];
+		encabezado[0] = "Fecha";
+		encabezado[1] = "Tipo Comprobante";
+		encabezado[2] = "Numero Comprobante";
+		encabezado[3] = "Debe";
+		encabezado[4] = "Haber";
+		encabezado[5] = "Importe";
 
-		DefaultTableModel tablaModeloContado = new DefaultTableModel(encabezado, 0);
+		
+		Object[] encabezadocdo = new Object[3];
+		encabezadocdo[0] = "Tipo Comprobante";
+		encabezadocdo[1] = "Numero Comprobante";
+		encabezadocdo[2] = "Importe";
+
+		DefaultTableModel tablaModeloContado = new DefaultTableModel(encabezadocdo, 0);
 		
 		tableContado = new JTable(tablaModeloContado);
 		scrollPaneContado.setViewportView(tableContado);
@@ -126,6 +144,17 @@ public class ResumenProveedor extends JFrame {
 
 		table = new JTable(modeloTabla);
 		scrollPane.setViewportView(table);
+		
+		JLabel lblSaldo = new JLabel("Saldo :  $");
+		lblSaldo.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 16));
+		lblSaldo.setBounds(542, 417, 78, 16);
+		contentPanel.add(lblSaldo);
+		
+		JLabel lblSaldopro = new JLabel("New label");
+		lblSaldopro.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSaldopro.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 16));
+		lblSaldopro.setBounds(613, 414, 86, 23);
+		contentPanel.add(lblSaldopro);
 
 
 
@@ -134,17 +163,19 @@ public class ResumenProveedor extends JFrame {
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblSeleccioneElProveedor = new JLabel("Seleccione el Proveedor");
-			lblSeleccioneElProveedor.setFont(new Font("Times New Roman", Font.BOLD, 12));
-			lblSeleccioneElProveedor.setBounds(10, 55, 142, 14);
+			JLabel lblSeleccioneElProveedor = new JLabel("Seleccione el Proveedor :");
+			lblSeleccioneElProveedor.setFont(new Font("Times New Roman", Font.BOLD, 14));
+			lblSeleccioneElProveedor.setBounds(10, 78, 166, 23);
 			contentPanel.add(lblSeleccioneElProveedor);
 		}
 		{
-			lblNombreDelCliente.setBounds(341, 55, 142, 14);
+			lblNombreDelCliente.setFont(new Font("Times New Roman", Font.BOLD, 14));
+			lblNombreDelCliente.setBounds(335, 78, 285, 22);
 			contentPanel.add(lblNombreDelCliente);
 		}
 		{
 			JButton btnBuscarProveedor = new JButton("Buscar Proveedor");
+			btnBuscarProveedor.setFont(new Font("Times New Roman", Font.BOLD, 12));
 			btnBuscarProveedor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ElegirProveedor ep;
@@ -160,11 +191,12 @@ public class ResumenProveedor extends JFrame {
 
 			}
 		});
-			btnBuscarProveedor.setBounds(162, 51, 142, 23);
+			btnBuscarProveedor.setBounds(167, 79, 142, 23);
 			contentPanel.add(btnBuscarProveedor);
 		}
 		
 		JButton btnListarMovimientos = new JButton("Listar Movimientos");
+		btnListarMovimientos.setFont(new Font("Tahoma", Font.BOLD, 12));
 		btnListarMovimientos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String fechaDesde;
@@ -172,6 +204,7 @@ public class ResumenProveedor extends JFrame {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				fechaDesde = sdf.format(dateChooserDesde.getDate());
 				fechaHasta = sdf.format(dateChooserHasta.getDate());
+			    int saldopro = 0;
 				
 				// Borramos lo que tenga la tabla de cuenta corriente y luego insertamos la busqueda
 				while(modeloTabla.getRowCount()>0) {
@@ -185,10 +218,26 @@ public class ResumenProveedor extends JFrame {
 					ResultSet resultado = instruccion.executeQuery("select * from itemcuentaproveedor join cuenta_proveedor on cuenta_proveedor.id_cuenta = itemcuentaproveedor.id_cuenta where fecha>=cast('"+fechaDesde+"' as date) and fecha<=cast('"+fechaHasta+"' as date) and id_proveedor = "+idProveedor);
 
 					while(resultado.next()) {
-						Object[] fila = new Object[3];
-						fila[0] = resultado.getString("comprobante");
-						fila[1] = resultado.getString("numerocomprobante");
-						fila[2] = resultado.getDouble("saldo");
+						Object[] fila = new Object[6];
+						fila[0] = resultado.getDate("fecha");
+						fila[1] = resultado.getString("comprobante");
+						fila[2] = resultado.getString("numerocomprobante");
+						tipocomp = resultado.getString("comprobante").trim();
+						
+						if(tipocomp.toString().equals("factura"))
+						{
+							fila[3]=resultado.getInt("saldo");
+							fila[4]= 0.00;
+							saldopro = saldopro+resultado.getInt("saldo");
+						}
+						else
+						{
+							fila[3]= 0.00;
+							fila[4]= resultado.getInt("saldo");
+							saldopro = saldopro-resultado.getInt("saldo");
+						}
+						fila[5]= saldopro;
+						lblSaldopro.setText(String.valueOf(saldopro));								
 						modeloTabla.addRow(fila);
 					}
 					
@@ -217,8 +266,10 @@ public class ResumenProveedor extends JFrame {
 				
 			}
 		});
-		btnListarMovimientos.setBounds(390, 68, 157, 23);
+		btnListarMovimientos.setBounds(515, 114, 157, 23);
 		contentPanel.add(btnListarMovimientos);
+		
+	
 
 	}
 }
