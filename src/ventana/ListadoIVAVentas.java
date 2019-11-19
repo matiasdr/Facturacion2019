@@ -95,10 +95,6 @@ public class ListadoIVAVentas extends JFrame {
 		lblHasta.setBounds(385, 11, 49, 14);
 		contentPane.add(lblHasta);
 		
-		JButton btnImprimir = new JButton("Imprimir");
-		btnImprimir.setBounds(835, 7, 89, 23);
-		contentPane.add(btnImprimir);
-		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(176, 11, 98, 20);
 		contentPane.add(dateChooser);
@@ -145,39 +141,39 @@ public class ListadoIVAVentas extends JFrame {
 		lblTotal.setBounds(332, 426, 49, 14);
 		contentPane.add(lblTotal);
 		
-		JLabel lblNeto21 = new JLabel("New label");
+		JLabel lblNeto21 = new JLabel("--");
 		lblNeto21.setBounds(130, 401, 74, 14);
 		contentPane.add(lblNeto21);
 		
-		JLabel lblNeto27 = new JLabel("New label");
+		JLabel lblNeto27 = new JLabel("--");
 		lblNeto27.setBounds(130, 426, 74, 14);
 		contentPane.add(lblNeto27);
 		
-		JLabel lblNeto10 = new JLabel("New label");
+		JLabel lblNeto10 = new JLabel("--");
 		lblNeto10.setBounds(130, 451, 74, 14);
 		contentPane.add(lblNeto10);
 		
-		JLabel lblIVA21 = new JLabel("New label");
+		JLabel lblIVA21 = new JLabel("--");
 		lblIVA21.setBounds(264, 401, 58, 14);
 		contentPane.add(lblIVA21);
 		
-		JLabel lblIVA27 = new JLabel("New label");
+		JLabel lblIVA27 = new JLabel("--");
 		lblIVA27.setBounds(264, 426, 58, 14);
 		contentPane.add(lblIVA27);
 		
-		JLabel lblIVA10 = new JLabel("New label");
+		JLabel lblIVA10 = new JLabel("--");
 		lblIVA10.setBounds(264, 451, 58, 14);
 		contentPane.add(lblIVA10);
 		
-		JLabel lblTotal21 = new JLabel("New label");
+		JLabel lblTotal21 = new JLabel("--");
 		lblTotal21.setBounds(396, 401, 74, 14);
 		contentPane.add(lblTotal21);
 		
-		JLabel lblTotal27 = new JLabel("New label");
+		JLabel lblTotal27 = new JLabel("--");
 		lblTotal27.setBounds(396, 426, 74, 14);
 		contentPane.add(lblTotal27);
 		
-		JLabel lblTotal10 = new JLabel("New label");
+		JLabel lblTotal10 = new JLabel("--");
 		lblTotal10.setBounds(396, 451, 74, 14);
 		contentPane.add(lblTotal10);
 		
@@ -204,6 +200,14 @@ public class ListadoIVAVentas extends JFrame {
 		JLabel label_5 = new JLabel("TOTAL");
 		label_5.setBounds(332, 451, 49, 14);
 		contentPane.add(label_5);
+		
+		JLabel lblTotalIvaDebito = new JLabel("Total IVA Debito Fiscal");
+		lblTotalIvaDebito.setBounds(566, 451, 136, 14);
+		contentPane.add(lblTotalIvaDebito);
+		
+		JLabel lblTotalIvaDebitoFiscal = new JLabel("--");
+		lblTotalIvaDebitoFiscal.setBounds(712, 451, 100, 14);
+		contentPane.add(lblTotalIvaDebitoFiscal);
 		
 		
 		
@@ -290,7 +294,7 @@ public class ListadoIVAVentas extends JFrame {
 					lblTotal21.setText(String.valueOf(totalIVA21+totalNeto21));
 					lblTotal27.setText(String.valueOf(totalIVA27+totalNeto27));
 					lblTotal10.setText(String.valueOf(totalIVA10+totalNeto10));
-					
+					lblTotalIvaDebitoFiscal.setText(String.valueOf(totalIVA21+totalIVA10+totalIVA27));
 					
 					
 					

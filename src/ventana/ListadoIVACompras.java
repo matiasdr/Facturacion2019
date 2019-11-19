@@ -39,6 +39,9 @@ public class ListadoIVACompras extends JFrame {
 	private Double totalIVA27=0.0;
 	private Double totalIVA10=0.0;
 	private Double totalIVA0=0.0;
+	private JTable tableServicios;
+	private JTable tableBienesUso;
+	private JTable tableCompra;
 	/**
 	 * Launch the application.
 	 */
@@ -62,7 +65,7 @@ public class ListadoIVACompras extends JFrame {
 		setTitle("Lista de IVA Compras");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoIVACompras.class.getResource("/logos/logo4.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 878, 578);
+		setBounds(100, 100, 878, 615);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -76,7 +79,7 @@ public class ListadoIVACompras extends JFrame {
 		encabezado[4] = "CUIT";
 		encabezado[5] = "Alicuota IVA";
 		encabezado[6] = "Importe Neto (sin Iva)";
-		encabezado[7] = "Iva Debito Fiscal";
+		encabezado[7] = "Iva Credito Fiscal";
 		encabezado[8] = "Importe Total";
 		
 		
@@ -115,122 +118,72 @@ public class ListadoIVACompras extends JFrame {
 		table = new JTable(tablaModelo);
 		scrollPane.setViewportView(table);
 		
-		JLabel lblAlicuota = new JLabel("21%");
-		lblAlicuota.setBounds(32, 401, 37, 14);
-		contentPane.add(lblAlicuota);
+		Object[] encabServ = new Object[4];
+		encabServ[0] = "Alícuota";
+		encabServ[1] = "IVA";
+		encabServ[2] = "NETO";
+		encabServ[3] = "TOTAL";
 		
-		JLabel lblAlicuota_1 = new JLabel("27%");
-		lblAlicuota_1.setBounds(32, 426, 28, 14);
-		contentPane.add(lblAlicuota_1);
+		DefaultTableModel modelServicio = new DefaultTableModel(encabServ, 0);
 		
-		JLabel lblAlicuota_2 = new JLabel("10.5%");
-		lblAlicuota_2.setBounds(32, 451, 37, 14);
-		contentPane.add(lblAlicuota_2);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(607, 405, 245, 110);
+		contentPane.add(scrollPane_1);
 		
-		JLabel lblNewLabel = new JLabel("NETO");
-		lblNewLabel.setBounds(68, 401, 49, 14);
-		contentPane.add(lblNewLabel);
+		tableServicios = new JTable(modelServicio);
+		scrollPane_1.setViewportView(tableServicios);
 		
-		JLabel lblIva = new JLabel("IVA");
-		lblIva.setBounds(214, 401, 49, 14);
-		contentPane.add(lblIva);
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(289, 405, 262, 110);
+		contentPane.add(scrollPane_2);
 		
-		JLabel lblTotal = new JLabel("TOTAL");
-		lblTotal.setBounds(332, 426, 49, 14);
-		contentPane.add(lblTotal);
+		DefaultTableModel modelBienesUso = new DefaultTableModel(encabServ, 0);
 		
-		JLabel lblNeto21 = new JLabel("New label");
-		lblNeto21.setBounds(130, 401, 74, 14);
-		contentPane.add(lblNeto21);
+		tableBienesUso = new JTable(modelBienesUso);
+		scrollPane_2.setViewportView(tableBienesUso);
 		
-		JLabel lblNeto27 = new JLabel("New label");
-		lblNeto27.setBounds(130, 426, 74, 14);
-		contentPane.add(lblNeto27);
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(10, 405, 239, 110);
+		contentPane.add(scrollPane_3);
 		
-		JLabel lblNeto10 = new JLabel("New label");
-		lblNeto10.setBounds(130, 451, 74, 14);
-		contentPane.add(lblNeto10);
+		DefaultTableModel modelCompra = new DefaultTableModel(encabServ, 0);
 		
-		JLabel lblIVA21 = new JLabel("New label");
-		lblIVA21.setBounds(264, 401, 58, 14);
-		contentPane.add(lblIVA21);
+		tableCompra = new JTable(modelCompra);
+		scrollPane_3.setViewportView(tableCompra);
 		
-		JLabel lblIVA27 = new JLabel("New label");
-		lblIVA27.setBounds(264, 426, 58, 14);
-		contentPane.add(lblIVA27);
+		JLabel lblTotalIvaCredito = new JLabel("Total IVA Credito Fiscal");
+		lblTotalIvaCredito.setBounds(289, 538, 146, 14);
+		contentPane.add(lblTotalIvaCredito);
 		
-		JLabel lblIVA10 = new JLabel("New label");
-		lblIVA10.setBounds(264, 451, 58, 14);
-		contentPane.add(lblIVA10);
+		JLabel lblIVATOTALTOTAL = new JLabel("--");
+		lblIVATOTALTOTAL.setBounds(458, 538, 93, 14);
+		contentPane.add(lblIVATOTALTOTAL);
 		
-		JLabel lblTotal21 = new JLabel("New label");
-		lblTotal21.setBounds(396, 401, 74, 14);
-		contentPane.add(lblTotal21);
+		JLabel lblCompraDeBienes = new JLabel("Compra de Bienes");
+		lblCompraDeBienes.setBounds(85, 378, 113, 14);
+		contentPane.add(lblCompraDeBienes);
 		
-		JLabel lblTotal27 = new JLabel("New label");
-		lblTotal27.setBounds(396, 426, 74, 14);
-		contentPane.add(lblTotal27);
+		JLabel lblBienesDeUso = new JLabel("Bienes de Uso");
+		lblBienesDeUso.setBounds(367, 378, 121, 14);
+		contentPane.add(lblBienesDeUso);
 		
-		JLabel lblTotal10 = new JLabel("New label");
-		lblTotal10.setBounds(396, 451, 74, 14);
-		contentPane.add(lblTotal10);
-		
-		JLabel label = new JLabel("NETO");
-		label.setBounds(68, 426, 49, 14);
-		contentPane.add(label);
-		
-		JLabel label_1 = new JLabel("NETO");
-		label_1.setBounds(68, 451, 49, 14);
-		contentPane.add(label_1);
-		
-		JLabel label_2 = new JLabel("IVA");
-		label_2.setBounds(214, 426, 49, 14);
-		contentPane.add(label_2);
-		
-		JLabel label_3 = new JLabel("IVA");
-		label_3.setBounds(214, 451, 49, 14);
-		contentPane.add(label_3);
-		
-		JLabel label_4 = new JLabel("TOTAL");
-		label_4.setBounds(332, 401, 49, 14);
-		contentPane.add(label_4);
-		
-		JLabel label_5 = new JLabel("TOTAL");
-		label_5.setBounds(332, 451, 49, 14);
-		contentPane.add(label_5);
-		
-		JLabel label_6 = new JLabel("0%");
-		label_6.setBounds(32, 376, 37, 14);
-		contentPane.add(label_6);
-		
-		JLabel label_7 = new JLabel("NETO");
-		label_7.setBounds(68, 378, 49, 14);
-		contentPane.add(label_7);
-		
-		JLabel lblNeto0 = new JLabel("New label");
-		lblNeto0.setBounds(130, 378, 74, 14);
-		contentPane.add(lblNeto0);
-		
-		JLabel lblIva0 = new JLabel("New label");
-		lblIva0.setBounds(264, 378, 58, 14);
-		contentPane.add(lblIva0);
-		
-		JLabel lblTotal0 = new JLabel("New label");
-		lblTotal0.setBounds(396, 378, 74, 14);
-		contentPane.add(lblTotal0);
-		
-		JLabel label_8 = new JLabel("IVA");
-		label_8.setBounds(214, 378, 49, 14);
-		contentPane.add(label_8);
-		
-		JLabel label_9 = new JLabel("TOTAL");
-		label_9.setBounds(332, 378, 49, 14);
-		contentPane.add(label_9);
+		JLabel lblServicios = new JLabel("Servicios");
+		lblServicios.setBounds(676, 378, 77, 14);
+		contentPane.add(lblServicios);
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				while(tablaModelo.getRowCount()>0) {
 					tablaModelo.removeRow(tablaModelo.getRowCount()-1);
+				}
+				while(modelServicio.getRowCount()>0) {
+					modelServicio.removeRow(modelServicio.getRowCount()-1);
+				}
+				while(modelBienesUso.getRowCount()>0) {
+					modelBienesUso.removeRow(modelBienesUso.getRowCount()-1);
+				}
+				while(modelCompra.getRowCount()>0) {
+					modelCompra.removeRow(modelCompra.getRowCount()-1);
 				}
 				totalNeto0=0.0;
 				totalNeto21=0.0;
@@ -316,7 +269,7 @@ public class ListadoIVACompras extends JFrame {
 						
 						
 					}
-					
+				/*	
 					lblIVA21.setText(String.valueOf(totalIVA21));
 					lblIVA27.setText(String.valueOf(totalIVA27));
 					lblIVA10.setText(String.valueOf(totalIVA10));
@@ -328,7 +281,94 @@ public class ListadoIVACompras extends JFrame {
 					lblTotal10.setText(String.valueOf(totalIVA10+totalNeto10));
 					lblIva0.setText(String.valueOf(totalIVA0));
 					lblNeto0.setText(String.valueOf(totalNeto0));
-					lblTotal0.setText(String.valueOf(totalNeto0));
+					lblTotal0.setText(String.valueOf(totalNeto0));*/
+					
+					resultado = instruccion.executeQuery("select sum(iva_21) as 'iva21', sum(iva_10) as 'iva10', sum(iva_27) as 'iva27', sum(importe_neto21) as 'neto21', sum(importe_neto10) as 'neto10', sum(importe_neto27) as 'neto27' from remito where concepto = 'Servicios' and fecha>=cast('"+fechaDesde+"' as date) and fecha<=cast('"+fechaHasta+"' as date)");
+					while(resultado.next()) {
+						Object[] fila = new Object[4];
+						fila[0]="21%";
+						fila[1]=resultado.getDouble("iva21");
+						fila[2]=resultado.getDouble("neto21");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelServicio.addRow(fila);
+						
+						fila[0]="10%";
+						fila[1]=resultado.getDouble("iva10");
+						fila[2]=resultado.getDouble("neto10");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelServicio.addRow(fila);
+						
+						fila[0]="27%";
+						fila[1]=resultado.getDouble("iva27");
+						fila[2]=resultado.getDouble("neto27");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelServicio.addRow(fila);
+						
+						fila[0]= "TOTALES";
+						fila[1]=(Double)tableServicios.getValueAt(0, 1) + (Double)tableServicios.getValueAt(1, 1)+ (Double)tableServicios.getValueAt(2, 1);
+						fila[2]=(Double)tableServicios.getValueAt(0, 2) + (Double)tableServicios.getValueAt(1, 2)+ (Double)tableServicios.getValueAt(2, 2);
+						fila[3]=(Double)tableServicios.getValueAt(0, 3) + (Double)tableServicios.getValueAt(1, 3)+ (Double)tableServicios.getValueAt(2, 3);
+						modelServicio.addRow(fila);
+					}
+					
+					
+					resultado = instruccion.executeQuery("select sum(iva_21) as 'iva21', sum(iva_10) as 'iva10', sum(iva_27) as 'iva27', sum(importe_neto21) as 'neto21', sum(importe_neto10) as 'neto10', sum(importe_neto27) as 'neto27' from remito where concepto = 'Bienes de Uso' and fecha>=cast('"+fechaDesde+"' as date) and fecha<=cast('"+fechaHasta+"' as date)");
+					while(resultado.next()) {
+						Object[] fila = new Object[4];
+						fila[0]="21%";
+						fila[1]=resultado.getDouble("iva21");
+						fila[2]=resultado.getDouble("neto21");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelBienesUso.addRow(fila);
+						
+						fila[0]="10%";
+						fila[1]=resultado.getDouble("iva10");
+						fila[2]=resultado.getDouble("neto10");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelBienesUso.addRow(fila);
+						
+						fila[0]="27%";
+						fila[1]=resultado.getDouble("iva27");
+						fila[2]=resultado.getDouble("neto27");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelBienesUso.addRow(fila);
+						
+						fila[0]= "TOTALES";
+						fila[1]=(Double)tableBienesUso.getValueAt(0, 1) + (Double)tableBienesUso.getValueAt(1, 1)+ (Double)tableBienesUso.getValueAt(2, 1);
+						fila[2]=(Double)tableBienesUso.getValueAt(0, 2) + (Double)tableBienesUso.getValueAt(1, 2)+ (Double)tableBienesUso.getValueAt(2, 2);
+						fila[3]=(Double)tableBienesUso.getValueAt(0, 3) + (Double)tableBienesUso.getValueAt(1, 3)+ (Double)tableBienesUso.getValueAt(2, 3);
+						modelBienesUso.addRow(fila);
+					}
+					
+					resultado = instruccion.executeQuery("select sum(iva_21) as 'iva21', sum(iva_10) as 'iva10', sum(iva_27) as 'iva27', sum(importe_neto21) as 'neto21', sum(importe_neto10) as 'neto10', sum(importe_neto27) as 'neto27' from remito where concepto = 'Compra de Bienes' and fecha>=cast('"+fechaDesde+"' as date) and fecha<=cast('"+fechaHasta+"' as date)");
+					while(resultado.next()) {
+						Object[] fila = new Object[4];
+						fila[0]="21%";
+						fila[1]=resultado.getDouble("iva21");
+						fila[2]=resultado.getDouble("neto21");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelCompra.addRow(fila);
+						
+						fila[0]="10%";
+						fila[1]=resultado.getDouble("iva10");
+						fila[2]=resultado.getDouble("neto10");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelCompra.addRow(fila);
+						
+						fila[0]="27%";
+						fila[1]=resultado.getDouble("iva27");
+						fila[2]=resultado.getDouble("neto27");
+						fila[3]=(Double)fila[1]+(Double)fila[2];
+						modelCompra.addRow(fila);
+						
+						fila[0]= "TOTALES";
+						fila[1]=(Double)tableCompra.getValueAt(0, 1) + (Double)tableCompra.getValueAt(1, 1)+ (Double)tableCompra.getValueAt(2, 1);
+						fila[2]=(Double)tableCompra.getValueAt(0, 2) + (Double)tableCompra.getValueAt(1, 2)+ (Double)tableCompra.getValueAt(2, 2);
+						fila[3]=(Double)tableCompra.getValueAt(0, 3) + (Double)tableCompra.getValueAt(1, 3)+ (Double)tableCompra.getValueAt(2, 3);
+						modelCompra.addRow(fila);
+					}
+					Double totaliva=(Double)tableCompra.getValueAt(3, 1)+(Double)tableBienesUso.getValueAt(3, 1)+(Double)tableServicios.getValueAt(3, 1);
+					lblIVATOTALTOTAL.setText(String.valueOf(totaliva));
 					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
